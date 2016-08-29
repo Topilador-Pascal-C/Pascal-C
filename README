@@ -1,0 +1,27 @@
+Repositório referente ao projeto do compilador da linguagem Pascal para C na matéria de Fundamentos de Compiladores de 2016/02
+
+CRONOGRAMA:
+
+
+05/09/2016 - Ponto de Controle 1
+ Gerar código simples de pascal para c:
+  - Variáveis;
+  - Atribuições;
+  - Entradas e Saídas;
+  - Estruturas condicionais (IF);
+
+03/10/2016 - Ponto de Controle 2
+ Aprofundar complexidade do compilador:
+  - Records / Objects;
+  - Arrays;
+  - Laços de repetição (FOR, WHILE, REPEAT);
+  - Functions;
+  - Procedures;
+
+07/11/2016 - Ponto de Controle 3
+ Mais complexidade:
+  - Modularização com Uses e Units;
+  - Coisas a serem definidas;
+
+30/11/2016 - Apresentação Final
+ - Vídeo de 12 min max;
