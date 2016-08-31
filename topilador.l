@@ -14,6 +14,12 @@ real {integer}("."{integer})?{exponant}?
 
 %%
 
+{white} { /* We ignore white characters */ }
+{real} {
+	yylval=atof(yytext);
+	return(NUMBER);
+}
+
 ; basic symbol
 "+" return(PLUS);
 "-" return(MINUS);
@@ -23,7 +29,6 @@ real {integer}("."{integer})?{exponant}?
 "^" return(POWER);
 "(" return(LEFT_PARENTHESIS);
 ")" return(RIGHT_PARENTHESIS);
-"\n" return(END);
 ":=" return(ATTRIBUTION);
 ";" return (SEMICOLON);
 ":" return (COLON);
@@ -64,7 +69,6 @@ real {integer}("."{integer})?{exponant}?
 "reset" return (RESET);
 "rewrite" return (REWRITE);
 "assign" return (ASSIGN);
-"rewrite" return (REWRITE);
 "close" return (CLOSE);
 
 ; variable types
