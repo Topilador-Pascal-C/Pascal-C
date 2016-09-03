@@ -1,5 +1,7 @@
 %{
 // make include
+#include "global.h"
+#include "topilador.h"
 #include <ctype.h>
 #include <stdlib.h>
 }%
@@ -12,7 +14,7 @@ letter[A-Za-z]
 exponant [eE][+-]?{integer}
 real {integer}("."{integer})?{exponant}?
 
-%%
+%% /* REGRAS */
 
 {white} { /* We ignore white characters */ }
 {real} {
@@ -65,7 +67,7 @@ real {integer}("."{integer})?{exponant}?
 "not" return (NOT);
 
 ; file manipulation
-"file" return (FILE);
+"file" return (FILE_DECLARATION);
 "reset" return (RESET);
 "rewrite" return (REWRITE);
 "assign" return (ASSIGN);
@@ -145,3 +147,9 @@ real {integer}("."{integer})?{exponant}?
 "set" return (SET);
 "shl" return (SHL);
 "shr" return (SHR);
+
+%%
+
+yywrap () {
+return 0;
+}

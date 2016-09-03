@@ -1,15 +1,16 @@
 CFLAGS=-g
 BISON=bison
 FLEX=flex
+RM=rm
  
-topilador: topilador.o topiladorFlex.o
-	$(CC) -o topilador topiladorFlex.o topilador.o
+topilador: sintatico.o lexico.o
+	$(CC) -o topilador lexico.o sintatico.o
  
-topilador.c: topilador.y
-	$(BISON) -d -o topilador.c topilador.y
+sintatico.c: sintatico.y
+	$(BISON) -d -o sintatico.c sintatico.y
  
-topiladorFlex.c: topilador.l
-	$(FLEX) -o topiladorFlex.c topilador.l
+lexico.c: lexico.l
+	$(FLEX) -o lexico.c lexico.l
  
 clean:
-	rm -f topiladorFlex.c topiladorFlex.o topilador.c topilador.o topilador.h topilador
+	$(RM) -f lexico.c lexico.o sintatico.c sintatico.o sintatico.h topilador
