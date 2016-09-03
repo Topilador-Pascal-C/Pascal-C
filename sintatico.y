@@ -26,6 +26,10 @@ R_Expression:
 void yyerror(const char* errmsg) {
     printf("\n*** Erro: %s\n", errmsg);
 }
+
+int yywrap(void) {
+    return 0;
+}
  
 int main(int argc, char** argv) {
     yyparse();
