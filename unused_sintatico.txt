@@ -1,0 +1,108 @@
+%token NUMBER 
+%token PLUS
+%token MINUS 
+%token TIMES
+%token DIVIDE_REAL
+%token DIVIDE_INTEGER
+%token POWER
+
+%token LEFT_PARENTHESIS 
+%token RIGHT_PARENTHESIS
+%token ATTRIBUTION
+%token SEMICOLON
+%token COLON
+%token COMMA
+%token EQUAL
+%token DIFFERENT
+%token BIGGER
+%token BIGGER_OR_EQUAL
+%token MINOR
+%token MINOR_OR_EQUAL 
+%token MOD 
+%token AND_STATEMENT
+%token OR_STATEMENT
+%token XOR_STATEMENT 
+%token NOT_STATEMENT
+%token END
+%token END_PROGRAM
+
+%token PROGRAM_STATEMENT
+%token UNIT_STATEMENT
+%token IMPORT_LIBRARIES
+%token BEGIN
+%token VAR_STATEMENT
+%token NEW_STATEMENT
+%token BREAK 
+%token CONST_STATEMENT
+%token CONTINUE_STATEMENT
+%token IMPLEMENTATION
+%token INHERITED_STATEMENT
+%token INLINE
+%token INTERFACE
+%token NULL_STATEMENT
+%token FALSE_STATEMENT
+%token TRUE_STATEMENT
+ 
+%token FILE_DECLARATION
+%token RESET
+%token REWRITE
+%token ASSIGN
+%token CLOSE
+
+%token TYPE_STRING
+%token TYPE_ARRAY
+%token TYPE_BOOLEAN
+%token TYPE_CHAR
+%token TYPE_OBJECT
+%token TYPE_RECORD
+
+%token TYPE_INTEGER
+%token TYPE_BYTE
+%token TYPE_SHORTINT
+%token TYPE_SMALLINT
+%token TYPE_WORD
+%token TYPE_CARDINAL
+%token TYPE_LONGINT
+%token TYPE_LONGWORD
+%token TYPE_INT64
+%token TYPE_QWORD
+
+%token TYPE_REAL
+%token TYPE_DOUBLE
+%token TYPE_SINGLE
+%token TYPE_EXTENDED
+%token TYPE_COMP
+%token TYPE_CURRENCY 
+
+%token FUNCTION_STATEMENT
+%token PROCEDURE_STATEMENT
+%token CONSTRUCTOR
+%token DESTRUCTOR
+
+%token IN
+%token ON
+%token OF
+%token WITH
+
+
+%token ELSE_STATEMENT
+%token SWITCH_CASE
+
+%token FOR_STATEMENT
+%token TO
+%token DOWNTO
+%token FOR_DO_STATEMENT 
+%token WHILE_STATEMENT
+%token REPEAT_STATEMENT
+%token UNTIL_STATEMENT
+%token GOTO_STATEMENT
+
+%token ASM
+%token LABEL
+%token OPERATOR
+%token PACKED
+%token REINTRODUCE
+%token SELF
+%token SET
+%token SHL
+%token SHR

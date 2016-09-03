@@ -1,0 +1,121 @@
+; basic symbol
+"+" return(PLUS);
+"-" return(MINUS);
+"*" return(TIMES);
+"/" return(DIVIDE_REAL); real division
+"div" return(DIVIDE_INTEGER); integer division
+"^" return(POWER);
+"(" return(LEFT_PARENTHESIS);
+")" return(RIGHT_PARENTHESIS);
+":=" return(ATTRIBUTION);
+";" return(SEMICOLON);
+":" return(COLON);
+"," return(COMMA);
+"=" return(EQUAL);
+"<>" return(DIFFERENT);
+">" return(BIGGER);
+">=" return(BIGGER_OR_EQUAL);
+"<" return(MINOR);
+"<=" return(MINOR_OR_EQUAL);
+"mod" return(MOD);
+"and" return(AND_STATEMENT);
+"or" return(OR_STATEMENT);
+"xor" return(XOR_STATEMENT);
+"not" return(NOT_STATEMENT);
+
+; basic commands
+"program" return(PROGRAM_STATEMENT);
+"unit" return(UNIT_STATEMENT);
+"uses" return(IMPORT_LIBRARIES);
+"begin" return(BEGIN);
+"end." return(END_PROGRAM);
+"end" return(END);
+"var" return(VAR_STATEMENT);
+"type" return(NEW_STATEMENT);
+"break" return(BREAK);
+"const" return(CONST_STATEMENT);
+"continue" return(CONTINUE_STATEMENT);
+"implementation" return(IMPLEMENTATION);
+"inherited" return(INHERITED_STATEMENT);
+"inline" return(INLINE);
+"interface" return(INTERFACE);
+"nil" return(NULL_STATEMENT);
+"false" return(FALSE_STATEMENT);
+"true" return(TRUE_STATEMENT);
+
+; file manipulation
+"file" return(FILE_DECLARATION);
+"reset" return(RESET);
+"rewrite" return(REWRITE);
+"assign" return(ASSIGN);
+"close" return(CLOSE);
+
+; variable types
+"string" return(TYPE_STRING);
+"array" return(TYPE_ARRAY);
+"boolean" return(TYPE_BOOLEAN);
+"char" return(TYPE_CHAR);
+"object" return(TYPE_OBJECT);
+"record" return(TYPE_RECORD);
+
+; ordinal types
+"integer" return(TYPE_INTEGER);
+"byte" return(TYPE_BYTE);
+"shortint" return(TYPE_SHORTINT);
+"smallint" return(TYPE_SMALLINT);
+"word" return(TYPE_WORD);
+"cardinal" return(TYPE_CARDINAL);
+"longint" return(TYPE_LONGINT);
+"longword" return(TYPE_LONGWORD);
+"int64" return(TYPE_INT64);
+"qword" return(TYPE_QWORD);
+
+; real types
+"real" return(TYPE_REAL);
+"double" return(TYPE_DOUBLE);
+"single" return(TYPE_SINGLE);
+"extended" return(TYPE_EXTENDED);
+"comp" return(TYPE_COMP);
+"currency" return(TYPE_CURRENCY);
+
+; function statement
+"function" return(FUNCTION_STATEMENT);
+"procedure" return(PROCEDURE_STATEMENT);
+"constructor" return(CONSTRUCTOR);
+"destructor" return(DESTRUCTOR);
+
+;  other things
+"in" return(IN);
+"of" return(OF);
+"on" return(ON);
+"with" return(WITH);
+
+"else" return(ELSE_STATEMENT);
+"case" return(SWITCH_CASE);
+
+; io statements
+"read" return(READ);
+"readln" return(READLN);
+"write" return(WRITE);
+"writeln" return(WRITELN);
+
+; repeating statements
+"for" return(FOR_STATEMENT);
+"to" return(TO);
+"downto" return(DOWNTO);
+"do" return(FOR_DO_STATEMENT); used in for
+"while" return(WHILE_STATEMENT);
+"repeat" return(REPEAT_STATEMENT);
+"until" return(UNTIL_STATEMENT);
+"goto" return(GOTO_STATEMENT);
+
+; don't know
+"asm" return(ASM);
+"label" return(LABEL);
+"operator" return(OPERATOR);
+"packed" return(PACKED);
+"reintroduce" return(REINTRODUCE);
+"self" return(SELF);
+"set" return(SET);
+"shl" return(SHL);
+"shr" return(SHR);
