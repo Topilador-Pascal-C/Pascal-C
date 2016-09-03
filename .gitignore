@@ -3,4 +3,5 @@ sintatico.h
 sintatico.c
 lexico.o
 sintatico.o
+topilador.o
 topilador

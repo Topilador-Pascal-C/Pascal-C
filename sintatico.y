@@ -14,7 +14,12 @@
 %%
  
 R_If_Statement:
-    T_IF_STATEMENT R_Expression T_IF_THEN_STATEMENT
+    T_IF_STATEMENT R_Expression T_IF_THEN_STATEMENT {
+        printf("if ");
+        printf("(expressao)");
+        printf(" {\n");
+        printf("}");
+    }
 ;
 
 R_Expression:
