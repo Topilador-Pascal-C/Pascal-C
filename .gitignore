@@ -1,0 +1,6 @@
+lexico.c
+sintatico.h
+sintatico.c
+lexico.o
+sintatico.o
+topilador
