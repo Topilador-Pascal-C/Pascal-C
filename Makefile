@@ -8,7 +8,7 @@ topilador: sintatico.o lexico.o
  
 sintatico.c: sintatico.y
 	$(BISON) -d -o sintatico.c sintatico.y
- 
+
 lexico.c: lexico.l
 	$(FLEX) -o lexico.c lexico.l
  
