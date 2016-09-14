@@ -30,6 +30,38 @@ void addref(int, char *, char *, int);
 /* Name of current input file */
 char *curfilename;
 
+static unsigned symhash(char * sym) {
+	unsigned int hash = 0;
+	unsigned c;
+
+	while (c =  * sym++) {
+		hash = hash * 9 ^ c;
+	}
+	return hash;
+}
+
+struct symbol * lookup(char * sym) {
+	struct symbol * sp  = &symtab[symhash(sym)%NHASH];
+	int scount = NHASH;
+
+	while(--scount >= 0){
+		if(sp->name && strcmp(sp->name, sym )){
+			return sp;
+		}
+		if(!sp->name){
+			sp->name = strdup(sym);
+			sp->reflist = 0;
+			return sp;
+		}
+		if(++sp >= symtab+NHASH){
+			sp = symtab;
+		}
+	}
+	fputs("symbol table overflow\n", stderr);
+	abort();
+}
+
+
 %}
 
 %option noyywrap nodefault yylineno
@@ -54,7 +86,7 @@ any_char .
 {strings} {
 	addref(yylineno, curfilename, yytext, 0);
 	; yylval.id = (char *) strdup(yytext);
-	return T_ANY_STRING; 
+	return T_ANY_STRING;
 }
 
 {any_char} {
