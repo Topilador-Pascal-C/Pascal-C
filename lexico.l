@@ -162,6 +162,13 @@ void printrefs() {
 strings [a-z][a-z0-9]*
 withespace [ \n\r\t]+
 digits [0-9]+
+integer -?{digits}
+floatvalues {integer}"."[0-9]* |
+						-?"."{digits} |
+						{integer}E[-+]?{digits} |
+						{integer}"."[0-9]*E[-+]?{digits} |
+						-?"."{digits}E[-+]?{digits}
+
 any_char .
 
 %% /* RULES */
@@ -174,6 +181,16 @@ any_char .
 {strings} {
 	addref(yylineno, curfilename, yytext, 0);
 	return T_ANY_STRING;
+}
+
+{floatvalues} {
+	yylval.floatval = atof(yytext);
+	return APPROXNUM;
+}
+
+{integer} {
+	yylval.intval = atoi(yytext);
+	return T_INTEGER;
 }
 
 {digits} return T_ANY_DIGIT;
