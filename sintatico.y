@@ -24,7 +24,7 @@ int errors;
 %start R_If_Statement
 
 %%
- 
+
 R_If_Statement:
     T_IF_STATEMENT R_Expression T_IF_THEN_STATEMENT {
         printf("if ");
@@ -35,7 +35,7 @@ R_If_Statement:
 ;
 
 R_Expression:
-    T_ANY_STRING 
+    T_ANY_STRING
 ;
 
 %%
@@ -46,12 +46,5 @@ void yyerror(const char* errmsg) {
 }
 
 int yywrap(void) {
-    return 0;
-}
- 
-
-int main(int argc, char ** argv) { 
-
-    yyparse();
     return 0;
 }

@@ -28,8 +28,9 @@ symbol * lookup(char *);
 void addref(int, char *, char *, int);
 
 /* Name of current input file */
-char *curfilename;
+char * curfilename;
 
+/* Hash a symbol */
 static unsigned symhash(char * sym) {
 	unsigned int hash = 0;
 	unsigned c;
@@ -40,20 +41,32 @@ static unsigned symhash(char * sym) {
 	return hash;
 }
 
-struct symbol * lookup(char * sym) {
-	struct symbol * sp  = &symtab[symhash(sym)%NHASH];
+/* Find a symbol or create a new symbol in table */
+symbol * lookup(char * sym) {
+
+	symbol * sp  = &symtab[symhash(sym) % NHASH];
+
+	/* How many have we looket at */
 	int scount = NHASH;
 
-	while(--scount >= 0){
-		if(sp->name && strcmp(sp->name, sym )){
+	while (--scount >= 0) {
+		if (sp->name && strcmp(sp->name, sym)) {
 			return sp;
+		} else {
+			// Nothing to do
 		}
-		if(!sp->name){
+
+		/* New symbol */
+		if (!sp->name) {
 			sp->name = strdup(sym);
 			sp->reflist = 0;
 			return sp;
+		} else {
+			// Nothing to do
 		}
-		if(++sp >= symtab+NHASH){
+
+		/* Try the next entry */
+		if (++sp >= symtab+NHASH) {
 			sp = symtab;
 		}
 	}
@@ -61,6 +74,85 @@ struct symbol * lookup(char * sym) {
 	abort();
 }
 
+// Adding new word in the symbol table
+void addref(int lineno, char * filename, char * word, int flags) {
+	ref * r;
+	symbol * sp = lookup(word);
+
+	/* Don't do dups of same line and file */
+	if (sp->reflist && sp->reflist->lineno == lineno && sp->reflist->filename == filename) {
+		return;
+	} else {
+		r = malloc(sizeof(ref));
+		if (!r) {
+			fputs("out of space\n", stderr);
+			abort();
+		} else {
+			r->next = sp->reflist;
+			r->filename = filename;
+			r->lineno = lineno;
+			r->flags = flags;
+			sp->reflist = r;
+		}
+	}
+}
+
+/* Aux function for sorting */
+static int symcompare(const void * xa, const void * xb) {
+	const symbol * a = xa;
+	const symbol * b = xb;
+
+	if (!a->name) {
+		if (!b->name) {
+			/* Both empty */
+			return 0;
+		} else {
+			/* Put the empties at the end */
+			return 1;
+		}
+	} else {
+		if (!b->name) {
+			return -1;
+		} else {
+			return strcmp(a->name, b->name);
+		}
+	}
+}
+
+/* Print the identifiers of the list tree */
+void printrefs() {
+	symbol * sp;
+
+	/* Sort the symbol table in alfabethic order */
+	qsort(symtab, NHASH, sizeof(symbol), symcompare);
+
+	for (sp = symtab; sp->name && sp < symtab+NHASH; sp++) {
+		char * prevfn = NULL;
+
+		/* Revert the list of references */
+		ref * rp = sp->reflist;
+		ref * rpp = 0;
+		ref * rpn;
+		do {
+			rpn = rp->next;
+			rp->next = rpp;
+			rpp = rp;
+			rp = rpn;
+		} while (rp);
+
+		/* Now print the word and its references */
+		printf("%10s", sp->name);
+		for (rp = rpp; rp; rp = rp->next) {
+			if (rp->filename == prevfn) {
+				printf(" %d", rp->lineno);
+			} else {
+				printf(" %s:%d", rp->filename, rp->lineno);
+				prevfn = rp->filename;
+			}
+		}
+		printf("\n");
+	}
+}
 
 %}
 
@@ -79,33 +171,33 @@ any_char .
 "if" return T_IF_STATEMENT;
 "then" return T_IF_THEN_STATEMENT;
 
-
-{digits} return T_ANY_DIGIT;
-
-
 {strings} {
 	addref(yylineno, curfilename, yytext, 0);
-	; yylval.id = (char *) strdup(yytext);
 	return T_ANY_STRING;
 }
 
+{digits} return T_ANY_DIGIT;
+
 {any_char} {
-	printf("Unexpected character in input: '%c' (ASCII=%d)\n", yytext[0], yytext[0]);
+	printf("%s:%d: Mystery character '%s'\n", curfilename, yylineno, yytext);
 }
 
 %%
 
-main (int argc, char ** argv) {
+int main (int argc, char ** argv) {
 	int i;
 
 	if (argc < 2) {
 		curfilename = "(stdin)";
 		yylineno = 1;
+
+		// Start the analisis lexical
 		yylex();
 	} else {
 		for (i = 1; i < argc; i++) {
 			FILE * f = fopen(argv[i], "r");
 
+			// Verified if the file is openned
 			if (!f) {
 				perror(argv[1]);
 				return (1);
@@ -114,12 +206,13 @@ main (int argc, char ** argv) {
 
 				yyrestart(f);
 				yylineno = 1;
+
+				// Start the analisis lexical
 				yylex();
 				fclose(f);
 			}
-
 		}
-
-		printrefs();
 	}
+	printrefs();
+	return 1;
 }
