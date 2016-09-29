@@ -1,5 +1,6 @@
 %{
 #include "global.h"
+#include "symTable.h"
 #include <stdlib.h> /* For malloc in symbol table */
 #include <string.h> /* For strcmp in symbol table */
 #include <stdio.h> /* For error messages */
