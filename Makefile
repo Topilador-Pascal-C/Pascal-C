@@ -1,19 +1,22 @@
-CFLAGS=-g
-BISON=bison
-FLEX=flex
-RM=rm
+CC = cc
+CFLAGS = -I/
+BISON = bison
+FLEX = flex
+RM = rm -f
+ARQ_DEL = lex.yy.c sintatico.tab.c sintatico.tab.h symTable.o topilador
+TARGET = topilador
  
-topilador: sintatico.o lexico.o symTable.o
-	$(CC) -o topilador lexico.o sintatico.o symTable.o -I/
+$(TARGET): sintatico.tab.c lex.yy.c symTable.o
+	$(CC) -o $(TARGET) symTable.o sintatico.tab.c lex.yy.c -lfl
  
-sintatico.o: sintatico.y 
+sintatico.tab.c: sintatico.y 
 	$(BISON) -d sintatico.y
 
-lexico.o: lexico.l
+lex.yy.c: lexico.l
 	$(FLEX) -c lexico.l
 
 symTable.o: symTable.c symTable.h
-	$(CC) -c symTable.c -I/
+	gcc -o symTable.c
  
 clean:
-	$(RM) -f lexico.c lexico.o sintatico.c sintatico.o sintatico.h lex.yy.c sintatico.tab.c sintatico.tab.h topilador
+	$(RM) $(ARQ_DEL)

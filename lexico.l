@@ -1,8 +1,9 @@
 %{
 #include <string.h> /* for strdup */
 #include "global.h"
-#include "sintatico.h"
+#include "sintatico.tab.h"
 #include "symTable.h"
+
 
 /* Name of current input file */
 char * curfilename;
