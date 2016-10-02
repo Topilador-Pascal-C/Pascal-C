@@ -1,12 +1,21 @@
-#ifndef SYMTABLE
-#define SYMTABLE
+#ifndef SYMTABLE_H
+#define SYMTABLE_H
+
 #define NHASH 9997
 
 /* struct of symbol table */
-typedef struct symbol symbol;
+typedef struct symbol {
+	char * name;
+	struct ref * reflist;
+}symbol;
 
 /* struct of contents of symbol table */
-typedef struct ref ref;
+typedef struct ref {
+	struct ref * next;
+	char * filename;
+	int flags;
+	int lineno;
+}ref;
 
 /* Function to lookup a string in table symbol */
 symbol * lookup(char *);

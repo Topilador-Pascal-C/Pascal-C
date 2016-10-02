@@ -1,16 +1,7 @@
-/* struct of symbol table */
-struct symbol {
-	char * name;
-	struct ref * reflist;
-};
-
-/* struct of contents of symbol table */
-struct ref {
-	struct ref * next;
-	char * filename;
-	int flags;
-	int lineno;
-};
+#include "symTable.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* Hash a symbol */
 static unsigned symhash(char * sym) {
