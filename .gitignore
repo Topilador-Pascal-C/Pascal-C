@@ -5,3 +5,4 @@ lexico.o
 sintatico.o
 topilador.o
 topilador
+teste.pas

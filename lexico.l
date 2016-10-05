@@ -1,21 +1,17 @@
 %{
 #include <string.h> /* for strdup */
 #include "global.h"
-#include "sintatico.h"
+#include "sintatico.tab.h"
 #include "symTable.h"
 
-/* Name of current input file */
-char * curfilename;
-
-/* Defining the symbol table */
-symbol symtab[NHASH];
+int i = 0;
 
 %}
 
 %option noyywrap nodefault yylineno
 
 /* DEFINITIONS */
-strings [a-z][a-z0-9]*
+strings [a-zA-Z][a-zA-Z0-9]*
 withespace [ \n\r\t]+
 digits [0-9]+
 
@@ -25,12 +21,15 @@ any_char .
 
 {withespace} /* Ignore */ ;
 
-"if" return T_IF_STATEMENT;
-"then" return T_IF_THEN_STATEMENT;
+"if" {return T_IF_STATEMENT;}
+"then" {return T_IF_THEN_STATEMENT;}
+"\n" {return T_END_LINE;}
 
-{strings} {
-	addref(yylineno, curfilename, yytext, 0);
-	return T_ANY_STRING;
+{strings} {	
+	addref(yylineno, curfilename, yytext, 0); 
+	yylval.id = malloc(sizeof(yytext));
+	strcpy(yylval.id, yytext);
+	return T_ANY_STRING; 
 }
 
 {digits} return T_ANY_DIGIT;
@@ -39,9 +38,11 @@ any_char .
 	printf("%s:%d: Mystery character '%s'\n", curfilename, yylineno, yytext);
 }
 
+
 %%
 
-int main (int argc, char ** argv) {
+/* int main (int argc, char ** argv) {
+
 	int i;
 
 	if (argc < 2) {
@@ -72,4 +73,4 @@ int main (int argc, char ** argv) {
 	}
 	printrefs();
 	return 1;
-}
+} */
