@@ -6,6 +6,13 @@
 
 int i = 0;
 
+
+/* Name of current input file */
+char * curfilename;
+
+/* Defining the symbol table */
+symbol symtab[NHASH];
+
 %}
 
 %option noyywrap nodefault yylineno
@@ -25,11 +32,11 @@ any_char .
 "then" {return T_IF_THEN_STATEMENT;}
 "\n" {return T_END_LINE;}
 
-{strings} {	
-	addref(yylineno, curfilename, yytext, 0); 
+{strings} {
+	addref(yylineno, curfilename, yytext, 0);
 	yylval.id = malloc(sizeof(yytext));
 	strcpy(yylval.id, yytext);
-	return T_ANY_STRING; 
+	return T_ANY_STRING;
 }
 
 {digits} return T_ANY_DIGIT;

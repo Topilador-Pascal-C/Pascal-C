@@ -1,5 +1,6 @@
-#ifndef SYMTABLE
-#define SYMTABLE
+#ifndef SYMTABLE_H
+#define SYMTABLE_H
+
 #define NHASH 9997
 
 /* struct of symbol table */
@@ -18,6 +19,9 @@ typedef struct ref {
 
 /* Function to lookup a string in table symbol */
 symbol * lookup(char *);
+
+/* simple symtab of fixed size */
+struct symbol symtab[NHASH];
 
 /* Function to add new ref in a symbol table */
 void addref(int, char *, char *, int);
