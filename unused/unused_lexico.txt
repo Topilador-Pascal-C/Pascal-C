@@ -7,8 +7,7 @@
 "^" return(POWER);
 "(" return(LEFT_PARENTHESIS);
 ")" return(RIGHT_PARENTHESIS);
-":=" return(ATTRIBUTION);
-";" return(SEMICOLON);
+
 ":" return(COLON);
 "," return(COMMA);
 "=" return(EQUAL);
@@ -30,10 +29,8 @@
 "begin" return(BEGIN);
 "end." return(END_PROGRAM);
 "end" return(END);
-"var" return(VAR_STATEMENT);
 "type" return(NEW_STATEMENT);
 "break" return(BREAK);
-"const" return(CONST_STATEMENT);
 "continue" return(CONTINUE_STATEMENT);
 "implementation" return(IMPLEMENTATION);
 "inherited" return(INHERITED_STATEMENT);
@@ -51,32 +48,9 @@
 "close" return(CLOSE);
 
 ; variable types
-"string" return(TYPE_STRING);
 "array" return(TYPE_ARRAY);
-"boolean" return(TYPE_BOOLEAN);
-"char" return(TYPE_CHAR);
 "object" return(TYPE_OBJECT);
 "record" return(TYPE_RECORD);
-
-; ordinal types
-"integer" return(TYPE_INTEGER);
-"byte" return(TYPE_BYTE);
-"shortint" return(TYPE_SHORTINT);
-"smallint" return(TYPE_SMALLINT);
-"word" return(TYPE_WORD);
-"cardinal" return(TYPE_CARDINAL);
-"longint" return(TYPE_LONGINT);
-"longword" return(TYPE_LONGWORD);
-"int64" return(TYPE_INT64);
-"qword" return(TYPE_QWORD);
-
-; real types
-"real" return(TYPE_REAL);
-"double" return(TYPE_DOUBLE);
-"single" return(TYPE_SINGLE);
-"extended" return(TYPE_EXTENDED);
-"comp" return(TYPE_COMP);
-"currency" return(TYPE_CURRENCY);
 
 ; function statement
 "function" return(FUNCTION_STATEMENT);
