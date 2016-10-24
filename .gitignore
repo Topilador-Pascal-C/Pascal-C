@@ -1,8 +1,4 @@
-lexico.c
-sintatico.h
-sintatico.c
-lexico.o
-sintatico.o
-topilador.o
+*.yy.c
+*.tab.*
+*.o
 topilador
-teste.pas
