@@ -10,6 +10,10 @@
 extern int yylineno;
 int errors;
 
+int debugValue = 1;
+
+// to use debugValues: debugValue = printDebugText(debugValue);
+
 %}
 
 %union { /* SEMANTIC RECORD */

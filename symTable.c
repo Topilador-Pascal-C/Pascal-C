@@ -128,3 +128,8 @@ void printrefs() {
 		printf("\n");
 	}
 }
+
+int printDebugText(int debugValue) {
+	printf("Debug %d \n", debugValue);
+	return debugValue + 1;
+}

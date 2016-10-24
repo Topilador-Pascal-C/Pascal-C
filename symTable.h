@@ -32,4 +32,6 @@ static int symcompare(const void * xa, const void * xb);
 
 void printrefs();
 
+int printDebugText(int debugValue);
+
 #endif
