@@ -1,0 +1,25 @@
+Comparações entre Pascal e C
+
+Pascal		x C
+
+shortint 	x signed char 			- (-128 to 127)
+smallint 	x short int 			- (-32768 to 32767)
+longint 	x (long) int     		- (-2147483648 to 2147483647)
+int64  		x long long				- (-9223372036854775808 to 9223372036854775807)
+integer 	x ????????				- pode ser smallint, longint ou int64
+byte 		x unsigned char 		- (0 to 255)
+word 		x unsigned short int 	- (0 to 65535)
+longword 	x unsigned int 			- (0 to 4294967295)
+qword 		x unsigned long long 	- (0 to 18446744073709551615)
+cardinal 	x ????????				- pode ser word, longword ou qword
+
+real 		x 						- ponto flutuante - 4 or 8 bytes
+single 		x float					- ponto flutuante - 7 a 8 digitos significativos - 4 bytes
+double 		x double				- ponto flutuante - 15 a 16 digitos significativos - 8 bytes
+extended 	x long double			- ponto flutuante - 19 a 20 digitos significativos - 10 bytes
+comp 		x 						- ponto flutuante - 19 a 20 digitos significativos - 8 bytes
+currency 	x 						- ponto fixo - 4 digitos - 8 bytes
+
+char 		x char
+string		x char *
+boolean		x bool
