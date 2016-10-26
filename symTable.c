@@ -116,7 +116,7 @@ void printrefs() {
 		} while (rp);
 
 		/* Now print the word and its references */
-		printf("%10s", sp->name);
+		printf("%20s", sp->name);
 		for (rp = rpp; rp; rp = rp->next) {
 			if (rp->filename == prevfn) {
 				printf(" %d", rp->lineno);

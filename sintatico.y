@@ -8,20 +8,22 @@
 
 /* interface to the lexer */
 extern int yylineno;
+extern int yyrestart();
 int errors;
 
 int debugValue = 1;
 
-// to use debugValues: debugValue = printDebugText(debugValue);
+// to use debugValues: 
+// debugValue = printDebugText(debugValue);
+// {debugValue = printDebugText(debugValue);}
+
+FILE * fileOut;
 
 %}
 
 %union { /* SEMANTIC RECORD */
-    char * id; /* For returning identifiers */
     char * strval;
 }
-
-%token T_IDENT /* Simple identifier */
 
 %token T_ATTRIBUTION;
 %token T_SEMICOLON;
@@ -33,22 +35,22 @@ int debugValue = 1;
 %token T_CONST_STATEMENT
 
 // variable types
-%token <strval> T_TYPE_STRING
 %token <strval> T_TYPE_CHAR
+%token <strval> T_TYPE_STRING
 %token <strval> T_TYPE_BOOLEAN
-%token <strval> T_TYPE_INTEGER
-%token <strval> T_TYPE_BYTE
 %token <strval> T_TYPE_SHORTINT
 %token <strval> T_TYPE_SMALLINT
-%token <strval> T_TYPE_WORD
-%token <strval> T_TYPE_CARDINAL
 %token <strval> T_TYPE_LONGINT
-%token <strval> T_TYPE_LONGWORD
 %token <strval> T_TYPE_INT64
+%token <strval> T_TYPE_INTEGER
+%token <strval> T_TYPE_BYTE
+%token <strval> T_TYPE_WORD
+%token <strval> T_TYPE_LONGWORD
 %token <strval> T_TYPE_QWORD
+%token <strval> T_TYPE_CARDINAL
 %token <strval> T_TYPE_REAL
-%token <strval> T_TYPE_DOUBLE
 %token <strval> T_TYPE_SINGLE
+%token <strval> T_TYPE_DOUBLE
 %token <strval> T_TYPE_EXTENDED
 %token <strval> T_TYPE_COMP
 %token <strval> T_TYPE_CURRENCY
@@ -57,45 +59,56 @@ int debugValue = 1;
 %token T_ANY_DIGIT
 %token T_END_LINE
 
-%type <strval> R_Variables
+%type <strval> Type_Of_Variable
 
 %start Input
 
 %%
 
 Input:
-  { /* nothing */ }
-  | Input Line
+    { /* nothing */ }
+    | Input Command
 ;
 
-Line:
-  T_END_LINE
-  | R_If_Statement T_END_LINE {printf("Rodando ... \n");}
-  | R_Attribuition T_END_LINE
+Command:
+    T_END_LINE
+    | If_Statement T_END_LINE
+    | Declaration_Of_Variables T_END_LINE
+    | Attribuition T_END_LINE
 ;
 
-R_Expression:
+Any_String:
     T_ANY_STRING
 ;
 
-R_If_Statement:
-    T_IF_STATEMENT R_Expression T_IF_THEN_STATEMENT {
-        printf("if ");
-        printf("(%s)", $<id>2);
-        printf(" {\n");
-        printf("}\n");
+Conditions:
+    Expression
+;
+
+Expression:
+    Any_String
+;
+
+Declaration_Of_Variables:
+    Type_Of_Variable Any_String T_SEMICOLON {
+        fprintf(fileOut, "%s ", $<strval>1);
+        fprintf(fileOut, "%s", $<strval>2);
+        fprintf(fileOut, ";\n");
+    }
+    | Type_Of_Variable Attribuition {
+        fprintf(fileOut, "%s ", $<strval>1);
     }
 ;
 
-R_Attribuition:
-    R_Variables R_Expression T_SEMICOLON {
-      printf("%s ", $<strval>1);
-      printf("%s", $<id>2);
-      printf(";\n");
+Attribuition:
+    Any_String T_ATTRIBUTION Expression T_SEMICOLON {
+        fprintf(fileOut, "%s", $<strval>1);
+        fprintf(fileOut, " = %s", $<strval>3);
+        fprintf(fileOut, ";\n");
     }
 ;
 
-R_Variables:
+Type_Of_Variable:
     T_TYPE_STRING {
         $$ = malloc(sizeof(strlen("string")));
         strcpy($$, "string");
@@ -135,6 +148,15 @@ R_Variables:
     | T_TYPE_COMP
 ;
 
+If_Statement:
+    T_IF_STATEMENT Conditions T_IF_THEN_STATEMENT {
+        fprintf(fileOut, "if ");
+        fprintf(fileOut, "(%s)", $<strval>2);
+        fprintf(fileOut, " {\n");
+        fprintf(fileOut, "}\n");
+    }
+;
+
 %%
 
 int main(int argc, char ** argv){
@@ -145,7 +167,11 @@ int main(int argc, char ** argv){
         yylineno = 1;
 
         // Start the analisis lexical
+        fileOut = fopen("out.c", "w");
+        printf("Esperando a entrada do código a ser compilado...\n");
         yyparse();
+        fclose(fileOut);
+        printf("Leitura concluída e resultado compilado em out%d.c\n", i);
     } else {
         for (i = 1; i < argc; i++) {
             FILE * f = fopen(argv[i], "r");
@@ -157,16 +183,29 @@ int main(int argc, char ** argv){
             } else {
                 curfilename = argv[i];
 
-                /* yyrestart(f); */
+                // Start the analisis lexical
+                yyrestart(f);
                 yylineno = 1;
 
-                // Start the analisis lexical
+                printf("Iniciando leitura do arquivo %s...\n", curfilename);
+                
+                char outfilename [10];
+                sprintf(outfilename, "out%d.c", i);
+
+                fileOut = fopen(outfilename, "w");
                 yyparse();
+                fclose(fileOut);
+                printf("Arquivo compilado e resultado em %s\n", outfilename);
+
                 fclose(f);
             }
         }
     }
+
+    printf("\n\n----------------------\n");
+    printf("Print of symbol table! \n\n");
     printrefs();
+    printf("----------------------\n");
     return 1;
 }
 

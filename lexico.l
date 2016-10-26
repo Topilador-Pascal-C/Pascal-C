@@ -59,8 +59,8 @@ any_char .
 
 {strings} {
 	addref(yylineno, curfilename, yytext, 0);
-	yylval.id = malloc(sizeof(strlen(yytext)));
-	strcpy(yylval.id, yytext);
+	yylval.strval = malloc(sizeof(strlen(yytext)));
+	strcpy(yylval.strval, yytext);
 	return T_ANY_STRING;
 }
 
@@ -70,39 +70,3 @@ any_char .
 	printf("%s:%d: Mystery character '%s'\n", curfilename, yylineno, yytext);
 }
 
-
-%%
-
-/* int main (int argc, char ** argv) {
-
-	int i;
-
-	if (argc < 2) {
-		curfilename = "(stdin)";
-		yylineno = 1;
-
-		// Start the analisis lexical
-		yylex();
-	} else {
-		for (i = 1; i < argc; i++) {
-			FILE * f = fopen(argv[i], "r");
-
-			// Verified if the file is openned
-			if (!f) {
-				perror(argv[1]);
-				return (1);
-			} else {
-				curfilename = argv[i];
-
-				yyrestart(f);
-				yylineno = 1;
-
-				// Start the analisis lexical
-				yylex();
-				fclose(f);
-			}
-		}
-	}
-	printrefs();
-	return 1;
-} */
