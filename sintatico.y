@@ -13,7 +13,7 @@ int errors;
 
 int debugValue = 1;
 
-// to use debugValues: 
+// to use debugValues:
 // debugValue = printDebugText(debugValue);
 // {debugValue = printDebugText(debugValue);}
 
@@ -55,11 +55,17 @@ FILE * fileOut;
 %token <strval> T_TYPE_COMP
 %token <strval> T_TYPE_CURRENCY
 
-%token T_ANY_STRING
-%token T_ANY_DIGIT
+%token T_SOME_TEXT
+%token T_SOME_WORD
+%token T_SOME_VARIABLES
+%token T_SOME_DIGIT
 %token T_END_LINE
+%token <strval> T_END_PROGRAM
+%token <strval> T_PROGRAM
+%token <strval> T_BEGIN
 
 %type <strval> Type_Of_Variable
+%type <strval> Lim_File
 
 %start Input
 
@@ -71,14 +77,24 @@ Input:
 ;
 
 Command:
-    T_END_LINE
+    Lim_File
+    | T_END_LINE
     | If_Statement T_END_LINE
     | Declaration_Of_Variables T_END_LINE
     | Attribuition T_END_LINE
 ;
 
-Any_String:
-    T_ANY_STRING
+Some_String:
+    T_SOME_WORD
+    | T_SOME_VARIABLES
+
+Lim_File:
+    T_END_PROGRAM {
+        fprintf(fileOut, "\n\treturn 0;\n}");
+    }
+    | T_PROGRAM Expression T_BEGIN {
+        fprintf(fileOut, "int main() {\n");
+    }
 ;
 
 Conditions:
@@ -86,22 +102,20 @@ Conditions:
 ;
 
 Expression:
-    Any_String
+    Some_String
 ;
 
 Declaration_Of_Variables:
-    Type_Of_Variable Any_String T_SEMICOLON {
+    Type_Of_Variable Some_String T_SEMICOLON {
+        addref(yylineno, curfilename, $<strval>2, 0);
         fprintf(fileOut, "%s ", $<strval>1);
         fprintf(fileOut, "%s", $<strval>2);
         fprintf(fileOut, ";\n");
     }
-    | Type_Of_Variable Attribuition {
-        fprintf(fileOut, "%s ", $<strval>1);
-    }
 ;
 
 Attribuition:
-    Any_String T_ATTRIBUTION Expression T_SEMICOLON {
+    Some_String T_ATTRIBUTION Expression T_SEMICOLON {
         fprintf(fileOut, "%s", $<strval>1);
         fprintf(fileOut, " = %s", $<strval>3);
         fprintf(fileOut, ";\n");
@@ -188,7 +202,7 @@ int main(int argc, char ** argv){
                 yylineno = 1;
 
                 printf("Iniciando leitura do arquivo %s...\n", curfilename);
-                
+
                 char outfilename [10];
                 sprintf(outfilename, "out%d.c", i);
 

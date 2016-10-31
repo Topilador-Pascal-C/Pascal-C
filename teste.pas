@@ -1,3 +1,4 @@
+program teste begin
 if condicao then
 string variavelString;
 char variavelChar;
@@ -6,3 +7,4 @@ integer variavelInteira;
 real variavelFloat;
 double variavelDouble;
 variavelString := teste;
+end.

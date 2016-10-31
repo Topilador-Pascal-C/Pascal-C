@@ -2,7 +2,7 @@ CFLAGS=-g
 BISON=bison
 FLEX=flex
 RM=rm
-DEL_FILE= sintatico.tab.c sintatico.tab.h lex.yy.c topilador symTable.o sintatico.tab.o out*.c
+DEL_FILE= sintatico.tab.c sintatico.tab.h lex.yy.c topilador symTable.o sintatico.tab.o out*.c out.c
 
 all: sintatico.tab.c lex.yy.c symTable.o
 	$(CC) -o topilador lex.yy.c sintatico.tab.c symTable.o -lfl

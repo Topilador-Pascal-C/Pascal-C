@@ -18,15 +18,21 @@ symbol symtab[NHASH];
 %option noyywrap nodefault yylineno
 
 /* DEFINITIONS */
-strings [a-zA-Z][a-zA-Z0-9]*
+word [a-z|A-Z][a-z|A-Z]*
+variables {word}[0-9]+
+text {word}[[ ]+{word}]+
 withespace [ \r\t]+
 digits [0-9]+
 
-any_char .
+some_char .
 
 %% /* RULES */
 
 {withespace} /* Ignore */ ;
+
+"program" {return T_PROGRAM;}
+"end." {return T_END_PROGRAM;}
+"begin" {return T_BEGIN;}
 
 "\n" {return T_END_LINE;}
 ":=" {return T_ATTRIBUTION;}
@@ -57,16 +63,26 @@ any_char .
 "currency" {return T_TYPE_CURRENCY;}
 "extended" {return T_TYPE_EXTENDED;}
 
-{strings} {
-	addref(yylineno, curfilename, yytext, 0);
+{text} {
 	yylval.strval = malloc(sizeof(strlen(yytext)));
 	strcpy(yylval.strval, yytext);
-	return T_ANY_STRING;
+	return T_SOME_TEXT;
 }
 
-{digits} return T_ANY_DIGIT;
+{variables} {
+	yylval.strval = malloc(sizeof(strlen(yytext)));
+	strcpy(yylval.strval, yytext);
+	return T_SOME_VARIABLES;
+}
 
-{any_char} {
+{word} {
+	yylval.strval = malloc(sizeof(strlen(yytext)));
+	strcpy(yylval.strval, yytext);
+	return T_SOME_WORD;
+}
+
+{digits} return T_SOME_DIGIT;
+
+{some_char} {
 	printf("%s:%d: Mystery character '%s'\n", curfilename, yylineno, yytext);
 }
-
