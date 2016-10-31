@@ -8,7 +8,6 @@
 
 %token LEFT_PARENTHESIS
 %token RIGHT_PARENTHESIS
-%token COLON
 %token COMMA
 %token EQUAL
 %token DIFFERENT

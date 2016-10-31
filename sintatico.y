@@ -27,6 +27,7 @@ FILE * fileOut;
 
 %token T_ATTRIBUTION;
 %token T_SEMICOLON;
+%token T_COLON;
 
 // structures
 %token T_IF_STATEMENT;
@@ -62,7 +63,7 @@ FILE * fileOut;
 %token T_END_LINE
 %token <strval> T_END_PROGRAM
 %token <strval> T_PROGRAM
-%token <strval> T_BEGIN
+%token <strval> T_BEGIN_PROGRAM
 
 %type <strval> Type_Of_Variable
 %type <strval> Lim_File
@@ -92,8 +93,11 @@ Lim_File:
     T_END_PROGRAM {
         fprintf(fileOut, "\n\treturn 0;\n}");
     }
-    | T_PROGRAM Expression T_BEGIN {
-        fprintf(fileOut, "int main() {\n");
+    | T_PROGRAM Expression T_SEMICOLON {
+        fprintf(fileOut, "#include <stdio.h>\n#include <stdlib.h>\n\n");
+    }
+    | T_BEGIN_PROGRAM {
+        fprintf(fileOut, "\nint main() {\n");
     }
 ;
 
@@ -106,10 +110,16 @@ Expression:
 ;
 
 Declaration_Of_Variables:
-    Type_Of_Variable Some_String T_SEMICOLON {
-        addref(yylineno, curfilename, $<strval>2, 0);
-        fprintf(fileOut, "%s ", $<strval>1);
-        fprintf(fileOut, "%s", $<strval>2);
+    T_VAR_STATEMENT T_END_LINE Some_String T_COLON Type_Of_Variable T_SEMICOLON {
+        addref(yylineno, curfilename, $<strval>3, 0);
+        fprintf(fileOut, "%s ", $<strval>5);
+        fprintf(fileOut, "%s", $<strval>3);
+        fprintf(fileOut, ";\n");
+    }
+    | Some_String T_COLON Type_Of_Variable T_SEMICOLON {
+        addref(yylineno, curfilename, $<strval>1, 0);
+        fprintf(fileOut, "%s ", $<strval>3);
+        fprintf(fileOut, "%s", $<strval>1);
         fprintf(fileOut, ";\n");
     }
 ;
@@ -123,7 +133,59 @@ Attribuition:
 ;
 
 Type_Of_Variable:
-    T_TYPE_STRING {
+    T_TYPE_SHORTINT {
+        $$ = malloc(sizeof(strlen("signed char")));
+        strcpy($$, "signed char");
+    }
+    | T_TYPE_SMALLINT {
+        $$ = malloc(sizeof(strlen("short int")));
+        strcpy($$, "short int");
+    }
+    | T_TYPE_LONGINT {
+        $$ = malloc(sizeof(strlen("int")));
+        strcpy($$, "int");
+    }
+    | T_TYPE_INT64 {
+        $$ = malloc(sizeof(strlen("long long")));
+        strcpy($$, "long long");
+    }
+    | T_TYPE_BYTE {
+        $$ = malloc(sizeof(strlen("unsigned char")));
+        strcpy($$, "unsigned char");
+    }
+    | T_TYPE_WORD {
+        $$ = malloc(sizeof(strlen("unsigned short int")));
+        strcpy($$, "unsigned short int");
+    }
+    | T_TYPE_LONGWORD {
+        $$ = malloc(sizeof(strlen("unsigned int")));
+        strcpy($$, "unsigned int");
+    }
+    | T_TYPE_QWORD {
+        $$ = malloc(sizeof(strlen("unsigned long long")));
+        strcpy($$, "unsigned long long");
+    }
+    | T_TYPE_INTEGER
+    | T_TYPE_CARDINAL
+    
+    | T_TYPE_CURRENCY
+    | T_TYPE_COMP
+    | T_TYPE_REAL
+    
+    | T_TYPE_DOUBLE {
+        $$ = malloc(sizeof(strlen("double")));
+        strcpy($$, "double");
+    }
+    | T_TYPE_EXTENDED {
+        $$ = malloc(sizeof(strlen("long double")));
+        strcpy($$, "long double");
+    }
+    | T_TYPE_SINGLE {
+        $$ = malloc(sizeof(strlen("float")));
+        strcpy($$, "float");
+    }
+
+    | T_TYPE_STRING {
         $$ = malloc(sizeof(strlen("string")));
         strcpy($$, "string");
     }
@@ -135,31 +197,6 @@ Type_Of_Variable:
         $$ = malloc(sizeof(strlen("bool")));
         strcpy($$, "bool");
     }
-    | T_TYPE_INTEGER {
-        $$ = malloc(sizeof(strlen("int")));
-        strcpy($$, "int");
-    }
-    | T_TYPE_BYTE
-    | T_TYPE_SHORTINT
-    | T_TYPE_WORD
-    | T_TYPE_SMALLINT
-    | T_TYPE_CARDINAL
-    | T_TYPE_LONGINT
-    | T_TYPE_LONGWORD
-    | T_TYPE_INT64
-    | T_TYPE_REAL {
-        $$ = malloc(sizeof(strlen("float")));
-        strcpy($$, "float");
-    }
-    | T_TYPE_DOUBLE {
-        $$ = malloc(sizeof(strlen("float")));
-        strcpy($$, "double");
-    }
-    | T_TYPE_QWORD
-    | T_TYPE_EXTENDED
-    | T_TYPE_SINGLE
-    | T_TYPE_CURRENCY
-    | T_TYPE_COMP
 ;
 
 If_Statement:

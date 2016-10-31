@@ -18,7 +18,7 @@ symbol symtab[NHASH];
 %option noyywrap nodefault yylineno
 
 /* DEFINITIONS */
-word [a-z|A-Z][a-z|A-Z]*
+word [a-zA-Z_][a-zA-Z_]*
 variables {word}[0-9]+
 text {word}[[ ]+{word}]+
 withespace [ \r\t]+
@@ -31,12 +31,13 @@ some_char .
 {withespace} /* Ignore */ ;
 
 "program" {return T_PROGRAM;}
+"begin" {return T_BEGIN_PROGRAM;}
 "end." {return T_END_PROGRAM;}
-"begin" {return T_BEGIN;}
 
 "\n" {return T_END_LINE;}
 ":=" {return T_ATTRIBUTION;}
 ";" {return T_SEMICOLON;}
+":" {return T_COLON;}
 
 "var" {return T_VAR_STATEMENT;}
 "if" {return T_IF_STATEMENT;}
