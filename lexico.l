@@ -28,6 +28,10 @@ any_char .
 
 {withespace} /* Ignore */ ;
 
+"program" {return T_PROGRAM;}
+"end." {return T_END_PROGRAM;}
+"begin" {return T_BEGIN;}
+
 "\n" {return T_END_LINE;}
 ":=" {return T_ATTRIBUTION;}
 ";" {return T_SEMICOLON;}

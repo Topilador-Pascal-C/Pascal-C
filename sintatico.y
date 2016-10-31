@@ -58,8 +58,12 @@ FILE * fileOut;
 %token T_ANY_STRING
 %token T_ANY_DIGIT
 %token T_END_LINE
+%token <strval> T_END_PROGRAM
+%token <strval> T_PROGRAM
+%token <strval> T_BEGIN
 
 %type <strval> Type_Of_Variable
+%type <strval> Lim_File
 
 %start Input
 
@@ -71,10 +75,20 @@ Input:
 ;
 
 Command:
-    T_END_LINE
+    Lim_File
+    | T_END_LINE
     | If_Statement T_END_LINE
     | Declaration_Of_Variables T_END_LINE
     | Attribuition T_END_LINE
+;
+
+Lim_File:
+    T_END_PROGRAM {
+        fprintf(fileOut, "\n\treturn 0;\n}");
+    }
+    | T_PROGRAM Expression T_BEGIN {
+        fprintf(fileOut, "int main() {\n");
+    }
 ;
 
 Any_String:
@@ -193,7 +207,7 @@ int main(int argc, char ** argv){
                 sprintf(outfilename, "out%d.c", i);
 
                 fileOut = fopen(outfilename, "w");
-                yyparse();
+                yyparse();                
                 fclose(fileOut);
                 printf("Arquivo compilado e resultado em %s\n", outfilename);
 
