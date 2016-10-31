@@ -23,11 +23,8 @@
 "not" return(NOT_STATEMENT);
 
 ; basic commands
-"program" return(PROGRAM_STATEMENT);
 "unit" return(UNIT_STATEMENT);
 "uses" return(IMPORT_LIBRARIES);
-"begin" return(BEGIN);
-"end." return(END_PROGRAM);
 "end" return(END);
 "type" return(NEW_STATEMENT);
 "break" return(BREAK);
