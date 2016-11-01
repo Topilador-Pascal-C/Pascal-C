@@ -251,12 +251,10 @@ int main(int argc, char ** argv){
                 fileName = malloc(sizeof(strlen(curfilename)));
                 for (k = 0; k < (int)strlen(curfilename)-4; k++) {
                     if (curfilename[k] != '.') {
-                        printf("%c \n", curfilename[k]);
                         fileName[k] = curfilename[k];
                     }
                     else break;
                 }
-                printf("%s \n", fileName);
 
                 // Start the analisis lexical
                 yyrestart(f);
