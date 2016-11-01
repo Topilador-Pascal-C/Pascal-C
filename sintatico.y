@@ -182,11 +182,11 @@ Type_Of_Variable:
         $$ = malloc(sizeof(strlen("unsigned int")));
         strcpy($$, "unsigned int");
     }
-    
+
     | T_TYPE_CURRENCY
     | T_TYPE_COMP
     | T_TYPE_REAL
-    
+
     | T_TYPE_DOUBLE {
         $$ = malloc(sizeof(strlen("double")));
         strcpy($$, "double");
@@ -226,7 +226,7 @@ If_Statement:
 %%
 
 int main(int argc, char ** argv){
-    int i;
+    int i, k;
 
     if (argc < 2) {
         curfilename = "(stdin)";
@@ -237,7 +237,7 @@ int main(int argc, char ** argv){
         printf("Esperando a entrada do código a ser compilado...\n");
         yyparse();
         fclose(fileOut);
-        printf("Leitura concluída e resultado compilado em out%d.c\n", i);
+        printf("Leitura concluída e resultado compilado em %s.c\n", fileName);
     } else {
         for (i = 1; i < argc; i++) {
             FILE * f = fopen(argv[i], "r");
@@ -248,6 +248,15 @@ int main(int argc, char ** argv){
                 return (1);
             } else {
                 curfilename = argv[i];
+                fileName = malloc(sizeof(strlen(curfilename)));
+                for (k = 0; k < (int)strlen(curfilename)-4; k++) {
+                    if (curfilename[k] != '.') {
+                        printf("%c \n", curfilename[k]);
+                        fileName[k] = curfilename[k];
+                    }
+                    else break;
+                }
+                printf("%s \n", fileName);
 
                 // Start the analisis lexical
                 yyrestart(f);
@@ -256,7 +265,7 @@ int main(int argc, char ** argv){
                 printf("Iniciando leitura do arquivo %s...\n", curfilename);
 
                 char outfilename [10];
-                sprintf(outfilename, "out%d.c", i);
+                sprintf(outfilename, "%s.c", fileName);
 
                 fileOut = fopen(outfilename, "w");
                 yyparse();
