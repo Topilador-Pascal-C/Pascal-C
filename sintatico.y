@@ -66,6 +66,13 @@ FILE * fileOut;
 %token <strval> T_PROGRAM
 %token <strval> T_BEGIN_PROGRAM
 
+%token T_EQUAL
+%token T_DIFFERENT
+%token T_BIGGER
+%token T_BIGGER_OR_EQUAL
+%token T_MINOR
+%token T_MINOR_OR_EQUAL
+
 %type <strval> Type_Of_Variable
 %type <strval> Lim_File
 
@@ -213,6 +220,42 @@ If_Statement:
         fprintf(fileOut, " {\n");
         fprintf(fileOut, "}\n");
     }
+    | T_IF_STATEMENT Expression T_EQUAL Expression T_IF_THEN_STATEMENT {
+        fprintf(fileOut, "if ");
+        fprintf(fileOut, "(%s == %s)", $<strval>2, $<strval>4);
+        fprintf(fileOut, " {\n");
+        fprintf(fileOut, "}\n");
+    }
+    | T_IF_STATEMENT Expression T_DIFFERENT Expression T_IF_THEN_STATEMENT {
+        fprintf(fileOut, "if ");
+        fprintf(fileOut, "(%s != %s)", $<strval>2, $<strval>4);
+        fprintf(fileOut, " {\n");
+        fprintf(fileOut, "}\n");
+    }
+    | T_IF_STATEMENT Expression T_BIGGER Expression T_IF_THEN_STATEMENT {
+        fprintf(fileOut, "if ");
+        fprintf(fileOut, "(%s > %s)", $<strval>2, $<strval>4);
+        fprintf(fileOut, " {\n");
+        fprintf(fileOut, "}\n");
+    }
+    | T_IF_STATEMENT Expression T_BIGGER_OR_EQUAL Expression T_IF_THEN_STATEMENT {
+        fprintf(fileOut, "if ");
+        fprintf(fileOut, "(%s >= %s)", $<strval>2, $<strval>4);
+        fprintf(fileOut, " {\n");
+        fprintf(fileOut, "}\n");
+    }
+    | T_IF_STATEMENT Expression T_MINOR Expression T_IF_THEN_STATEMENT {
+        fprintf(fileOut, "if ");
+        fprintf(fileOut, "(%s < %s)", $<strval>2, $<strval>4);
+        fprintf(fileOut, " {\n");
+        fprintf(fileOut, "}\n");
+    }
+    | T_IF_STATEMENT Expression T_MINOR_OR_EQUAL Expression T_IF_THEN_STATEMENT {
+        fprintf(fileOut, "if ");
+        fprintf(fileOut, "(%s <= %s)", $<strval>2, $<strval>4);
+        fprintf(fileOut, " {\n");
+        fprintf(fileOut, "}\n");
+    }
 ;
 
 %%
@@ -243,12 +286,10 @@ int main(int argc, char ** argv){
                 fileName = malloc(sizeof(strlen(curfilename)));
                 for (k = 0; k < (int)strlen(curfilename)-4; k++) {
                     if (curfilename[k] != '.') {
-                        printf("%c \n", curfilename[k]);
                         fileName[k] = curfilename[k];
                     }
                     else break;
                 }
-                printf("%s \n", fileName);
 
                 // Start the analisis lexical
                 yyrestart(f);

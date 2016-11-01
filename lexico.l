@@ -65,6 +65,12 @@ some_char .
 "currency" {return T_TYPE_CURRENCY;}
 "extended" {return T_TYPE_EXTENDED;}
 
+"=" {return T_EQUAL;}
+"<>" {return T_DIFFERENT;}
+">" {return T_BIGGER;}
+">=" {return T_BIGGER_OR_EQUAL;}
+"<" {return T_MINOR;}
+"<=" {return T_MINOR_OR_EQUAL;}
 
 {text} {
 	yylval.strval = malloc(sizeof(strlen(yytext)));

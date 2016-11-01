@@ -9,12 +9,6 @@
 ")" return(RIGHT_PARENTHESIS);
 
 "," return(COMMA);
-"=" return(EQUAL);
-"<>" return(DIFFERENT);
-">" return(BIGGER);
-">=" return(BIGGER_OR_EQUAL);
-"<" return(MINOR);
-"<=" return(MINOR_OR_EQUAL);
 "mod" return(MOD);
 "and" return(AND_STATEMENT);
 "or" return(OR_STATEMENT);

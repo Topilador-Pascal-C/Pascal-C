@@ -9,12 +9,6 @@
 %token LEFT_PARENTHESIS
 %token RIGHT_PARENTHESIS
 %token COMMA
-%token EQUAL
-%token DIFFERENT
-%token BIGGER
-%token BIGGER_OR_EQUAL
-%token MINOR
-%token MINOR_OR_EQUAL
 %token MOD
 %token AND_STATEMENT
 %token OR_STATEMENT

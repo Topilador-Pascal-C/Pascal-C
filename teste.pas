@@ -23,7 +23,11 @@ var
 
 begin
 
-	if _variavelBool then
+	if variavelShortint = variavelDouble then
+		variavel_String := teste;
+	if variavelShortint <> variavelDouble then
+		variavel_String := teste;
+	if variavelShortint >= variavelDouble then
 		variavel_String := teste;
 
 end.
