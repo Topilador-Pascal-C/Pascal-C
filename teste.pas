@@ -1,6 +1,4 @@
-program teste;
-
-uses 
+program testeProgram;
 
 var
 	variavel_String : string;
@@ -26,6 +24,6 @@ var
 begin
 
 	if _variavelBool then
-		variavel_String := teste;
+		variavel_String := 'teste';
 
 end.

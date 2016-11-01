@@ -39,6 +39,7 @@ some_char .
 ";" {return T_SEMICOLON;}
 ":" {return T_COLON;}
 "\"" {return T_QUOTATION_MARKS;}
+"\'" {return T_APOSTROPHE;}
 
 "var" {return T_VAR_STATEMENT;}
 "if" {return T_IF_STATEMENT;}
@@ -64,7 +65,6 @@ some_char .
 "comp" {return T_TYPE_COMP;}
 "currency" {return T_TYPE_CURRENCY;}
 "extended" {return T_TYPE_EXTENDED;}
-
 
 {text} {
 	yylval.strval = malloc(sizeof(strlen(yytext)));

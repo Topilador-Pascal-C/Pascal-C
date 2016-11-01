@@ -57,6 +57,7 @@ FILE * fileOut;
 %token <strval> T_TYPE_COMP
 %token <strval> T_TYPE_CURRENCY
 
+%token T_APOSTROPHE;
 %token T_SOME_TEXT
 %token T_SOME_WORD
 %token T_SOME_VARIABLES
@@ -89,6 +90,7 @@ Command:
 Some_String:
     T_SOME_WORD
     | T_SOME_VARIABLES
+;
 
 Lim_File:
     T_END_PROGRAM {
@@ -126,7 +128,13 @@ Declaration_Of_Variables:
 ;
 
 Attribuition:
-    Some_String T_ATTRIBUTION Expression T_SEMICOLON {
+    Some_String T_ATTRIBUTION T_APOSTROPHE Some_String T_APOSTROPHE T_SEMICOLON {
+        addref(yylineno, curfilename, $<strval>1, 0);
+        fprintf(fileOut, "%s", $<strval>1);
+        fprintf(fileOut, " = \"%s\"", $<strval>4);
+        fprintf(fileOut, ";\n");
+    }
+    | Some_String T_ATTRIBUTION Some_String T_SEMICOLON {
         fprintf(fileOut, "%s", $<strval>1);
         fprintf(fileOut, " = %s", $<strval>3);
         fprintf(fileOut, ";\n");
