@@ -2,16 +2,6 @@
 #include <string.h> /* for strdup */
 #include "global.h"
 #include "sintatico.tab.h"
-#include "symTable.h"
-
-int i = 0;
-
-
-/* Name of current input file */
-char * curfilename;
-
-/* Defining the symbol table */
-symbol symtab[NHASH];
 
 %}
 
@@ -39,6 +29,7 @@ some_char .
 ";" {return T_SEMICOLON;}
 ":" {return T_COLON;}
 "\"" {return T_QUOTATION_MARKS;}
+"\'" {return T_APOSTROPHE;}
 
 "var" {return T_VAR_STATEMENT;}
 "if" {return T_IF_STATEMENT;}

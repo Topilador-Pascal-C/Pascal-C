@@ -21,7 +21,10 @@ typedef struct ref {
 symbol * lookup(char *);
 
 /* simple symtab of fixed size */
-struct symbol symtab[NHASH];
+symbol symtab[NHASH];
+
+/* Name of current input file */
+char * curfilename;
 
 /* Function to add new ref in a symbol table */
 void addref(int, char *, char *, int);

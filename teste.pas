@@ -1,4 +1,4 @@
-program teste;
+program testeProgram;
 
 var
 	variavel_String : string;
@@ -29,5 +29,7 @@ begin
 		variavel_String := teste;
 	if variavelShortint >= variavelDouble then
 		variavel_String := teste;
+	if _variavelBool then
+		variavel_String := 'teste';
 
 end.
