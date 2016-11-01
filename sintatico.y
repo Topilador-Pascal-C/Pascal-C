@@ -28,6 +28,7 @@ FILE * fileOut;
 %token T_ATTRIBUTION;
 %token T_SEMICOLON;
 %token T_COLON;
+%token T_QUOTATION_MARKS;
 
 // structures
 %token T_IF_STATEMENT;
@@ -165,8 +166,14 @@ Type_Of_Variable:
         $$ = malloc(sizeof(strlen("unsigned long long")));
         strcpy($$, "unsigned long long");
     }
-    | T_TYPE_INTEGER
-    | T_TYPE_CARDINAL
+    | T_TYPE_INTEGER {
+        $$ = malloc(sizeof(strlen("int")));
+        strcpy($$, "int");
+    }
+    | T_TYPE_CARDINAL {
+        $$ = malloc(sizeof(strlen("unsigned int")));
+        strcpy($$, "unsigned int");
+    }
     
     | T_TYPE_CURRENCY
     | T_TYPE_COMP

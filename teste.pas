@@ -1,5 +1,7 @@
 program teste;
 
+uses 
+
 var
 	variavel_String : string;
 	variavel_Char   : char;
@@ -14,14 +16,16 @@ var
 	variavelLongword : longword;
 	variavelqword    : qword;
 
+	variavelCardinal : cardinal;
+	variavelInteger  : integer;
+
 	variavelSingle   : single;
 	variavelDouble   : double;
 	variavelExtended : extended;
 
 begin
 
-	if condicao then
-
-	variavelString := teste;
+	if _variavelBool then
+		variavel_String := teste;
 
 end.
