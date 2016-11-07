@@ -104,7 +104,7 @@ Lim_File:
         fprintf(fileOut, "\n\treturn 0;\n}");
     }
     | T_PROGRAM Expression T_SEMICOLON {
-        fprintf(fileOut, "#include <stdio.h>\n#include <stdlib.h>\n\n");
+        fprintf(fileOut, "#include <bits/stdc++.h>\n\n using namespace std;\n\n");
     }
     | T_BEGIN_PROGRAM {
         fprintf(fileOut, "\nint main() {\n");
@@ -308,7 +308,7 @@ int main(int argc, char ** argv){
                 printf("Iniciando leitura do arquivo %s...\n", curfilename);
 
                 char outfilename [10];
-                sprintf(outfilename, "%s.c", fileName);
+                sprintf(outfilename, "%s.cpp", fileName);
 
                 fileOut = fopen(outfilename, "w");
                 yyparse();
