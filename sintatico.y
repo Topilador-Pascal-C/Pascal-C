@@ -1,6 +1,6 @@
 %{
 #include "global.h"
-#include "symTable.h"
+#include "symbolTable.h"
 #include <stdlib.h> /* For malloc in symbol table */
 #include <string.h> /* For strcmp in symbol table */
 #include <stdio.h> /* For error messages */
@@ -121,13 +121,13 @@ Expression:
 
 Declaration_Of_Variables:
     T_VAR_STATEMENT T_END_LINE Some_String T_COLON Type_Of_Variable T_SEMICOLON {
-        addref(yylineno, curfilename, $<strval>3, 0);
+        addSymbol(yylineno, curfilename, $<strval>3);
         fprintf(fileOut, "%s ", $<strval>5);
         fprintf(fileOut, "%s", $<strval>3);
         fprintf(fileOut, ";\n");
     }
     | Some_String T_COLON Type_Of_Variable T_SEMICOLON {
-        addref(yylineno, curfilename, $<strval>1, 0);
+        addSymbol(yylineno, curfilename, $<strval>1);
         fprintf(fileOut, "%s ", $<strval>3);
         fprintf(fileOut, "%s", $<strval>1);
         fprintf(fileOut, ";\n");
@@ -136,7 +136,7 @@ Declaration_Of_Variables:
 
 Attribuition:
     Some_String T_ATTRIBUTION T_APOSTROPHE Some_String T_APOSTROPHE T_SEMICOLON {
-        addref(yylineno, curfilename, $<strval>1, 0);
+        addSymbol(yylineno, curfilename, $<strval>1);
         fprintf(fileOut, "%s", $<strval>1);
         fprintf(fileOut, " = \"%s\"", $<strval>4);
         fprintf(fileOut, ";\n");
@@ -271,6 +271,8 @@ If_Statement:
 int main(int argc, char ** argv){
     int i, k;
 
+    size_of_table = 0;
+
     if (argc < 2) {
         curfilename = "(stdin)";
         yylineno = 1;
@@ -320,7 +322,7 @@ int main(int argc, char ** argv){
 
     printf("\n\n----------------------\n");
     printf("Print of symbol table! \n\n");
-    printrefs();
+    printSymbolTable();
     printf("----------------------\n");
     return 1;
 }
