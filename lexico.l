@@ -34,6 +34,8 @@ some_char .
 "var" {return T_VAR_STATEMENT;}
 "if" {return T_IF_STATEMENT;}
 "then" {return T_IF_THEN_STATEMENT;}
+"while" {return T_WHILE_STATEMENT;}
+"do" {return T_DO_STATEMENT;}
 "const" {return T_CONST_STATEMENT;}
 
 "string" {return T_TYPE_STRING;}

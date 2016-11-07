@@ -31,5 +31,9 @@ begin
 		variavel_String := teste;
 	if _variavelBool then
 		variavel_String := 'teste';
-
+	while variavelShortint = variavelDouble do
+	while variavelShortint <> variavelDouble do
+	while variavelShortint >= variavelDouble do
+	while _variavelBool do
+	
 end.

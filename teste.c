@@ -31,6 +31,14 @@ variavel_String = teste;
 if (_variavelBool) {
 }
 variavel_String = "teste";
+while (variavelShortint == variavelDouble) {
+}
+while (variavelShortint != variavelDouble) {
+}
+while (variavelShortint >= variavelDouble) {
+}
+while (_variavelBool) {
+}
 
 	return 0;
-} q
+}
