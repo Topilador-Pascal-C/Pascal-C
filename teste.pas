@@ -24,11 +24,11 @@ var
 begin
 
 	if variavelShortint = variavelDouble then
-		
+
 	if variavelShortint <> variavelDouble then
-		
+
 	if variavelShortint >= variavelDouble then
-		
+
 	if variavelShortint <= variavelDouble then
 
 	if variavelShortint > variavelDouble then
@@ -36,6 +36,12 @@ begin
 	if variavelShortint < variavelDouble then
 
 	if _variavelBool then
+
+	if _variavelBool and variavel_String then
+
+	if _variavelBool or variavel_String < variavel_Char then
+	
+	if variavelShortint < variavelDouble or variavel_String < variavel_Char then
 		
 	variavel_String := 'teste';
 

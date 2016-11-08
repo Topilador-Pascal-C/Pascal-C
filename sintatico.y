@@ -1,6 +1,7 @@
 %{
 #include "global.h"
 #include "symbolTable.h"
+#include "auxFunctions.h"
 #include <stdlib.h> /* For malloc in symbol table */
 #include <string.h> /* For strcmp in symbol table */
 #include <stdio.h> /* For error messages */
@@ -16,8 +17,6 @@ int debugValue = 1;
 // to use debugValues:
 // debugValue = printDebugText(debugValue);
 // {debugValue = printDebugText(debugValue);}
-
-FILE * fileOut;
 
 %}
 
@@ -65,7 +64,10 @@ FILE * fileOut;
 %token T_END_LINE
 %token <strval> T_END_PROGRAM
 %token <strval> T_PROGRAM
-%token <strval> T_BEGIN_PROGRAM
+%token <strval> T_BEGIN
+%token T_END_STATEMENT
+%token T_OR_STATEMENT
+%token T_AND_STATEMENT
 
 %token T_EQUAL
 %token T_DIFFERENT
@@ -76,6 +78,8 @@ FILE * fileOut;
 
 %type <strval> Type_Of_Variable
 %type <strval> Lim_File
+%type <strval> Conditions
+%type <strval> Multiple_Conditions
 
 %start Input
 
@@ -106,31 +110,83 @@ Lim_File:
     | T_PROGRAM Expression T_SEMICOLON {
         fprintf(fileOut, "#include <bits/stdc++.h>\n\n using namespace std;\n\n");
     }
-    | T_BEGIN_PROGRAM {
+    | T_BEGIN {
         fprintf(fileOut, "\nint main() {\n");
     }
-;
-
-Conditions:
-    Expression
 ;
 
 Expression:
     Some_String
 ;
 
+If_Statement:
+    T_IF_STATEMENT {
+        fprintf(fileOut, "if ");
+        fprintf(fileOut, "(");
+        
+    } Multiple_Conditions T_IF_THEN_STATEMENT {
+        fprintf(fileOut, ") ");
+        fprintf(fileOut, "{\n");
+        fprintf(fileOut, "}\n");
+    }
+
+;
+
+Multiple_Conditions:
+    Conditions
+    | Conditions T_AND_STATEMENT {
+        fprintf(fileOut, " && ");
+    } Conditions
+    | Conditions T_OR_STATEMENT {
+        fprintf(fileOut, " || ");
+    } Conditions
+;
+
+Conditions:
+    Expression {
+        fprintf(fileOut, "%s", $<strval>1);
+    }
+    | Expression T_EQUAL Expression {
+        fprintf(fileOut, "%s", $<strval>1);
+        fprintf(fileOut, " == ");
+        fprintf(fileOut, "%s", $<strval>3);
+
+    }
+    | Expression T_DIFFERENT Expression {
+        fprintf(fileOut, "%s", $<strval>1);
+        fprintf(fileOut, " != ");
+        fprintf(fileOut, "%s", $<strval>3);
+    }
+    | Expression T_BIGGER Expression {
+        fprintf(fileOut, "%s", $<strval>1);
+        fprintf(fileOut, " > ");
+        fprintf(fileOut, "%s", $<strval>3);
+    }
+    | Expression T_BIGGER_OR_EQUAL Expression {
+        fprintf(fileOut, "%s", $<strval>1);
+        fprintf(fileOut, " >= ");
+        fprintf(fileOut, "%s", $<strval>3);
+    }
+    | Expression T_MINOR Expression {
+        fprintf(fileOut, "%s", $<strval>1);
+        fprintf(fileOut, " < ");
+        fprintf(fileOut, "%s", $<strval>3);
+    }
+    | Expression T_MINOR_OR_EQUAL Expression {
+        fprintf(fileOut, "%s", $<strval>1);
+        fprintf(fileOut, " <= ");
+        fprintf(fileOut, "%s", $<strval>3);
+    }
+;
+
 Declaration_Of_Variables:
     T_VAR_STATEMENT T_END_LINE Some_String T_COLON Type_Of_Variable T_SEMICOLON {
         addSymbol(yylineno, curfilename, $<strval>3);
-        fprintf(fileOut, "%s ", $<strval>5);
-        fprintf(fileOut, "%s", $<strval>3);
-        fprintf(fileOut, ";\n");
+        printDeclarations($<strval>5, $<strval>3);
     }
     | Some_String T_COLON Type_Of_Variable T_SEMICOLON {
         addSymbol(yylineno, curfilename, $<strval>1);
-        fprintf(fileOut, "%s ", $<strval>3);
-        fprintf(fileOut, "%s", $<strval>1);
-        fprintf(fileOut, ";\n");
+        printDeclarations($<strval>3, $<strval>1);
     }
 ;
 
@@ -142,6 +198,7 @@ Attribuition:
         fprintf(fileOut, ";\n");
     }
     | Some_String T_ATTRIBUTION Some_String T_SEMICOLON {
+        addSymbol(yylineno, curfilename, $<strval>1);
         fprintf(fileOut, "%s", $<strval>1);
         fprintf(fileOut, " = %s", $<strval>3);
         fprintf(fileOut, ";\n");
@@ -218,51 +275,6 @@ Type_Of_Variable:
     | T_TYPE_BOOLEAN {
         $$ = malloc(sizeof(strlen("bool")));
         strcpy($$, "bool");
-    }
-;
-
-If_Statement:
-    T_IF_STATEMENT Conditions T_IF_THEN_STATEMENT {
-        fprintf(fileOut, "if ");
-        fprintf(fileOut, "(%s)", $<strval>2);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_IF_STATEMENT Expression T_EQUAL Expression T_IF_THEN_STATEMENT {
-        fprintf(fileOut, "if ");
-        fprintf(fileOut, "(%s == %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_IF_STATEMENT Expression T_DIFFERENT Expression T_IF_THEN_STATEMENT {
-        fprintf(fileOut, "if ");
-        fprintf(fileOut, "(%s != %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_IF_STATEMENT Expression T_BIGGER Expression T_IF_THEN_STATEMENT {
-        fprintf(fileOut, "if ");
-        fprintf(fileOut, "(%s > %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_IF_STATEMENT Expression T_BIGGER_OR_EQUAL Expression T_IF_THEN_STATEMENT {
-        fprintf(fileOut, "if ");
-        fprintf(fileOut, "(%s >= %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_IF_STATEMENT Expression T_MINOR Expression T_IF_THEN_STATEMENT {
-        fprintf(fileOut, "if ");
-        fprintf(fileOut, "(%s < %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_IF_STATEMENT Expression T_MINOR_OR_EQUAL Expression T_IF_THEN_STATEMENT {
-        fprintf(fileOut, "if ");
-        fprintf(fileOut, "(%s <= %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
     }
 ;
 

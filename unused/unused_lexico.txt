@@ -10,15 +10,12 @@
 
 "," return(COMMA);
 "mod" return(MOD);
-"and" return(AND_STATEMENT);
-"or" return(OR_STATEMENT);
 "xor" return(XOR_STATEMENT);
 "not" return(NOT_STATEMENT);
 
 ; basic commands
 "unit" return(UNIT_STATEMENT);
 "uses" return(IMPORT_LIBRARIES);
-"end" return(END);
 "type" return(NEW_STATEMENT);
 "break" return(BREAK);
 "continue" return(CONTINUE_STATEMENT);

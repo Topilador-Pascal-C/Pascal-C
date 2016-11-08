@@ -21,8 +21,9 @@ some_char .
 {withespace} /* Ignore */ ;
 
 "program" {return T_PROGRAM;}
-"begin" {return T_BEGIN_PROGRAM;}
+"begin" {return T_BEGIN;}
 "end." {return T_END_PROGRAM;}
+"end;" {return T_END_STATEMENT;}
 
 "\n" {return T_END_LINE;}
 ":=" {return T_ATTRIBUTION;}
@@ -35,6 +36,8 @@ some_char .
 "if" {return T_IF_STATEMENT;}
 "then" {return T_IF_THEN_STATEMENT;}
 "const" {return T_CONST_STATEMENT;}
+"and" {return T_AND_STATEMENT;}
+"or" {return T_OR_STATEMENT;}
 
 "string" {return T_TYPE_STRING;}
 "char" {return T_TYPE_CHAR;}
