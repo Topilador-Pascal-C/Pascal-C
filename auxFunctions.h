@@ -7,6 +7,8 @@
 
 FILE * fileOut;
 
-void printDeclarations(char * type, char * value);
+void printBlankSpace();
+void printDeclaration(char * type, char * value);
+void printAtribuition(char * variable, char * type, char * value);
 
 #endif

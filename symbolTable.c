@@ -28,6 +28,63 @@ symbol * searchSymbol(char * word) {
 	
 }
 
+int addNewVariable(char * name, char * type, int line, char * filename) {
+	reference * r;
+	symbol * sp = searchSymbol(name);
+
+	int return_validate = 0;
+
+	/* Don't do dups of same line and file */
+	if (sp->reflist) {
+		return_validate = 0;
+	} else {
+		sp->type = strdup(type);
+		r = malloc(sizeof(reference));
+		if (!r) {
+			fputs("out of space\n", stderr);
+			abort();
+		} else {
+			r->value = "";
+			r->next = sp->reflist;
+			r->filename = filename;
+			r->line = line;
+			sp->reflist = r;
+		}
+		return_validate = 1;
+	}
+
+	return return_validate;
+}
+
+int addAttribuition(char * variable, char * value, int line, char * filename) {
+	reference * r;
+	symbol * sp = searchSymbol(variable);
+
+	int return_validate = 0;
+
+	/* Don't do dups of same line and file */
+	if (sp->reflist && sp->reflist->line == line && sp->reflist->filename == filename) {
+		return_validate = 0;
+	} else {
+		r = malloc(sizeof(reference));
+		if (!r) {
+			fputs("out of space\n", stderr);
+			abort();
+		} else {
+			r->value = strdup(value);
+			r->next = sp->reflist;
+			r->filename = filename;
+			r->line = line;
+			sp->reflist = r;
+		}
+
+		return_validate = 1;
+	}
+
+	return return_validate;
+}
+
+
 // Adding new word in the symbol table
 void addSymbol(int line, char * filename, char * word) {
 	reference * r;
@@ -87,13 +144,16 @@ void printSymbolTable() {
 		reference * rp = symbol_table[i].reflist;
 
 		/* Now print the word and its references */
-		printf("%20s", symbol_table[i].name);
+		printf("%20s:%-20s", symbol_table[i].name, symbol_table[i].type);
 		while(rp != NULL) {
 			if (rp->filename == prevfn) {
 				printf(", %d", rp->line);
 			} else {
 				printf(" %s:%d", rp->filename, rp->line);
 				prevfn = rp->filename;
+			}
+			if (strcmp(rp->value, "") != 0) {
+				printf(":%s", rp->value);
 			}
 			rp = rp->next;
 		}

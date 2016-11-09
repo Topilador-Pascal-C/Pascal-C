@@ -2,4 +2,4 @@
 *.tab.*
 *.o
 topilador
-out*.c
+*.cpp

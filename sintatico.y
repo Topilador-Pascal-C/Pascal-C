@@ -184,27 +184,29 @@ Conditions:
 
 Declaration_Of_Variables:
     T_VAR_STATEMENT T_END_LINE Some_String T_COLON Type_Of_Variable T_SEMICOLON {
-        addSymbol(yylineno, curfilename, $<strval>3);
-        printDeclarations($<strval>5, $<strval>3);
+        if (addNewVariable($<strval>3, $<strval>5, yylineno, curfilename) == 1) {
+            printDeclaration($<strval>5, $<strval>3);
+        } else {
+            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>3, curfilename, yylineno);
+        }
     }
     | Some_String T_COLON Type_Of_Variable T_SEMICOLON {
-        addSymbol(yylineno, curfilename, $<strval>1);
-        printDeclarations($<strval>3, $<strval>1);
+        if (addNewVariable($<strval>1, $<strval>3, yylineno, curfilename) == 1) {
+            printDeclaration($<strval>3, $<strval>1);
+        } else {
+            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>1, curfilename, yylineno);
+        }
     }
 ;
 
 Attribuition:
     Some_String T_ATTRIBUTION T_APOSTROPHE Some_String T_APOSTROPHE T_SEMICOLON {
-        addSymbol(yylineno, curfilename, $<strval>1);
-        fprintf(fileOut, "%s", $<strval>1);
-        fprintf(fileOut, " = \"%s\"", $<strval>4);
-        fprintf(fileOut, ";\n");
+        addAttribuition($<strval>1, $<strval>4, yylineno, curfilename);
+        printAtribuition($<strval>1, "string", $<strval>4);
     }
     | Some_String T_ATTRIBUTION Some_String T_SEMICOLON {
-        addSymbol(yylineno, curfilename, $<strval>1);
-        fprintf(fileOut, "%s", $<strval>1);
-        fprintf(fileOut, " = %s", $<strval>3);
-        fprintf(fileOut, ";\n");
+        addAttribuition($<strval>1, $<strval>3, yylineno, curfilename);
+        printAtribuition($<strval>1, "number/expression", $<strval>3);
     }
 ;
 
@@ -331,10 +333,10 @@ int main(int argc, char ** argv){
     int i, k;
 
     size_of_table = 0;
-
     if (argc < 2) {
         curfilename = "(stdin)";
         yylineno = 1;
+        scope = 0;
 
         // Start the analisis lexical
         fileOut = fopen("out.c", "w");
@@ -352,6 +354,8 @@ int main(int argc, char ** argv){
                 return (1);
             } else {
                 curfilename = argv[i];
+                scope = 0;
+                
                 fileName = malloc(sizeof(strlen(curfilename)));
                 for (k = 0; k < (int)strlen(curfilename)-4; k++) {
                     if (curfilename[k] != '.') {

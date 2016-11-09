@@ -18,6 +18,7 @@ var
 	variavelInteger  : integer;
 
 	variavelSingle   : single;
+	variavelSingle   : single;
 	variavelDouble   : double;
 	variavelExtended : extended;
 
