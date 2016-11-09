@@ -144,54 +144,41 @@ While_Statement:
 Multiple_Conditions:
     Conditions
     | Conditions T_AND_STATEMENT {
-        fprintf(fileOut, " && ");
+        printAndOrCondition("and");
     } Conditions
     | Conditions T_OR_STATEMENT {
-        fprintf(fileOut, " || ");
+        printAndOrCondition("or");
     } Conditions
 ;
 
 Conditions:
     Expression {
-        fprintf(fileOut, "%s", $<strval>1);
+        printCondition1($<strval>1);
     }
     | Expression T_EQUAL Expression {
-        fprintf(fileOut, "%s", $<strval>1);
-        fprintf(fileOut, " == ");
-        fprintf(fileOut, "%s", $<strval>3);
-
+        printCondition($<strval>1, $<strval>3, "==");
     }
     | Expression T_DIFFERENT Expression {
-        fprintf(fileOut, "%s", $<strval>1);
-        fprintf(fileOut, " != ");
-        fprintf(fileOut, "%s", $<strval>3);
+        printCondition($<strval>1, $<strval>3, "!=");
     }
     | Expression T_BIGGER Expression {
-        fprintf(fileOut, "%s", $<strval>1);
-        fprintf(fileOut, " > ");
-        fprintf(fileOut, "%s", $<strval>3);
+        printCondition($<strval>1, $<strval>3, ">");
     }
     | Expression T_BIGGER_OR_EQUAL Expression {
-        fprintf(fileOut, "%s", $<strval>1);
-        fprintf(fileOut, " >= ");
-        fprintf(fileOut, "%s", $<strval>3);
+        printCondition($<strval>1, $<strval>3, ">=");
     }
     | Expression T_MINOR Expression {
-        fprintf(fileOut, "%s", $<strval>1);
-        fprintf(fileOut, " < ");
-        fprintf(fileOut, "%s", $<strval>3);
+        printCondition($<strval>1, $<strval>3, "<");
     }
     | Expression T_MINOR_OR_EQUAL Expression {
-        fprintf(fileOut, "%s", $<strval>1);
-        fprintf(fileOut, " <= ");
-        fprintf(fileOut, "%s", $<strval>3);
+        printCondition($<strval>1, $<strval>3, "<=");
     }
 ;
 
 Declaration_Of_Variables:
     T_VAR_STATEMENT Some_String T_COLON Type_Of_Variable T_SEMICOLON {
-        if (addNewVariable($<strval>3, $<strval>5, yylineno, curfilename) == 1) {
-            printDeclaration($<strval>5, $<strval>3);
+        if (addNewVariable($<strval>2, $<strval>4, yylineno, curfilename) == 1) {
+            printDeclaration($<strval>4, $<strval>2);
         } else {
             printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>3, curfilename, yylineno);
         }
@@ -218,44 +205,34 @@ Attribuition:
 
 Type_Of_Variable:
     T_TYPE_SHORTINT {
-        $$ = malloc(sizeof(strlen("signed char")));
-        strcpy($$, "signed char");
+        $$ = mallocNewString("signed char");
     }
     | T_TYPE_SMALLINT {
-        $$ = malloc(sizeof(strlen("short int")));
-        strcpy($$, "short int");
+        $$ = mallocNewString("short int");
     }
     | T_TYPE_LONGINT {
-        $$ = malloc(sizeof(strlen("int")));
-        strcpy($$, "int");
+        $$ = mallocNewString("int");
     }
     | T_TYPE_INT64 {
-        $$ = malloc(sizeof(strlen("long long")));
-        strcpy($$, "long long");
+        $$ = mallocNewString("long long");
     }
     | T_TYPE_BYTE {
-        $$ = malloc(sizeof(strlen("unsigned char")));
-        strcpy($$, "unsigned char");
+        $$ = mallocNewString("unsigned char");
     }
     | T_TYPE_WORD {
-        $$ = malloc(sizeof(strlen("unsigned short int")));
-        strcpy($$, "unsigned short int");
+        $$ = mallocNewString("unsigned short int");
     }
     | T_TYPE_LONGWORD {
-        $$ = malloc(sizeof(strlen("unsigned int")));
-        strcpy($$, "unsigned int");
+        $$ = mallocNewString("unsigned int");
     }
     | T_TYPE_QWORD {
-        $$ = malloc(sizeof(strlen("unsigned long long")));
-        strcpy($$, "unsigned long long");
+        $$ = mallocNewString("unsigned long long");
     }
     | T_TYPE_INTEGER {
-        $$ = malloc(sizeof(strlen("int")));
-        strcpy($$, "int");
+        $$ = mallocNewString("int");
     }
     | T_TYPE_CARDINAL {
-        $$ = malloc(sizeof(strlen("unsigned int")));
-        strcpy($$, "unsigned int");
+        $$ = mallocNewString("unsigned int");
     }
 
     | T_TYPE_CURRENCY
@@ -263,29 +240,23 @@ Type_Of_Variable:
     | T_TYPE_REAL
 
     | T_TYPE_DOUBLE {
-        $$ = malloc(sizeof(strlen("double")));
-        strcpy($$, "double");
+        $$ = mallocNewString("double");
     }
     | T_TYPE_EXTENDED {
-        $$ = malloc(sizeof(strlen("long double")));
-        strcpy($$, "long double");
+        $$ = mallocNewString("long double");
     }
     | T_TYPE_SINGLE {
-        $$ = malloc(sizeof(strlen("float")));
-        strcpy($$, "float");
+        $$ = mallocNewString("float");
     }
 
     | T_TYPE_STRING {
-        $$ = malloc(sizeof(strlen("string")));
-        strcpy($$, "string");
+        $$ = mallocNewString("string");
     }
     | T_TYPE_CHAR {
-        $$ = malloc(sizeof(strlen("char")));
-        strcpy($$, "char");
+        $$ = mallocNewString("char");
     }
     | T_TYPE_BOOLEAN {
-        $$ = malloc(sizeof(strlen("bool")));
-        strcpy($$, "bool");
+        $$ = mallocNewString("bool");
     }
 ;
 

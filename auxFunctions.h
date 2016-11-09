@@ -16,11 +16,14 @@ void printDeclaration(char * type, char * value);
 void printAtribuition(char * variable, char * type, char * value);
 
 void printIfDeclaration(char * type);
-void printIfCondition();
-
 void printWhileDeclaration(char * type);
-void printWhileCondition();
+
+void printCondition1(char * expression);
+void printCondition(char * expression1, char * expression2, char * condition);
+void printAndOrCondition(char * type);
 
 void printEndStatements();
+
+char * mallocNewString(char * new_text);
 
 #endif
