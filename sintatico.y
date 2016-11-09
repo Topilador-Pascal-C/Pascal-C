@@ -64,9 +64,9 @@ int debugValue = 1;
 %token T_SOME_VARIABLES
 %token T_SOME_DIGIT
 
-%token <strval> T_END_PROGRAM
-%token <strval> T_PROGRAM
-%token <strval> T_BEGIN
+%token T_END_PROGRAM
+%token T_PROGRAM
+%token T_BEGIN_STATEMENT
 %token T_END_STATEMENT
 %token T_OR_STATEMENT
 %token T_AND_STATEMENT
@@ -80,41 +80,67 @@ int debugValue = 1;
 
 %type <strval> Type_Of_Variable
 
-%start Input
+%start ProgramBegin
 
 %%
 
-Input:
-    { /* nothing */ }
-    | Input Command
+ProgramBegin:
+    T_PROGRAM Expression T_SEMICOLON {
+        printIncludesOfProgram();
+    } T_BEGIN_STATEMENT {
+        printBeginOfProgram();
+        incrementScope();
+    } Commands T_END_PROGRAM {
+        printEndOfProgram();
+        decrementScope();
+    }
+    | T_PROGRAM Expression T_SEMICOLON {
+        printIncludesOfProgram();
+    } Declaration_Of_Variables T_BEGIN_STATEMENT {
+        printBeginOfProgram();
+        incrementScope();
+    } Commands T_END_PROGRAM {
+        printEndOfProgram();
+        decrementScope();
+    }
+;
+
+Commands:
+    Command
+    | Commands Command
 ;
 
 Command:
-    Lim_File
+    Attribuition
     | If_Statement
     | While_Statement
-    | Declaration_Of_Variables
-    | Attribuition
+;
+
+Declaration_Of_Variables:
+    Declaration_Of_Variable
+    | Declaration_Of_Variables Declaration_Of_Variable
+;
+
+Declaration_Of_Variable:
+    T_VAR_STATEMENT Some_String T_COLON Type_Of_Variable T_SEMICOLON {
+        if (addNewVariable($<strval>2, $<strval>4, yylineno, curfilename) == 1) {
+            printDeclaration($<strval>4, $<strval>2);
+        } else {
+            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>3, curfilename, yylineno);
+        }
+    }
+    | Some_String T_COLON Type_Of_Variable T_SEMICOLON {
+        if (addNewVariable($<strval>1, $<strval>3, yylineno, curfilename) == 1) {
+            printDeclaration($<strval>3, $<strval>1);
+        } else {
+            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>1, curfilename, yylineno);
+        }
+    }
 ;
 
 Some_String:
     T_SOME_WORD
     | T_SOME_VARIABLES
-;
-
-Lim_File:
-    T_END_PROGRAM {
-        fprintf(fileOut, "\n\treturn 0;\n}");
-        decrementScope();
-    }
-    | T_PROGRAM Expression T_SEMICOLON {
-        fprintf(fileOut, "#include <bits/stdc++.h>\n\n");
-        fprintf(fileOut, "using namespace std;\n\n");
-    }
-    | T_BEGIN {
-        fprintf(fileOut, "\nint main() {\n");
-        incrementScope();
-    }
 ;
 
 Expression:
@@ -124,12 +150,22 @@ Expression:
 If_Statement:
     T_IF_STATEMENT {
         printIfDeclaration("begin");
-
     } Multiple_Conditions T_IF_THEN_STATEMENT {
         printIfDeclaration("end");
+        incrementScope();
+    } Command {
+        decrementScope();
         printEndStatements();
     }
-
+    //| T_IF_STATEMENT {
+    //    printIfDeclaration("begin");
+    //} Multiple_Conditions T_IF_THEN_STATEMENT T_BEGIN_STATEMENT {
+    //    printIfDeclaration("end");
+    //    incrementScope();
+    //} Command T_END_STATEMENT {
+    //    decrementScope();
+    //    printEndStatements();
+    //}
 ;
 
 While_Statement:
@@ -172,23 +208,6 @@ Conditions:
     }
     | Expression T_MINOR_OR_EQUAL Expression {
         printCondition($<strval>1, $<strval>3, "<=");
-    }
-;
-
-Declaration_Of_Variables:
-    T_VAR_STATEMENT Some_String T_COLON Type_Of_Variable T_SEMICOLON {
-        if (addNewVariable($<strval>2, $<strval>4, yylineno, curfilename) == 1) {
-            printDeclaration($<strval>4, $<strval>2);
-        } else {
-            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>3, curfilename, yylineno);
-        }
-    }
-    | Some_String T_COLON Type_Of_Variable T_SEMICOLON {
-        if (addNewVariable($<strval>1, $<strval>3, yylineno, curfilename) == 1) {
-            printDeclaration($<strval>3, $<strval>1);
-        } else {
-            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>1, curfilename, yylineno);
-        }
     }
 ;
 

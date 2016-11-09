@@ -21,7 +21,7 @@ some_char .
 {withespace} /* Ignore */ ;
 
 "program" {return T_PROGRAM;}
-"begin" {return T_BEGIN;}
+"begin" {return T_BEGIN_STATEMENT;}
 "end." {return T_END_PROGRAM;}
 "end;" {return T_END_STATEMENT;}
 
@@ -30,6 +30,13 @@ some_char .
 ":" {return T_COLON;}
 "\"" {return T_QUOTATION_MARKS;}
 "\'" {return T_APOSTROPHE;}
+
+"=" {return T_EQUAL;}
+"<>" {return T_DIFFERENT;}
+">" {return T_BIGGER;}
+">=" {return T_BIGGER_OR_EQUAL;}
+"<" {return T_MINOR;}
+"<=" {return T_MINOR_OR_EQUAL;}
 
 "var" {return T_VAR_STATEMENT;}
 "if" {return T_IF_STATEMENT;}
@@ -59,13 +66,6 @@ some_char .
 "comp" {return T_TYPE_COMP;}
 "currency" {return T_TYPE_CURRENCY;}
 "extended" {return T_TYPE_EXTENDED;}
-
-"=" {return T_EQUAL;}
-"<>" {return T_DIFFERENT;}
-">" {return T_BIGGER;}
-">=" {return T_BIGGER_OR_EQUAL;}
-"<" {return T_MINOR;}
-"<=" {return T_MINOR_OR_EQUAL;}
 
 {text} {
 	yylval.strval = malloc(sizeof(strlen(yytext)));

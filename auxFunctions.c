@@ -19,12 +19,41 @@ void printBlankSpace() {
 	fprintf(fileOut, " ");
 }
 
+void printNewLine() {
+	fprintf(fileOut, "\n");	
+}
+
+void printIncludesOfProgram() {
+	fprintf(fileOut, "#include <bits/stdc++.h>");
+    printNewLine();
+    printNewLine();
+    fprintf(fileOut, "using namespace std;");
+    printNewLine();
+    printNewLine();
+}
+
+void printBeginOfProgram() {
+    printNewLine();
+	fprintf(fileOut, "int main() {");
+    printNewLine();
+}
+
+void printEndOfProgram() {
+	printNewLine();
+	printTabs();
+	fprintf(fileOut, "return 0;");
+	printNewLine();
+	fprintf(fileOut, "}");
+	printNewLine();
+}
+
 void printDeclaration(char * type, char * value) {
 	printTabs();
 	fprintf(fileOut, "%s", type);
 	printBlankSpace();
     fprintf(fileOut, "%s", value);
-    fprintf(fileOut, ";\n");
+    fprintf(fileOut, ";");
+    printNewLine();
 }
 
 void printAtribuition(char * variable, char * type, char * value) {
@@ -40,7 +69,8 @@ void printAtribuition(char * variable, char * type, char * value) {
 		fprintf(fileOut, "%s", value);
 	}
 
-    fprintf(fileOut, ";\n");
+    fprintf(fileOut, ";");
+    printNewLine();
 }
 
 void printIfDeclaration(char * type) {
@@ -48,7 +78,8 @@ void printIfDeclaration(char * type) {
 		printTabs();
 		fprintf(fileOut, "if (");
 	} else {
-        fprintf(fileOut, ") {\n");
+        fprintf(fileOut, ") {");
+        printNewLine();
     }
 }
 
@@ -57,7 +88,8 @@ void printWhileDeclaration(char * type) {
 		printTabs();
 		fprintf(fileOut, "while (");
 	} else {
-        fprintf(fileOut, ") {\n");
+        fprintf(fileOut, ") {");
+        printNewLine();
     }
 }
 
@@ -81,7 +113,9 @@ void printAndOrCondition(char * type) {
 
 void printEndStatements() {
 	printTabs();
-	fprintf(fileOut, "}\n");
+	fprintf(fileOut, "}");
+	printNewLine();
+	printNewLine();
 }
 
 char * mallocNewString(char * new_text) {

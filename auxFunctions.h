@@ -11,7 +11,13 @@ int scope;
 void incrementScope();
 void decrementScope();
 
+void printTabs();
 void printBlankSpace();
+
+void printIncludesOfProgram();
+void printBeginOfProgram();
+void printEndOfProgram();
+
 void printDeclaration(char * type, char * value);
 void printAtribuition(char * variable, char * type, char * value);
 

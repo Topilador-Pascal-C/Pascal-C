@@ -25,26 +25,22 @@ var
 begin
 
 	if variavelShortint = variavelDouble then
+		variavelExtended := 'teste';
 
-	if variavelShortint <> variavelDouble then
+	if variavelShortint < variavelDouble then 
+		_variavelBool := 'teste'; 
 
-	if variavelShortint >= variavelDouble then
-
-	if variavelShortint <= variavelDouble then
-
-	if variavelShortint > variavelDouble then
-
-	if variavelShortint < variavelDouble then
-
-	if _variavelBool then
+	if _variavelBool then variavel_String := 'teste';
 
 	if _variavelBool and variavel_String then
+		variavel_String := 'teste';
 
 	if _variavelBool or variavel_String < variavel_Char then
+		variavelDouble := 'teste';
+	variavelShortint := 'teste';
 
 	if variavelShortint < variavelDouble or variavel_String < variavel_Char then
-
-	variavel_String := 'teste';
+		variavelSingle := 'teste';
 
 	while variavelShortint = variavelDouble do
 
