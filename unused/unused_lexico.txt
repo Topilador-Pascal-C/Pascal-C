@@ -65,7 +65,7 @@
 "to" return(TO);
 "downto" return(DOWNTO);
 "do" return(FOR_DO_STATEMENT); used in for
-"while" return(WHILE_STATEMENT);
+
 "repeat" return(REPEAT_STATEMENT);
 "until" return(UNTIL_STATEMENT);
 "goto" return(GOTO_STATEMENT);
