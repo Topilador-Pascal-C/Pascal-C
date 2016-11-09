@@ -126,13 +126,24 @@ If_Statement:
     T_IF_STATEMENT {
         fprintf(fileOut, "if ");
         fprintf(fileOut, "(");
-        
+
     } Multiple_Conditions T_IF_THEN_STATEMENT {
         fprintf(fileOut, ") ");
         fprintf(fileOut, "{\n");
         fprintf(fileOut, "}\n");
     }
 
+;
+
+While_Statement:
+    T_WHILE_STATEMENT {
+        fprintf(fileOut, "while ");
+        fprintf(fileOut, "(");
+    } Multiple_Conditions T_DO_STATEMENT {
+        fprintf(fileOut, ") ");
+        fprintf(fileOut, "{\n");
+        fprintf(fileOut, "}\n");
+    }
 ;
 
 Multiple_Conditions:
@@ -280,50 +291,6 @@ Type_Of_Variable:
     | T_TYPE_BOOLEAN {
         $$ = malloc(sizeof(strlen("bool")));
         strcpy($$, "bool");
-    }
-;
-While_Statement:
-    T_WHILE_STATEMENT Conditions T_DO_STATEMENT {
-        fprintf(fileOut, "while ");
-        fprintf(fileOut, "(%s)", $<strval>2);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_WHILE_STATEMENT Expression T_EQUAL Expression T_DO_STATEMENT {
-        fprintf(fileOut, "while ");
-        fprintf(fileOut, "(%s == %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_WHILE_STATEMENT Expression T_DIFFERENT Expression T_DO_STATEMENT {
-        fprintf(fileOut, "while ");
-        fprintf(fileOut, "(%s != %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_WHILE_STATEMENT  Expression T_BIGGER Expression T_DO_STATEMENT {
-        fprintf(fileOut, "while ");
-        fprintf(fileOut, "(%s > %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_WHILE_STATEMENT Expression T_BIGGER_OR_EQUAL Expression T_DO_STATEMENT {
-        fprintf(fileOut, "while ");
-        fprintf(fileOut, "(%s >= %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_WHILE_STATEMENT Expression T_MINOR Expression T_DO_STATEMENT {
-        fprintf(fileOut, "while ");
-        fprintf(fileOut, "(%s < %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
-    }
-    | T_WHILE_STATEMENT Expression T_MINOR_OR_EQUAL Expression T_DO_STATEMENT {
-        fprintf(fileOut, "while ");
-        fprintf(fileOut, "(%s <= %s)", $<strval>2, $<strval>4);
-        fprintf(fileOut, " {\n");
-        fprintf(fileOut, "}\n");
     }
 ;
 
