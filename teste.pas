@@ -40,9 +40,9 @@ begin
 	if _variavelBool and variavel_String then
 
 	if _variavelBool or variavel_String < variavel_Char then
-	
+
 	if variavelShortint < variavelDouble or variavel_String < variavel_Char then
-		
+
 	variavel_String := 'teste';
 
 	while variavelShortint = variavelDouble do
@@ -58,5 +58,11 @@ begin
 	while variavelShortint < variavelDouble do
 
 	while _variavelBool do
+
+	while _variavelBool and variavel_String do
+
+	while _variavelBool or variavel_String < variavel_Char do 
+
+	while variavelShortint < variavelDouble or variavel_String < variavel_Char do
 
 end.
