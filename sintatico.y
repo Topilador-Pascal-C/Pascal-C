@@ -63,7 +63,7 @@ int debugValue = 1;
 %token T_SOME_WORD
 %token T_SOME_VARIABLES
 %token T_SOME_DIGIT
-%token T_END_LINE
+
 %token <strval> T_END_PROGRAM
 %token <strval> T_PROGRAM
 %token <strval> T_BEGIN
@@ -79,9 +79,6 @@ int debugValue = 1;
 %token T_MINOR_OR_EQUAL
 
 %type <strval> Type_Of_Variable
-%type <strval> Lim_File
-%type <strval> Conditions
-%type <strval> Multiple_Conditions
 
 %start Input
 
@@ -94,11 +91,10 @@ Input:
 
 Command:
     Lim_File
-    | T_END_LINE
-    | If_Statement T_END_LINE
-    | While_Statement T_END_LINE
-    | Declaration_Of_Variables T_END_LINE
-    | Attribuition T_END_LINE
+    | If_Statement
+    | While_Statement
+    | Declaration_Of_Variables
+    | Attribuition
 ;
 
 Some_String:
@@ -109,12 +105,15 @@ Some_String:
 Lim_File:
     T_END_PROGRAM {
         fprintf(fileOut, "\n\treturn 0;\n}");
+        decrementScope();
     }
     | T_PROGRAM Expression T_SEMICOLON {
-        fprintf(fileOut, "#include <bits/stdc++.h>\n\n using namespace std;\n\n");
+        fprintf(fileOut, "#include <bits/stdc++.h>\n\n");
+        fprintf(fileOut, "using namespace std;\n\n");
     }
     | T_BEGIN {
         fprintf(fileOut, "\nint main() {\n");
+        incrementScope();
     }
 ;
 
@@ -124,25 +123,21 @@ Expression:
 
 If_Statement:
     T_IF_STATEMENT {
-        fprintf(fileOut, "if ");
-        fprintf(fileOut, "(");
+        printIfDeclaration("begin");
 
     } Multiple_Conditions T_IF_THEN_STATEMENT {
-        fprintf(fileOut, ") ");
-        fprintf(fileOut, "{\n");
-        fprintf(fileOut, "}\n");
+        printIfDeclaration("end");
+        printEndStatements();
     }
 
 ;
 
 While_Statement:
     T_WHILE_STATEMENT {
-        fprintf(fileOut, "while ");
-        fprintf(fileOut, "(");
+        printWhileDeclaration("begin");
     } Multiple_Conditions T_DO_STATEMENT {
-        fprintf(fileOut, ") ");
-        fprintf(fileOut, "{\n");
-        fprintf(fileOut, "}\n");
+        printWhileDeclaration("end");
+        printEndStatements();
     }
 ;
 
@@ -194,7 +189,7 @@ Conditions:
 ;
 
 Declaration_Of_Variables:
-    T_VAR_STATEMENT T_END_LINE Some_String T_COLON Type_Of_Variable T_SEMICOLON {
+    T_VAR_STATEMENT Some_String T_COLON Type_Of_Variable T_SEMICOLON {
         if (addNewVariable($<strval>3, $<strval>5, yylineno, curfilename) == 1) {
             printDeclaration($<strval>5, $<strval>3);
         } else {

@@ -11,7 +11,7 @@
 word [a-zA-Z_][a-zA-Z_]*
 variables {word}[0-9]+
 text {word}[[ ]+{word}]+
-withespace [ \r\t]+
+withespace [ \r\t\n]+
 digits [0-9]+
 
 some_char .
@@ -25,7 +25,6 @@ some_char .
 "end." {return T_END_PROGRAM;}
 "end;" {return T_END_STATEMENT;}
 
-"\n" {return T_END_LINE;}
 ":=" {return T_ATTRIBUTION;}
 ";" {return T_SEMICOLON;}
 ":" {return T_COLON;}

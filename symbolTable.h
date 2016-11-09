@@ -24,7 +24,6 @@ symbol symbol_table[SIZE_TABLE];
 /* Name of current input file */
 char * curfilename;
 int size_of_table;
-int scope;
 
 /* Function to lookup a string in table symbol */
 symbol * searchSymbol(char * word);
