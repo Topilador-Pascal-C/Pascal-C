@@ -62,4 +62,6 @@ begin
 
 	while variavelShortint < variavelDouble or variavel_String < variavel_Char do
 
+	for variavelShortint := variavelSmallint to variavelLongint_ do
+
 end.
