@@ -46,6 +46,8 @@ some_char .
 "const" {return T_CONST_STATEMENT;}
 "and" {return T_AND_STATEMENT;}
 "or" {return T_OR_STATEMENT;}
+"for" return(T_FOR_STATEMENT);
+"to" return(T_TO_STATEMENT);
 
 "string" {return T_TYPE_STRING;}
 "char" {return T_TYPE_CHAR;}
