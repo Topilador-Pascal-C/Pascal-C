@@ -153,24 +153,23 @@ Expression:
 If_Statement:
     T_IF_STATEMENT {
         printIfDeclaration("begin");
-    } Multiple_Conditions T_IF_THEN_STATEMENT T_BEGIN_STATEMENT {
+    } Multiple_Conditions T_IF_THEN_STATEMENT {
         printIfDeclaration("end");
         incrementScope();
-    } Commands T_END_STATEMENT T_SEMICOLON {
+    } If_Statement_Complementation
+;
+
+If_Statement_Complementation:
+    T_BEGIN_STATEMENT Commands T_END_STATEMENT T_SEMICOLON {
         decrementScope();
         printEndStatements();
     }
-    //| T_IF_STATEMENT {
-    //    printIfDeclaration("begin");
-    //} Multiple_Conditions T_IF_THEN_STATEMENT {
-    //    printIfDeclaration("end");
-    //    incrementScope();
-    //} Command {
-    //    decrementScope();
-    //    printEndStatements();
-    //} 
+    | Command {
+        decrementScope();
+        printEndStatements();
+    }
 ;
-
+    
 While_Statement:
     T_WHILE_STATEMENT {
         printWhileDeclaration("begin");

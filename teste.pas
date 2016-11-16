@@ -23,19 +23,20 @@ var
 	variavelExtended : extended;
 
 begin
+	if variavelShortint = variavelDouble then
+		if variavelShortint = variavelDouble then
+		begin
+			variavelExtended := 'teste';
+		end;
 
 	if variavelShortint = variavelDouble then
-	begin
 		variavelExtended := 'teste';
-	end;
 
 	if variavelShortint < variavelDouble then begin
 		_variavelBool := 'teste';
 		variavel_String := 'teste';
 		if _variavelBool then begin variavel_String := 'teste'; end;
 	end;
-
-
 
 	variavelShortint := 'teste';
 
