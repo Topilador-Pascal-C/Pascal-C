@@ -36,33 +36,32 @@ begin
 	end;
 
 
-	if _variavelBool = variavelqword or variavel_String < variavel_Char then
-	begin
-		variavelDouble := 'teste';
-	end;
 
 	variavelShortint := 'teste';
 
 
-	while variavelShortint = variavelDouble do
+	while variavelShortint = variavelDouble do 
+	begin 
+		if _variavelBool = variavelqword or variavel_String < variavel_Char then
+		begin
+			variavelDouble := 'teste';
+		end;
+	end;
+
 
 	while variavelShortint <> variavelDouble do
-
-	while variavelShortint >= variavelDouble do
+	begin
+		variavelDouble := 'teste';
+	end;
+	
 
 	while variavelShortint <= variavelDouble do
-
-	while variavelShortint > variavelDouble do
-
-	while variavelShortint < variavelDouble do
-
-	while _variavelBool do
-
-	while _variavelBool and variavel_String do
-
-	while _variavelBool or variavel_String < variavel_Char do 
-
-	while variavelShortint < variavelDouble or variavel_String < variavel_Char do
+	begin
+		while variavelShortint >= variavelDouble do
+		begin
+			variavelDouble := 'teste';
+		end;
+	end;
 
 	for variavelShortint := variavelSmallint to variavelLongint_ do
 

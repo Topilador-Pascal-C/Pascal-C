@@ -153,11 +153,7 @@ Expression:
 If_Statement:
     T_IF_STATEMENT {
         printIfDeclaration("begin");
-    } Multiple_Conditions {
-        debugValue = printDebugText(debugValue);
-    } T_IF_THEN_STATEMENT {
-        debugValue = printDebugText(debugValue);
-    }  T_BEGIN_STATEMENT {
+    } Multiple_Conditions T_IF_THEN_STATEMENT T_BEGIN_STATEMENT {
         printIfDeclaration("end");
         incrementScope();
     } Commands T_END_STATEMENT T_SEMICOLON {
@@ -178,8 +174,11 @@ If_Statement:
 While_Statement:
     T_WHILE_STATEMENT {
         printWhileDeclaration("begin");
-    } Multiple_Conditions T_DO_STATEMENT {
+    } Multiple_Conditions T_DO_STATEMENT T_BEGIN_STATEMENT {
         printWhileDeclaration("end");
+        incrementScope();
+    } Commands T_END_STATEMENT T_SEMICOLON {
+        decrementScope();
         printEndStatements();
     }
 ;
