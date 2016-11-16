@@ -73,6 +73,21 @@ void printAtribuition(char * variable, char * type, char * value) {
     printNewLine();
 }
 
+void printAtribuitionNoSemicolon(char * variable, char * type, char * value) {
+	fprintf(fileOut, "%s", variable);
+	printBlankSpace();
+	fprintf(fileOut, "=");
+	printBlankSpace();
+
+	if (strcmp(type, "string") == 0) {
+    	fprintf(fileOut, "\"%s\"", value);
+	} else {
+		fprintf(fileOut, "%s", value);
+	}
+
+	fprintf(fileOut, ";");
+}
+
 void printIfDeclaration(char * type) {
 	if (strcmp(type, "begin") == 0) {
 		printTabs();
@@ -87,6 +102,16 @@ void printWhileDeclaration(char * type) {
 	if (strcmp(type, "begin") == 0) {
 		printTabs();
 		fprintf(fileOut, "while (");
+	} else {
+        fprintf(fileOut, ") {");
+        printNewLine();
+    }
+}
+
+void printForDeclaration(char * type) {
+	if (strcmp(type, "begin") == 0) {
+		printTabs();
+		fprintf(fileOut, "for (");
 	} else {
         fprintf(fileOut, ") {");
         printNewLine();

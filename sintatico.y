@@ -36,6 +36,8 @@ int debugValue = 1;
 %token T_DO_STATEMENT;
 %token T_VAR_STATEMENT
 %token T_CONST_STATEMENT
+%token T_FOR_STATEMENT
+%token T_TO_STATEMENT
 
 // variable types
 %token <strval> T_TYPE_CHAR
@@ -114,6 +116,7 @@ Command:
     Attribuition
     | If_Statement
     | While_Statement
+    | For_Statement
 ;
 
 Declaration_Of_Variables:
@@ -181,6 +184,16 @@ While_Statement:
     }
 ;
 
+For_Statement:
+    T_FOR_STATEMENT {
+        printForDeclaration("begin");
+    } Command T_TO_STATEMENT Expression T_DO_STATEMENT {
+        printForDeclaration("end");
+        printEndStatements();
+        decrementScope();
+    }
+;
+
 Multiple_Conditions:
     Conditions
     | Conditions T_AND_STATEMENT {
@@ -223,6 +236,10 @@ Attribuition:
     | Some_String T_ATTRIBUTION Some_String T_SEMICOLON {
         addAttribuition($<strval>1, $<strval>3, yylineno, curfilename);
         printAtribuition($<strval>1, "number/expression", $<strval>3);
+    }
+    | Some_String T_ATTRIBUTION Some_String {
+        addAttribuition($<strval>1, $<strval>3, yylineno, curfilename);
+        printAtribuitionNoSemicolon($<strval>1, "number/expression", $<strval>3);
     }
 ;
 
