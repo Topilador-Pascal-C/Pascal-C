@@ -23,7 +23,7 @@ some_char .
 "program" {return T_PROGRAM;}
 "begin" {return T_BEGIN_STATEMENT;}
 "end." {return T_END_PROGRAM;}
-"end;" {return T_END_STATEMENT;}
+"end" {return T_END_STATEMENT;}
 
 ":=" {return T_ATTRIBUTION;}
 ";" {return T_SEMICOLON;}

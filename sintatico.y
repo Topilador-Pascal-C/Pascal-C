@@ -150,22 +150,26 @@ Expression:
 If_Statement:
     T_IF_STATEMENT {
         printIfDeclaration("begin");
-    } Multiple_Conditions T_IF_THEN_STATEMENT {
+    } Multiple_Conditions {
+        debugValue = printDebugText(debugValue);
+    } T_IF_THEN_STATEMENT {
+        debugValue = printDebugText(debugValue);
+    }  T_BEGIN_STATEMENT {
         printIfDeclaration("end");
         incrementScope();
-    } Command {
+    } Commands T_END_STATEMENT T_SEMICOLON {
         decrementScope();
         printEndStatements();
     }
     //| T_IF_STATEMENT {
     //    printIfDeclaration("begin");
-    //} Multiple_Conditions T_IF_THEN_STATEMENT T_BEGIN_STATEMENT {
+    //} Multiple_Conditions T_IF_THEN_STATEMENT {
     //    printIfDeclaration("end");
     //    incrementScope();
-    //} Command T_END_STATEMENT {
+    //} Command {
     //    decrementScope();
     //    printEndStatements();
-    //}
+    //} 
 ;
 
 While_Statement:
