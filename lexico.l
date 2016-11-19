@@ -20,6 +20,11 @@ some_char .
 
 {withespace} /* Ignore */ ;
 
+{digits} {
+	yylval.intval = atof(yytext);
+	return T_INT_NUMBER;
+}
+
 "program" {return T_PROGRAM;}
 "begin" {return T_BEGIN_STATEMENT;}
 "end." {return T_END_PROGRAM;}
