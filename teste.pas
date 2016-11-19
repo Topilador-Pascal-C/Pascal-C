@@ -18,7 +18,6 @@ var
 	variavelInteger  : integer;
 
 	variavelSingle   : single;
-	variavelSingle   : single;
 	variavelDouble   : double;
 	variavelExtended : extended;
 
@@ -27,6 +26,7 @@ begin
 		if variavelShortint = variavelDouble then
 		begin
 			variavelExtended := 'teste';
+			variavelInteger := 123;
 		end;
 
 	if variavelShortint = variavelDouble then
