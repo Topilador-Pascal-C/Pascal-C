@@ -88,6 +88,26 @@ void printAtribuitionNoSemicolon(char * variable, char * type, char * value) {
 	fprintf(fileOut, ";");
 }
 
+void printAtribuitionNoSemicolonInt(char * variable, char * type, int value) {
+	printTabs();
+	
+	fprintf(fileOut, "%s", variable);
+	printBlankSpace();
+	fprintf(fileOut, "=");
+	printBlankSpace();
+
+
+	if (strcmp(type, "string") == 0) {
+    	fprintf(fileOut, "\"%s\"", value);
+	} else {
+		fprintf(fileOut, "%d", value);
+	}
+
+
+	fprintf(fileOut, ";");
+	printNewLine();
+}
+
 void printIfDeclaration(char * type) {
 	if (strcmp(type, "begin") == 0) {
 		printTabs();
