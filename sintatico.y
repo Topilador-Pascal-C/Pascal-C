@@ -22,7 +22,10 @@ int debugValue = 1;
 
 %union { /* SEMANTIC RECORD */
     char * strval;
+    int intval;
 }
+
+%token <intval> T_INT_NUMBER;
 
 %token T_ATTRIBUTION;
 %token T_SEMICOLON;
@@ -141,6 +144,10 @@ Declaration_Of_Variable:
     }
 ;
 
+Some_Number:
+    T_INT_NUMBER
+;
+
 Some_String:
     T_SOME_WORD
     | T_SOME_VARIABLES
@@ -238,6 +245,9 @@ Attribuition:
     | Some_String T_ATTRIBUTION Some_String {
         addAttribuition($<strval>1, $<strval>3, yylineno, curfilename);
         printAtribuitionNoSemicolon($<strval>1, "number/expression", $<strval>3);
+    }
+    | Some_String T_ATTRIBUTION Some_Number T_SEMICOLON {
+        printAtribuitionNoSemicolonInt($<strval>1, "number/expression", $<intval>3);
     }
 ;
 
