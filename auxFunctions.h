@@ -32,6 +32,14 @@ void printCondition1(char * expression);
 void printCondition(char * expression1, char * expression2, char * condition);
 void printAndOrCondition(char * type);
 
+void printWriteDeclarationString(char * expression);
+void printWriteDeclarationVariable(char * expression);
+
+void printWritelnDeclarationString(char * expression);
+void printWritelnDeclarationVariable(char * expression);
+
+void printReadDeclaration(char * expression);
+
 void printEndStatements();
 
 char * mallocNewString(char * new_text);

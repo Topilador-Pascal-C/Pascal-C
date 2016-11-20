@@ -85,6 +85,14 @@ int debugValue = 1;
 %token T_MINOR
 %token T_MINOR_OR_EQUAL
 
+%token T_WRITE
+%token T_WRITELN
+
+%token T_READ
+
+%token T_LEFT_PARENTHESIS
+%token T_RIGHT_PARENTHESIS
+
 %type <strval> Type_Of_Variable
 
 %start ProgramBegin
@@ -182,7 +190,7 @@ If_Statement_Complementation:
         printEndStatements();
     }
 ;
-    
+
 While_Statement:
     T_WHILE_STATEMENT {
         printWhileDeclaration("begin");
@@ -202,6 +210,30 @@ For_Statement:
         printForDeclaration("end");
         printEndStatements();
         decrementScope();
+    }
+;
+
+Write_Statement:
+    T_WRITE T_LEFT_PARENTHESIS T_APOSTROPHE Expression T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printWriteDeclarationString($<strval>4);
+    }
+    | T_WRITE T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printWriteDeclarationVariable($<strval>3);
+    }
+;
+
+Writeln_Statement:
+    T_WRITELN T_LEFT_PARENTHESIS T_APOSTROPHE Expression T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printWritelnDeclarationString($<strval>4);
+    }
+    | T_WRITE T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printWritelnDeclarationVariable($<strval>3);
+    }
+;
+
+Read_Statement:
+    T_READ T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printReadDeclaration($<strval>3);
     }
 ;
 
@@ -343,9 +375,9 @@ int main(int argc, char ** argv){
                 perror(argv[1]);
                 return (1);
             } else {
-                curfilename = argv[i];
+                    curfilename = argv[i];
                 scope = 0;
-                
+
                 fileName = malloc(sizeof(strlen(curfilename)));
                 for (k = 0; k < (int)strlen(curfilename)-4; k++) {
                     if (curfilename[k] != '.') {

@@ -49,6 +49,9 @@ some_char .
 "<" {return T_MINOR;}
 "<=" {return T_MINOR_OR_EQUAL;}
 
+"(" {return T_LEFT_PARENTHESIS;}
+")" {return T_RIGHT_PARENTHESIS;}
+
 "var" {return T_VAR_STATEMENT;}
 "if" {return T_IF_STATEMENT;}
 "then" {return T_IF_THEN_STATEMENT;}
@@ -59,6 +62,11 @@ some_char .
 "or" {return T_OR_STATEMENT;}
 "for" return(T_FOR_STATEMENT);
 "to" return(T_TO_STATEMENT);
+
+"write" {return T_WRITE;}
+"writeln" {return T_WRITELN;}
+
+"read" {return T_READ;}
 
 "string" {return T_TYPE_STRING;}
 "char" {return T_TYPE_CHAR;}

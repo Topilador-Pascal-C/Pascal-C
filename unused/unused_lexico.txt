@@ -5,13 +5,13 @@
 "/" return(DIVIDE_REAL); real division
 "div" return(DIVIDE_INTEGER); integer division
 "^" return(POWER);
-"(" return(LEFT_PARENTHESIS);
-")" return(RIGHT_PARENTHESIS);
 
 "," return(COMMA);
 "mod" return(MOD);
 "xor" return(XOR_STATEMENT);
 "not" return(NOT_STATEMENT);
+
+"readln" {return T_READLN;}
 
 ; basic commands
 "unit" return(UNIT_STATEMENT);

@@ -20,7 +20,7 @@ void printBlankSpace() {
 }
 
 void printNewLine() {
-	fprintf(fileOut, "\n");	
+	fprintf(fileOut, "\n");
 }
 
 void printIncludesOfProgram() {
@@ -90,7 +90,7 @@ void printAtribuitionNoSemicolon(char * variable, char * type, char * value) {
 
 void printAtribuitionNoSemicolonInt(char * variable, char * type, int value) {
 	printTabs();
-	
+
 	fprintf(fileOut, "%s", variable);
 	printBlankSpace();
 	fprintf(fileOut, "=");
@@ -110,7 +110,7 @@ void printAtribuitionNoSemicolonInt(char * variable, char * type, int value) {
 
 void printAtribuitionNoSemicolonDouble(char * variable, char * type, double value) {
 	printTabs();
-	
+
 	fprintf(fileOut, "%s", variable);
 	printBlankSpace();
 	fprintf(fileOut, "=");
@@ -187,4 +187,24 @@ char * mallocNewString(char * new_text) {
 	char * destination = malloc(sizeof(strlen(new_text)));
     strcpy(destination, new_text);
     return destination;
+}
+
+void printWriteDeclarationString(char * expression) {
+	fprintf(fileOut, "cout << \"%s\";", expression);
+}
+
+void printWriteDeclarationVariable(char * expression) {
+	fprintf(fileOut, "cout << %s;", expression);
+}
+
+void printWritelnDeclarationString(char * expression) {
+	fprintf(fileOut, "cout << \"%s\" << endl;", expression);
+}
+
+void printWritelnDeclarationVariable(char * expression) {
+	fprintf(fileOut, "cout << %s << endl;", expression);
+}
+
+void printReadDeclaration(char * expression) {
+	fprintf(fileOut, "cin >> %s;", expression);
 }
