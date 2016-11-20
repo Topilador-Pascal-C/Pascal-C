@@ -23,9 +23,11 @@ int debugValue = 1;
 %union { /* SEMANTIC RECORD */
     char * strval;
     int intval;
+    double doubval;
 }
 
 %token <intval> T_INT_NUMBER;
+%token <doubval> T_DOUBLE_NUMBER;
 
 %token T_ATTRIBUTION;
 %token T_SEMICOLON;
@@ -148,6 +150,10 @@ Some_Number:
     T_INT_NUMBER
 ;
 
+Some_Double_Number:
+	T_DOUBLE_NUMBER
+;
+
 Some_String:
     T_SOME_WORD
     | T_SOME_VARIABLES
@@ -248,6 +254,9 @@ Attribuition:
     }
     | Some_String T_ATTRIBUTION Some_Number T_SEMICOLON {
         printAtribuitionNoSemicolonInt($<strval>1, "number/expression", $<intval>3);
+    }
+    | Some_String T_ATTRIBUTION Some_Double_Number T_SEMICOLON {
+        printAtribuitionNoSemicolonDouble($<strval>1, "number/expression", $<doubval>3);
     }
 ;
 
