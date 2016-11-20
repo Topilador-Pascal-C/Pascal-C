@@ -40,6 +40,8 @@ begin
 
 	variavelShortint := 'teste';
 
+	variavelDouble := 3.5;
+
 
 	while variavelShortint = variavelDouble do 
 	begin 
