@@ -13,6 +13,7 @@ variables {word}[0-9]+
 text {word}[[ ]+{word}]+
 withespace [ \r\t\n]+
 digits [0-9]+
+real {digits}("."{digits})
 
 some_char .
 
@@ -21,8 +22,13 @@ some_char .
 {withespace} /* Ignore */ ;
 
 {digits} {
-	yylval.intval = atof(yytext);
+	yylval.intval = atoi(yytext);
 	return T_INT_NUMBER;
+}
+
+{real} {
+	yylval.doubval = atof(yytext);
+	return T_DOUBLE_NUMBER;
 }
 
 "program" {return T_PROGRAM;}
