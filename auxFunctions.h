@@ -21,6 +21,8 @@ void printEndOfProgram();
 void printDeclaration(char * type, char * value);
 void printAtribuition(char * variable, char * type, char * value);
 void printAtribuitionNoSemicolon(char * variable, char * type, char * value);
+void printAtribuitionNoSemicolonInt(char * variable, char * type, int value);
+void printAtribuitionNoSemicolonDouble(char * variable, char * type, double value);
 
 void printIfDeclaration(char * type);
 void printWhileDeclaration(char * type);
