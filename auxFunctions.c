@@ -166,6 +166,10 @@ void printConditionInt(int expression) {
 	fprintf(fileOut, "%d", expression);
 }
 
+void printConditionDouble(double expression) {
+	fprintf(fileOut, "%lf", expression);
+}
+
 void printCondition(char * expression1, char * expression2, char * condition) {
 	printCondition1(expression1);
 	fprintf(fileOut, " %s ", condition);
@@ -190,6 +194,24 @@ void printConditionIntAll(int expression1, int expression2, char * condition) {
 	printConditionInt(expression2);
 }
 
+void printConditionDoubleFirst(double expression1, char * expression2, char * condition) {
+	printConditionDouble(expression1);
+	fprintf(fileOut, " %s ", condition);
+	printCondition1(expression2);
+}
+
+void printConditionDoubleLast(char * expression1, double expression2, char * condition) {
+	printCondition1(expression1);
+	fprintf(fileOut, " %s ", condition);
+	printConditionDouble(expression2);
+}
+
+void printConditionDoubleAll(double expression1, double expression2, char * condition) {
+	printConditionDouble(expression1);
+	fprintf(fileOut, " %s ", condition);
+	printConditionDouble(expression2);
+}
+
 void printAndOrCondition(char * type) {
 	if (strcmp(type, "and") == 0) {
 		fprintf(fileOut, " && ");
@@ -212,21 +234,36 @@ char * mallocNewString(char * new_text) {
 }
 
 void printWriteDeclarationString(char * expression) {
+	printTabs();
 	fprintf(fileOut, "cout << \"%s\";", expression);
+	printNewLine();
+	printNewLine();
 }
 
 void printWriteDeclarationVariable(char * expression) {
+	printTabs();
 	fprintf(fileOut, "cout << %s;", expression);
+	printNewLine();
+	printNewLine();
 }
 
 void printWritelnDeclarationString(char * expression) {
+	printTabs();
 	fprintf(fileOut, "cout << \"%s\" << endl;", expression);
+	printNewLine();
+	printNewLine();
 }
 
 void printWritelnDeclarationVariable(char * expression) {
+	printTabs();
 	fprintf(fileOut, "cout << %s << endl;", expression);
+	printNewLine();
+	printNewLine();
 }
 
 void printReadDeclaration(char * expression) {
+	printTabs();
 	fprintf(fileOut, "cin >> %s;", expression);
+	printNewLine();
+	printNewLine();
 }
