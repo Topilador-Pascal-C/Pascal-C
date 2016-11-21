@@ -162,10 +162,32 @@ void printCondition1(char * expression) {
 	fprintf(fileOut, "%s", expression);
 }
 
+void printConditionInt(int expression) {
+	fprintf(fileOut, "%d", expression);
+}
+
 void printCondition(char * expression1, char * expression2, char * condition) {
 	printCondition1(expression1);
 	fprintf(fileOut, " %s ", condition);
 	printCondition1(expression2);
+}
+
+void printConditionIntFirst(int expression1, char * expression2, char * condition) {
+	printConditionInt(expression1);
+	fprintf(fileOut, " %s ", condition);
+	printCondition1(expression2);
+}
+
+void printConditionIntLast(char * expression1, int expression2, char * condition) {
+	printCondition1(expression1);
+	fprintf(fileOut, " %s ", condition);
+	printConditionInt(expression2);
+}
+
+void printConditionIntAll(int expression1, int expression2, char * condition) {
+	printConditionInt(expression1);
+	fprintf(fileOut, " %s ", condition);
+	printConditionInt(expression2);
 }
 
 void printAndOrCondition(char * type) {
