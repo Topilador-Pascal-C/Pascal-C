@@ -98,7 +98,7 @@ void printAtribuitionNoSemicolonInt(char * variable, char * type, int value) {
 
 
 	if (strcmp(type, "string") == 0) {
-    	fprintf(fileOut, "\"%s\"", value);
+    	fprintf(fileOut, "\"%d\"", value);
 	} else {
 		fprintf(fileOut, "%d", value);
 	}
@@ -118,7 +118,7 @@ void printAtribuitionNoSemicolonDouble(char * variable, char * type, double valu
 
 
 	if (strcmp(type, "string") == 0) {
-    	fprintf(fileOut, "\"%s\"", value);
+    	fprintf(fileOut, "\"%lf\"", value);
 	} else {
 		fprintf(fileOut, "%lf", value);
 	}

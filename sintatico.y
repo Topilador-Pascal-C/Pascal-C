@@ -130,6 +130,9 @@ Command:
     | If_Statement
     | While_Statement
     | For_Statement
+    | Write_Statement
+    | Writeln_Statement
+    | Read_Statement
 ;
 
 Declaration_Of_Variables:
@@ -226,7 +229,7 @@ Writeln_Statement:
     T_WRITELN T_LEFT_PARENTHESIS T_APOSTROPHE Expression T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
         printWritelnDeclarationString($<strval>4);
     }
-    | T_WRITE T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
+    | T_WRITELN T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
         printWritelnDeclarationVariable($<strval>3);
     }
 ;

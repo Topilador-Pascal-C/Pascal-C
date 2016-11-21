@@ -68,12 +68,6 @@ begin
 
 	for variavelShortint := variavelSmallint to variavelLongint_ do
 
-	write('Some message 1');
-	write(variavelInteger);
-
-	writeln('Some message 2');
-	writeln(variavelShortint);
-
-	read(variavelDouble);
+	writeln('Somemessage');
 
 end.
