@@ -32,7 +32,7 @@ begin
 	if variavelShortint = variavelDouble then
 		variavelExtended := 'teste';
 
-	if variavelShortint < variavelDouble then begin
+	if 0 then begin
 		_variavelBool := 'teste';
 		variavel_String := 'teste';
 		if _variavelBool then begin variavel_String := 'teste'; end;
@@ -52,7 +52,7 @@ begin
 	end;
 
 
-	while variavelShortint <> variavelDouble do
+	while variavelShortint <> 10 do
 	begin
 		variavelDouble := 'teste';
 	end;

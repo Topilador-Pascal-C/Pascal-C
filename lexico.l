@@ -106,8 +106,6 @@ some_char .
 	return T_SOME_WORD;
 }
 
-{digits} return T_SOME_DIGIT;
-
 {some_char} {
 	printf("%s:%d: Mystery character '%s'\n", curfilename, yylineno, yytext);
 }

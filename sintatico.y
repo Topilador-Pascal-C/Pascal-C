@@ -157,7 +157,7 @@ Declaration_Of_Variable:
     }
 ;
 
-Some_Number:
+Some_Int:
     T_INT_NUMBER
 ;
 
@@ -172,6 +172,10 @@ Some_String:
 
 Expression:
     Some_String
+;
+
+Expression_Int:
+	Some_Int
 ;
 
 If_Statement:
@@ -251,7 +255,12 @@ Multiple_Conditions:
 ;
 
 Conditions:
-    Expression {
+    Conditions_String
+    | Conditions_Int
+;
+
+Conditions_String:
+	Expression {
         printCondition1($<strval>1);
     }
     | Expression T_EQUAL Expression {
@@ -274,6 +283,66 @@ Conditions:
     }
 ;
 
+Conditions_Int:
+	| Expression_Int {
+    	printConditionInt($<intval>1);
+    }
+    | Expression_Int T_EQUAL Expression {
+        printConditionIntFirst($<intval>1, $<strval>3, "==");
+    }
+    | Expression T_EQUAL Expression_Int {
+        printConditionIntLast($<strval>1, $<intval>3, "==");
+    }
+    | Expression_Int T_EQUAL Expression_Int {
+        printConditionIntAll($<intval>1, $<intval>3, "==");
+    }
+    | Expression_Int T_DIFFERENT Expression {
+        printConditionIntFirst($<intval>1, $<strval>3, "!=");
+    }
+    | Expression T_DIFFERENT Expression_Int {
+        printConditionIntLast($<strval>1, $<intval>3, "!=");
+    }
+    | Expression_Int T_DIFFERENT Expression_Int {
+        printConditionIntAll($<intval>1, $<intval>3, "!=");
+    }
+    | Expression_Int T_BIGGER Expression {
+        printConditionIntFirst($<intval>1, $<strval>3, ">");
+    }
+    | Expression T_BIGGER Expression_Int {
+        printConditionIntLast($<strval>1, $<intval>3, ">");
+    }
+    | Expression_Int T_BIGGER Expression_Int {
+        printConditionIntAll($<intval>1, $<intval>3, ">");
+    }
+    | Expression_Int T_BIGGER_OR_EQUAL Expression {
+        printConditionIntFirst($<intval>1, $<strval>3, ">=");
+    }
+    | Expression T_BIGGER_OR_EQUAL Expression_Int {
+        printConditionIntLast($<strval>1, $<intval>3, ">=");
+    }
+    | Expression_Int T_BIGGER_OR_EQUAL Expression_Int {
+        printConditionIntAll($<intval>1, $<intval>3, ">=");
+    }
+    | Expression_Int T_MINOR Expression {
+        printConditionIntFirst($<intval>1, $<strval>3, "<");
+    }
+    | Expression T_MINOR Expression_Int {
+        printConditionIntLast($<strval>1, $<intval>3, "<");
+    }
+    | Expression_Int T_MINOR Expression_Int {
+        printConditionIntAll($<intval>1, $<intval>3, "<");
+    }
+    | Expression_Int T_MINOR_OR_EQUAL Expression {
+        printConditionIntFirst($<intval>1, $<strval>3, "<=");
+    }
+    | Expression T_MINOR_OR_EQUAL Expression_Int {
+        printConditionIntLast($<strval>1, $<intval>3, "<=");
+    }
+    | Expression_Int T_MINOR_OR_EQUAL Expression_Int {
+        printConditionIntAll($<intval>1, $<intval>3, "<=");
+    }
+;
+
 Attribuition:
     Some_String T_ATTRIBUTION T_APOSTROPHE Some_String T_APOSTROPHE T_SEMICOLON {
         addAttribuition($<strval>1, $<strval>4, yylineno, curfilename);
@@ -287,7 +356,7 @@ Attribuition:
         addAttribuition($<strval>1, $<strval>3, yylineno, curfilename);
         printAtribuitionNoSemicolon($<strval>1, "number/expression", $<strval>3);
     }
-    | Some_String T_ATTRIBUTION Some_Number T_SEMICOLON {
+    | Some_String T_ATTRIBUTION Some_Int T_SEMICOLON {
         printAtribuitionNoSemicolonInt($<strval>1, "number/expression", $<intval>3);
     }
     | Some_String T_ATTRIBUTION Some_Double_Number T_SEMICOLON {
