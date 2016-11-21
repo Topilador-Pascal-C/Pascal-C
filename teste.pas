@@ -68,7 +68,4 @@ begin
 	
 	writeln('Somemessage');
 
-
-
-
 end.
