@@ -161,7 +161,7 @@ Some_Int:
     T_INT_NUMBER
 ;
 
-Some_Double_Number:
+Some_Double:
 	T_DOUBLE_NUMBER
 ;
 
@@ -176,6 +176,10 @@ Expression:
 
 Expression_Int:
 	Some_Int
+;
+
+Expression_Double:
+    Some_Double
 ;
 
 If_Statement:
@@ -256,6 +260,7 @@ Multiple_Conditions:
 
 Conditions:
     Conditions_String
+    | Conditions_Double
     | Conditions_Int
 ;
 
@@ -284,7 +289,7 @@ Conditions_String:
 ;
 
 Conditions_Int:
-	| Expression_Int {
+    Expression_Int {
     	printConditionInt($<intval>1);
     }
     | Expression_Int T_EQUAL Expression {
@@ -343,6 +348,66 @@ Conditions_Int:
     }
 ;
 
+Conditions_Double:
+    Expression_Double {
+        printConditionDouble($<doubval>1);
+    }
+    | Expression_Double T_EQUAL Expression {
+        printConditionDoubleFirst($<doubval>1, $<strval>3, "==");
+    }
+    | Expression T_EQUAL Expression_Double {
+        printConditionDoubleLast($<strval>1, $<doubval>3, "==");
+    }
+    | Expression_Double T_EQUAL Expression_Double {
+        printConditionDoubleAll($<doubval>1, $<doubval>3, "==");
+    }
+    | Expression_Double T_DIFFERENT Expression {
+        printConditionDoubleFirst($<doubval>1, $<strval>3, "!=");
+    }
+    | Expression T_DIFFERENT Expression_Double {
+        printConditionDoubleLast($<strval>1, $<doubval>3, "!=");
+    }
+    | Expression_Double T_DIFFERENT Expression_Double {
+        printConditionDoubleAll($<doubval>1, $<doubval>3, "!=");
+    }
+    | Expression_Double T_BIGGER Expression {
+        printConditionDoubleFirst($<doubval>1, $<strval>3, ">");
+    }
+    | Expression T_BIGGER Expression_Double {
+        printConditionDoubleLast($<strval>1, $<doubval>3, ">");
+    }
+    | Expression_Double T_BIGGER Expression_Double {
+        printConditionDoubleAll($<doubval>1, $<doubval>3, ">");
+    }
+    | Expression_Double T_BIGGER_OR_EQUAL Expression {
+        printConditionDoubleFirst($<doubval>1, $<strval>3, ">=");
+    }
+    | Expression T_BIGGER_OR_EQUAL Expression_Double {
+        printConditionDoubleLast($<strval>1, $<doubval>3, ">=");
+    }
+    | Expression_Double T_BIGGER_OR_EQUAL Expression_Double {
+        printConditionDoubleAll($<doubval>1, $<doubval>3, ">=");
+    }
+    | Expression_Double T_MINOR Expression {
+        printConditionDoubleFirst($<doubval>1, $<strval>3, "<");
+    }
+    | Expression T_MINOR Expression_Double {
+        printConditionDoubleLast($<strval>1, $<doubval>3, "<");
+    }
+    | Expression_Double T_MINOR Expression_Double {
+        printConditionDoubleAll($<doubval>1, $<doubval>3, "<");
+    }
+    | Expression_Double T_MINOR_OR_EQUAL Expression {
+        printConditionDoubleFirst($<doubval>1, $<strval>3, "<=");
+    }
+    | Expression T_MINOR_OR_EQUAL Expression_Double {
+        printConditionDoubleLast($<strval>1, $<doubval>3, "<=");
+    }
+    | Expression_Double T_MINOR_OR_EQUAL Expression_Double {
+        printConditionDoubleAll($<doubval>1, $<doubval>3, "<=");
+    }
+;
+
 Attribuition:
     Some_String T_ATTRIBUTION T_APOSTROPHE Some_String T_APOSTROPHE T_SEMICOLON {
         addAttribuition($<strval>1, $<strval>4, yylineno, curfilename);
@@ -359,7 +424,7 @@ Attribuition:
     | Some_String T_ATTRIBUTION Some_Int T_SEMICOLON {
         printAtribuitionNoSemicolonInt($<strval>1, "number/expression", $<intval>3);
     }
-    | Some_String T_ATTRIBUTION Some_Double_Number T_SEMICOLON {
+    | Some_String T_ATTRIBUTION Some_Double T_SEMICOLON {
         printAtribuitionNoSemicolonDouble($<strval>1, "number/expression", $<doubval>3);
     }
 ;
