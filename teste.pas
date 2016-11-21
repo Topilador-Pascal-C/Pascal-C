@@ -43,7 +43,7 @@ begin
 	variavelDouble := 3.5;
 
 
-	while variavelShortint = variavelDouble do
+	while 7.5 = variavelDouble do
 	begin
 		if _variavelBool = variavelqword or variavel_String < variavel_Char then
 		begin
@@ -65,9 +65,10 @@ begin
 			variavelDouble := 'teste';
 		end;
 	end;
-
-	for variavelShortint := variavelSmallint to variavelLongint_ do
-
+	
 	writeln('Somemessage');
+
+
+
 
 end.
