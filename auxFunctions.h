@@ -29,7 +29,11 @@ void printWhileDeclaration(char * type);
 void printForDeclaration(char * type);
 
 void printCondition1(char * expression);
+void printConditionInt(int expression);
 void printCondition(char * expression1, char * expression2, char * condition);
+void printConditionIntFirst(int expression1, char * expression2, char * condition);
+void printConditionIntLast(char * expression1, int expression2, char * condition);
+void printConditionIntAll(int expression1, int expression2, char * condition);
 void printAndOrCondition(char * type);
 
 void printWriteDeclarationString(char * expression);
