@@ -8,6 +8,16 @@ void decrementScope() {
 	scope = scope - 1;
 }
 
+void set_variable_for(char * new_variable) {
+	variable_for = mallocNewString(new_variable);
+	strcpy(new_variable, variable_for);
+    printf("\nvariavel: %s\n\n", variable_for);
+}
+
+char * get_variable_for() {
+	return variable_for;
+}
+
 void printTabs() {
 	int i;
 	for (i = 0; i < scope; i++) {
@@ -71,6 +81,7 @@ void printAtribuition(char * variable, char * type, char * value) {
 
     fprintf(fileOut, ";");
     printNewLine();
+    printNewLine();
 }
 
 void printAtribuitionNoSemicolon(char * variable, char * type, char * value) {
@@ -86,6 +97,8 @@ void printAtribuitionNoSemicolon(char * variable, char * type, char * value) {
 	}
 
 	fprintf(fileOut, ";");
+	printNewLine();
+	printNewLine();
 }
 
 void printAtribuitionNoSemicolonInt(char * variable, char * type, int value) {
@@ -106,6 +119,24 @@ void printAtribuitionNoSemicolonInt(char * variable, char * type, int value) {
 
 	fprintf(fileOut, ";");
 	printNewLine();
+	printNewLine();
+}
+
+void printAtribuitionNoSemicolonIntFor(char * variable, char * type, int value) {
+	fprintf(fileOut, "%s", variable);
+	printBlankSpace();
+	fprintf(fileOut, "=");
+	printBlankSpace();
+
+
+	if (strcmp(type, "string") == 0) {
+    	fprintf(fileOut, "\"%d\"", value);
+	} else {
+		fprintf(fileOut, "%d", value);
+	}
+
+
+	fprintf(fileOut, ";");
 }
 
 void printAtribuitionNoSemicolonDouble(char * variable, char * type, double value) {
@@ -125,6 +156,7 @@ void printAtribuitionNoSemicolonDouble(char * variable, char * type, double valu
 
 
 	fprintf(fileOut, ";");
+	printNewLine();
 	printNewLine();
 }
 
@@ -148,12 +180,14 @@ void printWhileDeclaration(char * type) {
     }
 }
 
-void printForDeclaration(char * type) {
+void printForDeclaration(char * type, char * variable, int stop_point) {
 	if (strcmp(type, "begin") == 0) {
 		printTabs();
 		fprintf(fileOut, "for (");
+	} else if (strcmp(type, "condition_int") == 0) {
+		fprintf(fileOut, " %s > %d;", variable, stop_point);
 	} else {
-        fprintf(fileOut, ") {");
+        fprintf(fileOut, " %s++) {", variable);
         printNewLine();
     }
 }
