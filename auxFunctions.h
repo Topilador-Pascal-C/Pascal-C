@@ -7,6 +7,10 @@
 
 FILE * fileOut;
 int scope;
+char * variable_for;
+
+void set_variable_for(char * new_variable);
+char * get_variable_for();
 
 void incrementScope();
 void decrementScope();
@@ -22,11 +26,12 @@ void printDeclaration(char * type, char * value);
 void printAtribuition(char * variable, char * type, char * value);
 void printAtribuitionNoSemicolon(char * variable, char * type, char * value);
 void printAtribuitionNoSemicolonInt(char * variable, char * type, int value);
+void printAtribuitionNoSemicolonIntFor(char * variable, char * type, int value);
 void printAtribuitionNoSemicolonDouble(char * variable, char * type, double value);
 
 void printIfDeclaration(char * type);
 void printWhileDeclaration(char * type);
-void printForDeclaration(char * type);
+void printForDeclaration(char * type, char * variable, int stop_point);
 
 void printCondition1(char * expression);
 void printConditionInt(int expression);
