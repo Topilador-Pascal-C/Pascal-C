@@ -32,16 +32,17 @@ begin
 	if variavelShortint = variavelDouble then
 		variavelExtended := 'teste';
 
-	if 0 then begin
-		_variavelBool := 'teste';
-		variavel_String := 'teste';
-		if _variavelBool then begin variavel_String := 'teste'; end;
-	end;
 
 	variavelShortint := 'teste';
 
 	variavelDouble := 3.5;
 
+	for variavelInteger := 0 to 115 do
+		if 0 then begin
+			_variavelBool := 'teste';
+			variavel_String := 'teste';
+			if _variavelBool then begin variavel_String := 'teste'; end;
+		end;
 
 	while 7.5 = variavelDouble do
 	begin
