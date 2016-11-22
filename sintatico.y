@@ -188,18 +188,7 @@ If_Statement:
     } Multiple_Conditions T_IF_THEN_STATEMENT {
         printIfDeclaration("end");
         incrementScope();
-    } If_Statement_Complementation
-;
-
-If_Statement_Complementation:
-    T_BEGIN_STATEMENT Commands T_END_STATEMENT T_SEMICOLON {
-        decrementScope();
-        printEndStatements();
-    }
-    | Command {
-        decrementScope();
-        printEndStatements();
-    }
+    } Statement_Complementation
 ;
 
 While_Statement:
@@ -216,11 +205,25 @@ While_Statement:
 
 For_Statement:
     T_FOR_STATEMENT {
-        printForDeclaration("begin");
-    } Command T_TO_STATEMENT Expression T_DO_STATEMENT {
-        printForDeclaration("end");
-        printEndStatements();
+        printForDeclaration("begin", "", 0);
+    } For_Attribution T_TO_STATEMENT Some_Int {
+        char * variable = get_variable_for();
+        printForDeclaration("condition_int", variable, $<intval>5);
+    } T_DO_STATEMENT {
+        char * variable = get_variable_for();
+        printForDeclaration("end", variable, 0);
+        incrementScope();
+    } Statement_Complementation
+;
+
+Statement_Complementation:
+    T_BEGIN_STATEMENT Commands T_END_STATEMENT T_SEMICOLON {
         decrementScope();
+        printEndStatements();
+    }
+    | Command {
+        decrementScope();
+        printEndStatements();
     }
 ;
 
@@ -426,6 +429,13 @@ Attribuition:
     }
     | Some_String T_ATTRIBUTION Some_Double T_SEMICOLON {
         printAtribuitionNoSemicolonDouble($<strval>1, "number/expression", $<doubval>3);
+    }
+;
+
+For_Attribution:
+    Some_String T_ATTRIBUTION Some_Int {
+        set_variable_for($<strval>1);
+        printAtribuitionNoSemicolonIntFor($<strval>1, "number/expression", $<intval>3);
     }
 ;
 
