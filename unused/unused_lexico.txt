@@ -61,11 +61,7 @@
 "writeln" return(WRITELN);
 
 ; repeating statements
-"downto" return(DOWNTO);
-"do" return(FOR_DO_STATEMENT); used in for
 
-"repeat" return(REPEAT_STATEMENT);
-"until" return(UNTIL_STATEMENT);
 "goto" return(GOTO_STATEMENT);
 
 ; don't know

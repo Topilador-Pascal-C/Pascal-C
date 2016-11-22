@@ -62,6 +62,9 @@ some_char .
 "or" {return T_OR_STATEMENT;}
 "for" return(T_FOR_STATEMENT);
 "to" return(T_TO_STATEMENT);
+"downto" return(T_DOWNTO_STATEMENT);
+"repeat" return(T_REPEAT_STATEMENT);
+"until" return(T_UNTIL_STATEMENT);
 
 "write" {return T_WRITE;}
 "writeln" {return T_WRITELN;}

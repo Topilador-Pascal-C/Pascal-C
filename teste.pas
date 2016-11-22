@@ -45,6 +45,14 @@ begin
 			if _variavelBool then begin variavel_String := 'teste'; end;
 		end;
 
+	for variavelInteger := 115 downto 0 do
+		if 0 then 
+		begin
+			_variavelBool := 'teste';
+			variavel_String := 'teste';
+			if _variavelBool then begin variavel_String := 'teste'; end;
+		end;
+
 	for variavelInteger := 0 to variavelDouble do
 		if 0 then 
 		begin

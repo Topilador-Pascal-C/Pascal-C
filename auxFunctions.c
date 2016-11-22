@@ -11,7 +11,6 @@ void decrementScope() {
 void set_variable_for(char * new_variable) {
 	variable_for = mallocNewString(new_variable);
 	strcpy(new_variable, variable_for);
-    printf("\nvariavel: %s\n\n", variable_for);
 }
 
 char * get_variable_for() {
@@ -184,12 +183,17 @@ void printForDeclaration(char * type, char * variable, int int_stop_point, char 
 	if (strcmp(type, "begin") == 0) {
 		printTabs();
 		fprintf(fileOut, "for (");
-	} else if (strcmp(type, "condition_int") == 0) {
+	} else if (strcmp(type, "condition_to_int") == 0) {
+		fprintf(fileOut, " %s < %d;", variable, int_stop_point);
+	} else if (strcmp(type, "condition_to_str") == 0) {
+		fprintf(fileOut, " %s < %s;", variable, str_stop_point);
+	} else if (strcmp(type, "condition_downto_int") == 0) {
 		fprintf(fileOut, " %s > %d;", variable, int_stop_point);
-	} else if (strcmp(type, "condition_string") == 0) {
-		fprintf(fileOut, " %s > %s;", variable, str_stop_point);
-	} else {
+	} else if (strcmp(type, "end_to") == 0) {
         fprintf(fileOut, " %s++) {", variable);
+        printNewLine();
+    } else if (strcmp(type, "end_downto") == 0) {
+        fprintf(fileOut, " %s--) {", variable);
         printNewLine();
     }
 }

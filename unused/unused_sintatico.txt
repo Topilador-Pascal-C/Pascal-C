@@ -55,11 +55,6 @@
 %token ELSE_STATEMENT
 %token SWITCH_CASE
 
-%token DOWNTO
-%token REPEAT_STATEMENT
-%token UNTIL_STATEMENT
-%token GOTO_STATEMENT
-
 %token ASM
 %token LABEL
 %token OPERATOR

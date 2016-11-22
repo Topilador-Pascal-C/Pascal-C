@@ -43,6 +43,9 @@ int debugValue = 1;
 %token T_CONST_STATEMENT
 %token T_FOR_STATEMENT
 %token T_TO_STATEMENT
+%token T_DOWNTO_STATEMENT
+%token T_REPEAT_STATEMENT
+%token T_UNTIL_STATEMENT
 
 // variable types
 %token <strval> T_TYPE_CHAR
@@ -209,18 +212,30 @@ For_Statement:
 For_Info:
     For_Attribution T_TO_STATEMENT Some_Int {
         char * variable = get_variable_for();
-        printForDeclaration("condition_int", variable, $<intval>3, "");
-    } T_DO_STATEMENT {
-        char * variable = get_variable_for();
-        printForDeclaration("end", variable, 0, "");
-        incrementScope();
-    } Statement_Complementation
+        printForDeclaration("condition_to_int", variable, $<intval>3, "");
+    } For_Do_To
     | For_Attribution T_TO_STATEMENT Some_String {
         char * variable = get_variable_for();
-        printForDeclaration("condition_string", variable, 0,$<strval>3);
-    } T_DO_STATEMENT {
+        printForDeclaration("condition_to_str", variable, 0,$<strval>3);
+    } For_Do_To
+    | For_Attribution T_DOWNTO_STATEMENT Some_Int {
         char * variable = get_variable_for();
-        printForDeclaration("end", variable, 0, "");
+        printForDeclaration("condition_downto_int", variable, $<intval>3, "");
+    } For_Do_Downto
+;
+
+For_Do_To:
+    T_DO_STATEMENT {
+        char * variable = get_variable_for();
+        printForDeclaration("end_to", variable, 0, "");
+        incrementScope();
+    } Statement_Complementation
+;
+
+For_Do_Downto:
+    T_DO_STATEMENT {
+        char * variable = get_variable_for();
+        printForDeclaration("end_downto", variable, 0, "");
         incrementScope();
     } Statement_Complementation
 ;
