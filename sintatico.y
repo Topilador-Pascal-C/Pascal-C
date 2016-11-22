@@ -194,24 +194,33 @@ If_Statement:
 While_Statement:
     T_WHILE_STATEMENT {
         printWhileDeclaration("begin");
-    } Multiple_Conditions T_DO_STATEMENT T_BEGIN_STATEMENT {
+    } Multiple_Conditions T_DO_STATEMENT  {
         printWhileDeclaration("end");
         incrementScope();
-    } Commands T_END_STATEMENT T_SEMICOLON {
-        decrementScope();
-        printEndStatements();
-    }
+    } Statement_Complementation
 ;
 
 For_Statement:
     T_FOR_STATEMENT {
-        printForDeclaration("begin", "", 0);
-    } For_Attribution T_TO_STATEMENT Some_Int {
+        printForDeclaration("begin", "", 0, "");
+    } For_Info
+;
+
+For_Info:
+    For_Attribution T_TO_STATEMENT Some_Int {
         char * variable = get_variable_for();
-        printForDeclaration("condition_int", variable, $<intval>5);
+        printForDeclaration("condition_int", variable, $<intval>3, "");
     } T_DO_STATEMENT {
         char * variable = get_variable_for();
-        printForDeclaration("end", variable, 0);
+        printForDeclaration("end", variable, 0, "");
+        incrementScope();
+    } Statement_Complementation
+    | For_Attribution T_TO_STATEMENT Some_String {
+        char * variable = get_variable_for();
+        printForDeclaration("condition_string", variable, 0,$<strval>3);
+    } T_DO_STATEMENT {
+        char * variable = get_variable_for();
+        printForDeclaration("end", variable, 0, "");
         incrementScope();
     } Statement_Complementation
 ;

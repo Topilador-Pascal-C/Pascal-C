@@ -180,12 +180,14 @@ void printWhileDeclaration(char * type) {
     }
 }
 
-void printForDeclaration(char * type, char * variable, int stop_point) {
+void printForDeclaration(char * type, char * variable, int int_stop_point, char * str_stop_point) {
 	if (strcmp(type, "begin") == 0) {
 		printTabs();
 		fprintf(fileOut, "for (");
 	} else if (strcmp(type, "condition_int") == 0) {
-		fprintf(fileOut, " %s > %d;", variable, stop_point);
+		fprintf(fileOut, " %s > %d;", variable, int_stop_point);
+	} else if (strcmp(type, "condition_string") == 0) {
+		fprintf(fileOut, " %s > %s;", variable, str_stop_point);
 	} else {
         fprintf(fileOut, " %s++) {", variable);
         printNewLine();
