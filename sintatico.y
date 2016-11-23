@@ -136,6 +136,7 @@ Command:
     | Write_Statement
     | Writeln_Statement
     | Read_Statement
+    | Repeat_Until_Statement
 ;
 
 Declaration_Of_Variables:
@@ -238,6 +239,18 @@ For_Do_Downto:
         printForDeclaration("end_downto", variable, 0, "");
         incrementScope();
     } Statement_Complementation
+;
+
+Repeat_Until_Statement:
+    T_REPEAT_STATEMENT {
+        printRepeatDeclaration("begin");
+        incrementScope();
+    } Commands T_UNTIL_STATEMENT {
+        decrementScope();
+        printRepeatDeclaration("before_end");
+    } Multiple_Conditions T_SEMICOLON {
+        printRepeatDeclaration("after_end");
+    }
 ;
 
 Statement_Complementation:
