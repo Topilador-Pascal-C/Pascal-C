@@ -38,7 +38,7 @@ begin
 	variavelDouble := 3.5;
 
 	for variavelInteger := 0 to 115 do
-		if 0 then 
+		if 0 then
 		begin
 			_variavelBool := 'teste';
 			variavel_String := 'teste';
@@ -46,7 +46,7 @@ begin
 		end;
 
 	for variavelInteger := 115 downto 0 do
-		if 0 then 
+		if 0 then
 		begin
 			_variavelBool := 'teste';
 			variavel_String := 'teste';
@@ -54,7 +54,7 @@ begin
 		end;
 
 	for variavelInteger := 0 to variavelDouble do
-		if 0 then 
+		if 0 then
 		begin
 			_variavelBool := 'teste';
 			variavel_String := 'teste';
@@ -83,7 +83,4 @@ begin
 			variavelDouble := 'teste';
 		end;
 	end;
-	
-	writeln('Somemessage');
-
 end.
