@@ -90,6 +90,7 @@ int debugValue = 1;
 
 %token T_WRITE
 %token T_WRITELN
+%token <strval> T_STRING
 
 %token T_READ
 
@@ -135,7 +136,6 @@ Command:
     | For_Statement
     | Write_Statement
     | Writeln_Statement
-    | Read_Statement
 ;
 
 Declaration_Of_Variables:
@@ -171,6 +171,7 @@ Some_Double:
 Some_String:
     T_SOME_WORD
     | T_SOME_VARIABLES
+    | T_SOME_TEXT
 ;
 
 Expression:
@@ -252,7 +253,7 @@ Statement_Complementation:
 ;
 
 Write_Statement:
-    T_WRITE T_LEFT_PARENTHESIS T_APOSTROPHE Expression T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
+    T_WRITE T_LEFT_PARENTHESIS T_APOSTROPHE Some_String T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
         printWriteDeclarationString($<strval>4);
     }
     | T_WRITE T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
@@ -261,17 +262,11 @@ Write_Statement:
 ;
 
 Writeln_Statement:
-    T_WRITELN T_LEFT_PARENTHESIS T_APOSTROPHE Expression T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
+    T_WRITELN T_LEFT_PARENTHESIS T_APOSTROPHE Some_String T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
         printWritelnDeclarationString($<strval>4);
     }
     | T_WRITELN T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
         printWritelnDeclarationVariable($<strval>3);
-    }
-;
-
-Read_Statement:
-    T_READ T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printReadDeclaration($<strval>3);
     }
 ;
 

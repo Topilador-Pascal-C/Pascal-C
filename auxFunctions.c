@@ -288,6 +288,7 @@ void printWriteDeclarationVariable(char * expression) {
 }
 
 void printWritelnDeclarationString(char * expression) {
+	printf("Testando...\n");
 	printTabs();
 	fprintf(fileOut, "cout << \"%s\" << endl;", expression);
 	printNewLine();
