@@ -190,6 +190,7 @@ void printForDeclaration(char * type, char * variable, int int_stop_point, char 
         printNewLine();
     } else if (strcmp(type, "end_downto") == 0) {
         fprintf(fileOut, " %s--) {", variable);
+        printNewLine();
     }
 }
 

@@ -8,12 +8,13 @@
 %option noyywrap nodefault yylineno
 
 /* DEFINITIONS */
-word [a-zA-Z_][a-zA-Z_]*
-variables {word}[0-9]+
-text {word}[[ ]+{word}]+
+word [a-zA-Z_0-9][a-zA-Z_0-9]*
+text {word}(" "{word})+
 withespace [ \r\t\n]+
 digits [0-9]+
 real {digits}("."{digits})
+apostrophe "\'"
+quotation_marks "\""
 
 some_char .
 
@@ -39,8 +40,6 @@ some_char .
 ":=" {return T_ATTRIBUTION;}
 ";" {return T_SEMICOLON;}
 ":" {return T_COLON;}
-"\"" {return T_QUOTATION_MARKS;}
-"\'" {return T_APOSTROPHE;}
 
 "=" {return T_EQUAL;}
 "<>" {return T_DIFFERENT;}
@@ -91,17 +90,15 @@ some_char .
 "currency" {return T_TYPE_CURRENCY;}
 "extended" {return T_TYPE_EXTENDED;}
 
-{text} {
-	printf("kjasncjs\n");
-	yylval.strval = malloc(sizeof(strlen(yytext)));
-	strcpy(yylval.strval, yytext);
-	return T_SOME_TEXT;
-}
+{apostrophe} {return T_APOSTROPHE;}
 
-{variables} {
-	yylval.strval = malloc(sizeof(strlen(yytext)));
-	strcpy(yylval.strval, yytext);
-	return T_SOME_VARIABLES;
+{quotation_marks} {return T_QUOTATION_MARKS;}
+
+{apostrophe}{text}{apostrophe} {
+	yylval.strval = malloc(sizeof(strlen(yytext) - 2));
+	yytext = yytext + 1;
+	strncpy(yylval.strval, yytext, strlen(yytext) - 1);
+	return T_SOME_TEXT;
 }
 
 {word} {
@@ -109,6 +106,7 @@ some_char .
 	strcpy(yylval.strval, yytext);
 	return T_SOME_WORD;
 }
+
 
 {some_char} {
 	printf("%s:%d: Mystery character '%s'\n", curfilename, yylineno, yytext);

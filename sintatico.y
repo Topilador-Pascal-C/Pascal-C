@@ -33,6 +33,7 @@ int debugValue = 1;
 %token T_SEMICOLON;
 %token T_COLON;
 %token T_QUOTATION_MARKS;
+%token T_APOSTROPHE;
 
 // structures
 %token T_IF_STATEMENT;
@@ -68,10 +69,8 @@ int debugValue = 1;
 %token <strval> T_TYPE_COMP
 %token <strval> T_TYPE_CURRENCY
 
-%token T_APOSTROPHE;
 %token T_SOME_TEXT
 %token T_SOME_WORD
-%token T_SOME_VARIABLES
 %token T_SOME_DIGIT
 
 %token T_END_PROGRAM
@@ -162,7 +161,11 @@ Declaration_Of_Variable:
 
 Variable:
     T_SOME_WORD
-    | T_SOME_VARIABLES
+;
+
+Some_String:
+    T_SOME_TEXT
+    | T_APOSTROPHE T_SOME_WORD T_APOSTROPHE
 ;
 
 Some_Int:
@@ -170,17 +173,11 @@ Some_Int:
 ;
 
 Some_Double:
-	T_DOUBLE_NUMBER
-;
-
-Some_String:
-    T_SOME_WORD
-    | T_SOME_VARIABLES
-    | T_SOME_TEXT
+    T_DOUBLE_NUMBER
 ;
 
 Expression:
-    Some_String
+    Variable
 ;
 
 Expression_Int:
@@ -220,7 +217,7 @@ For_Info:
         char * variable = get_variable_for();
         printForDeclaration("condition_to_int", variable, $<intval>3, "");
     } For_Do_To
-    | For_Attribution T_TO_STATEMENT Some_String {
+    | For_Attribution T_TO_STATEMENT Variable {
         char * variable = get_variable_for();
         printForDeclaration("condition_to_str", variable, 0,$<strval>3);
     } For_Do_To
@@ -283,11 +280,11 @@ Write_Statements:
 ;
 
 Write_Statement_Complementation:
-    T_LEFT_PARENTHESIS T_APOSTROPHE Some_String T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printWriteDeclarationString($<strval>4);
+    T_LEFT_PARENTHESIS Some_String T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printWriteDeclarationString($<strval>3);
     }
     | T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printWriteDeclarationVariable($<strval>3);
+        printWriteDeclarationVariable($<strval>2);
     }
 ;
 
@@ -452,28 +449,28 @@ Conditions_Double:
 ;
 
 Attribuition:
-    Some_String T_ATTRIBUTION T_APOSTROPHE Some_String T_APOSTROPHE T_SEMICOLON {
+    Variable T_ATTRIBUTION Some_String T_SEMICOLON {
         addAttribuition($<strval>1, $<strval>4, yylineno, curfilename);
         printAtribuition($<strval>1, "string", $<strval>4);
     }
-    | Some_String T_ATTRIBUTION Some_String T_SEMICOLON {
+    | Variable T_ATTRIBUTION Variable T_SEMICOLON {
         addAttribuition($<strval>1, $<strval>3, yylineno, curfilename);
         printAtribuition($<strval>1, "number/expression", $<strval>3);
     }
-    | Some_String T_ATTRIBUTION Some_String {
+    | Variable T_ATTRIBUTION Some_String {
         addAttribuition($<strval>1, $<strval>3, yylineno, curfilename);
         printAtribuitionNoSemicolon($<strval>1, "number/expression", $<strval>3);
     }
-    | Some_String T_ATTRIBUTION Some_Int T_SEMICOLON {
+    | Variable T_ATTRIBUTION Some_Int T_SEMICOLON {
         printAtribuitionNoSemicolonInt($<strval>1, "number/expression", $<intval>3);
     }
-    | Some_String T_ATTRIBUTION Some_Double T_SEMICOLON {
+    | Variable T_ATTRIBUTION Some_Double T_SEMICOLON {
         printAtribuitionNoSemicolonDouble($<strval>1, "number/expression", $<doubval>3);
     }
 ;
 
 For_Attribution:
-    Some_String T_ATTRIBUTION Some_Int {
+    Variable T_ATTRIBUTION Some_Int {
         set_variable_for($<strval>1);
         printAtribuitionNoSemicolonIntFor($<strval>1, "number/expression", $<intval>3);
     }
