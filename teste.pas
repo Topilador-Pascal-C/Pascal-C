@@ -76,11 +76,21 @@ begin
 	end;
 
 
-	while variavelShortint <= variavelDouble do
-	begin
-		while variavelShortint >= variavelDouble do
+
+	repeat
+		while variavelShortint <= variavelDouble do
 		begin
-			variavelDouble := 'teste';
+			while variavelShortint >= variavelDouble do
+			begin
+				variavelDouble := 'teste';
+			end;
 		end;
+<<<<<<< HEAD
 	end;
+=======
+	until variavelInteger > 0;
+
+	writeln('Somemessage');
+
+>>>>>>> 453e4a1ef273bf25188e2ff8a590b55de1169664
 end.
