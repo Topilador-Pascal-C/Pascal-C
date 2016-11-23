@@ -31,13 +31,6 @@ some_char .
 	return T_DOUBLE_NUMBER;
 }
 
-"'"([^'])*"'" {
-	yytext = yytext + 1;
-	yytext[strlen(yytext)-1] = 0;
-	yylval.strval = strdup(yytext);
-	return T_STRING;
-}
-
 "program" {return T_PROGRAM;}
 "begin" {return T_BEGIN_STATEMENT;}
 "end." {return T_END_PROGRAM;}

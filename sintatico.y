@@ -104,7 +104,7 @@ int debugValue = 1;
 %%
 
 ProgramBegin:
-    T_PROGRAM Expression T_SEMICOLON {
+    T_PROGRAM Variable T_SEMICOLON {
         printIncludesOfProgram();
     } T_BEGIN_STATEMENT {
         printBeginOfProgram();
@@ -113,7 +113,7 @@ ProgramBegin:
         printEndOfProgram();
         decrementScope();
     }
-    | T_PROGRAM Expression T_SEMICOLON {
+    | T_PROGRAM Variable T_SEMICOLON {
         printIncludesOfProgram();
     } Declaration_Of_Variables T_BEGIN_STATEMENT {
         printBeginOfProgram();
@@ -134,13 +134,8 @@ Command:
     | If_Statement
     | While_Statement
     | For_Statement
-    | Write_Statement
-    | Writeln_Statement
-<<<<<<< HEAD
-=======
-    | Read_Statement
+    | Write_Statements
     | Repeat_Until_Statement
->>>>>>> 453e4a1ef273bf25188e2ff8a590b55de1169664
 ;
 
 Declaration_Of_Variables:
@@ -149,20 +144,25 @@ Declaration_Of_Variables:
 ;
 
 Declaration_Of_Variable:
-    T_VAR_STATEMENT Some_String T_COLON Type_Of_Variable T_SEMICOLON {
+    T_VAR_STATEMENT Variable T_COLON Type_Of_Variable T_SEMICOLON {
         if (addNewVariable($<strval>2, $<strval>4, yylineno, curfilename) == 1) {
             printDeclaration($<strval>4, $<strval>2);
         } else {
             printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>3, curfilename, yylineno);
         }
     }
-    | Some_String T_COLON Type_Of_Variable T_SEMICOLON {
+    | Variable T_COLON Type_Of_Variable T_SEMICOLON {
         if (addNewVariable($<strval>1, $<strval>3, yylineno, curfilename) == 1) {
             printDeclaration($<strval>3, $<strval>1);
         } else {
             printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>1, curfilename, yylineno);
         }
     }
+;
+
+Variable:
+    T_SOME_WORD
+    | T_SOME_VARIABLES
 ;
 
 Some_Int:
@@ -269,21 +269,25 @@ Statement_Complementation:
     }
 ;
 
-Write_Statement:
-    T_WRITE T_LEFT_PARENTHESIS T_APOSTROPHE Some_String T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printWriteDeclarationString($<strval>4);
+Write_Statements:
+    T_WRITE {
+        printWriteDeclaration("begin");
+    } Write_Statement_Complementation {
+        printWriteDeclaration("end");
     }
-    | T_WRITE T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printWriteDeclarationVariable($<strval>3);
+    | T_WRITELN {
+        printWriteDeclaration("begin");
+    } Write_Statement_Complementation {
+        printWriteDeclaration("endln");
     }
 ;
 
-Writeln_Statement:
-    T_WRITELN T_LEFT_PARENTHESIS T_APOSTROPHE Some_String T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printWritelnDeclarationString($<strval>4);
+Write_Statement_Complementation:
+    T_LEFT_PARENTHESIS T_APOSTROPHE Some_String T_APOSTROPHE T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printWriteDeclarationString($<strval>4);
     }
-    | T_WRITELN T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printWritelnDeclarationVariable($<strval>3);
+    | T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printWriteDeclarationVariable($<strval>3);
     }
 ;
 

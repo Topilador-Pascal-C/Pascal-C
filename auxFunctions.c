@@ -282,28 +282,24 @@ char * mallocNewString(char * new_text) {
 }
 
 void printWriteDeclarationString(char * expression) {
-	printTabs();
-	fprintf(fileOut, "cout << \"%s\";", expression);
-	printNewLine();
+	fprintf(fileOut, "\"%s\"", expression);
 }
 
 void printWriteDeclarationVariable(char * expression) {
-	printTabs();
-	fprintf(fileOut, "cout << %s;", expression);
-	printNewLine();
+	fprintf(fileOut, "%s", expression);
 }
 
-void printWritelnDeclarationString(char * expression) {
-	printf("Testando...\n");
-	printTabs();
-	fprintf(fileOut, "cout << \"%s\" << endl;", expression);
-	printNewLine();
-}
-
-void printWritelnDeclarationVariable(char * expression) {
-	printTabs();
-	fprintf(fileOut, "cout << %s << endl;", expression);
-	printNewLine();
+void printWriteDeclaration(char * type) {
+	if (strcmp(type, "begin") == 0) {
+		printTabs();
+		fprintf(fileOut, "cout << ");
+	} else if (strcmp(type, "endln") == 0) {
+		fprintf(fileOut, " >> endl;");
+		printNewLine();
+	} else {
+		fprintf(fileOut, ";");
+		printNewLine();
+	}
 }
 
 void printReadDeclaration(char * expression) {

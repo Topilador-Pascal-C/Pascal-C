@@ -50,11 +50,9 @@ void printConditionDoubleAll(double expression1, double expression2, char * cond
 
 void printAndOrCondition(char * type);
 
+void printWriteDeclaration(char * type);
 void printWriteDeclarationString(char * expression);
 void printWriteDeclarationVariable(char * expression);
-
-void printWritelnDeclarationString(char * expression);
-void printWritelnDeclarationVariable(char * expression);
 
 void printReadDeclaration(char * expression);
 

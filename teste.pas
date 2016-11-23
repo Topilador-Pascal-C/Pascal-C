@@ -85,12 +85,10 @@ begin
 				variavelDouble := 'teste';
 			end;
 		end;
-<<<<<<< HEAD
-	end;
-=======
 	until variavelInteger > 0;
 
 	writeln('Somemessage');
+	write('Somemessage');
+	writeln('Somemessage hahahaha');
 
->>>>>>> 453e4a1ef273bf25188e2ff8a590b55de1169664
 end.
