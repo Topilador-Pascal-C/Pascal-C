@@ -80,7 +80,6 @@ void printAtribuition(char * variable, char * type, char * value) {
 
     fprintf(fileOut, ";");
     printNewLine();
-    printNewLine();
 }
 
 void printAtribuitionNoSemicolon(char * variable, char * type, char * value) {
@@ -96,7 +95,6 @@ void printAtribuitionNoSemicolon(char * variable, char * type, char * value) {
 	}
 
 	fprintf(fileOut, ";");
-	printNewLine();
 	printNewLine();
 }
 
@@ -117,7 +115,6 @@ void printAtribuitionNoSemicolonInt(char * variable, char * type, int value) {
 
 
 	fprintf(fileOut, ";");
-	printNewLine();
 	printNewLine();
 }
 
@@ -156,7 +153,6 @@ void printAtribuitionNoSemicolonDouble(char * variable, char * type, double valu
 
 	fprintf(fileOut, ";");
 	printNewLine();
-	printNewLine();
 }
 
 void printIfDeclaration(char * type) {
@@ -194,6 +190,19 @@ void printForDeclaration(char * type, char * variable, int int_stop_point, char 
         printNewLine();
     } else if (strcmp(type, "end_downto") == 0) {
         fprintf(fileOut, " %s--) {", variable);
+    }
+}
+
+void printRepeatDeclaration(char * type) {
+	if (strcmp(type, "begin") == 0) {
+		printTabs();
+		fprintf(fileOut, "do {");
+		printNewLine();
+	} else if (strcmp(type, "before_end") == 0) {
+		printTabs();
+        fprintf(fileOut, "} while (");
+    } else if (strcmp(type, "after_end") == 0) {
+        fprintf(fileOut, ");");
         printNewLine();
     }
 }
@@ -264,7 +273,6 @@ void printEndStatements() {
 	printTabs();
 	fprintf(fileOut, "}");
 	printNewLine();
-	printNewLine();
 }
 
 char * mallocNewString(char * new_text) {
@@ -277,13 +285,11 @@ void printWriteDeclarationString(char * expression) {
 	printTabs();
 	fprintf(fileOut, "cout << \"%s\";", expression);
 	printNewLine();
-	printNewLine();
 }
 
 void printWriteDeclarationVariable(char * expression) {
 	printTabs();
 	fprintf(fileOut, "cout << %s;", expression);
-	printNewLine();
 	printNewLine();
 }
 
@@ -291,19 +297,16 @@ void printWritelnDeclarationString(char * expression) {
 	printTabs();
 	fprintf(fileOut, "cout << \"%s\" << endl;", expression);
 	printNewLine();
-	printNewLine();
 }
 
 void printWritelnDeclarationVariable(char * expression) {
 	printTabs();
 	fprintf(fileOut, "cout << %s << endl;", expression);
 	printNewLine();
-	printNewLine();
 }
 
 void printReadDeclaration(char * expression) {
 	printTabs();
 	fprintf(fileOut, "cin >> %s;", expression);
-	printNewLine();
 	printNewLine();
 }
