@@ -32,6 +32,7 @@ void printAtribuitionNoSemicolonDouble(char * variable, char * type, double valu
 void printIfDeclaration(char * type);
 void printWhileDeclaration(char * type);
 void printForDeclaration(char * type, char * variable, int int_stop_point, char * str_stop_point);
+void printRepeatDeclaration(char * type);
 
 void printCondition1(char * expression);
 void printConditionInt(int expression);
