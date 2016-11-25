@@ -88,6 +88,10 @@ begin
 		end;
 	until variavelInteger > 0;
 
+
+	read(variavelInteger);
+	readln(variavelInteger);
+
 	writeln('Somemessage');
 	write('Oxi');
 	writeln('kkkk hahahaha');

@@ -90,6 +90,7 @@ int debugValue = 1;
 %token T_WRITELN
 
 %token T_READ
+%token T_READLN
 
 %token T_LEFT_PARENTHESIS
 %token T_RIGHT_PARENTHESIS
@@ -130,6 +131,7 @@ Command:
     | While_Statement
     | For_Statement
     | Write_Statements
+    | Read_Statement
     | Repeat_Until_Statement
 ;
 
@@ -266,6 +268,17 @@ Write_Statements:
 Write_Statement_Complementation:
     T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
         printWriteDeclarationValues($<all>2);
+    }
+;
+
+Read_Statement:
+    T_READ  Read_Statement_Complement
+    | T_READLN Read_Statement_Complement
+;
+
+Read_Statement_Complement:
+    T_LEFT_PARENTHESIS Variable T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printReadDeclaration($<all>3->value);
     }
 ;
 

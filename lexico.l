@@ -57,8 +57,8 @@ some_char .
 
 "write" {return T_WRITE;}
 "writeln" {return T_WRITELN;}
-
 "read" {return T_READ;}
+"readln" {return T_READLN;}
 
 "string" {return T_TYPE_STRING;}
 "char" {return T_TYPE_CHAR;}
