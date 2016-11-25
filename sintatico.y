@@ -86,11 +86,8 @@ int debugValue = 1;
 %token T_MINOR
 %token T_MINOR_OR_EQUAL
 
-%token T_OPEN_COMMENT_KEY_ASTERISK
-%token T_CLOSE_COMMENT_KEY_ASTERISK
-%token T_OPEN_COMMENT_KEY
-%token T_CLOSE_COMMENT_KEY
 %token <all> T_SLASH_COMMENT
+%token <all> T_BRACE_COMMENT
 
 %token T_WRITE
 %token T_WRITELN
@@ -291,6 +288,9 @@ Read_Statement_Complement:
 Comment_Statement:
     T_SLASH_COMMENT {
         printComment("slash", $<all>1->value);
+    }
+    | T_BRACE_COMMENT {
+        printComment("brace_asterisk", $<all>1->value);
     }
 ;
 

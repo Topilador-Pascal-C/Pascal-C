@@ -99,4 +99,7 @@ begin
 	// comentario de teste
 	// comentarioumapalavra
 
+	{comentario de uma linha sem asterisco}
+	{* comentario de uma linha com asterisco *}
+
 end.

@@ -12,6 +12,10 @@ word [a-zA-Z_0-9][a-zA-Z_0-9]*
 text {word}(" "{word})+
 slash \/
 one_line_comment {slash}{slash}[ ]*{word}+{text}*
+open_brace \{
+close_brace \}
+asterisk \*
+brace_asterisk_comment {open_brace}{asterisk}*[ ]*{word}+{text}*[ ]*{asterisk}*{close_brace}
 withespace [ \r\t\n]+
 digits [0-9]+
 real {digits}("."{digits})
@@ -118,12 +122,23 @@ some_char .
 	return T_SLASH_COMMENT;
 }
 
+{brace_asterisk_comment} {
+	yylval.all = (type_values*) malloc(sizeof(type_values));
+	yylval.all->type = TYPE_STRING;
+	
+	yytext = yytext + 1;
+	yylval.all->value = malloc(sizeof(strlen(yytext) - 1));
+	strncpy(yylval.all->value, yytext, strlen(yytext) - 1);
+
+	return T_BRACE_COMMENT;
+}
+
 {apostrophe}{text}{apostrophe} {
 	yylval.all = (type_values*) malloc(sizeof(type_values));
 	yylval.all->type = TYPE_STRING;
 	
 	yytext = yytext + 1;
-	yylval.all->value = malloc(sizeof(strlen(yytext) - 2));
+	yylval.all->value = malloc(sizeof(strlen(yytext) - 1));
 	strncpy(yylval.all->value, yytext, strlen(yytext) - 1);
 
 	return T_SOME_TEXT;

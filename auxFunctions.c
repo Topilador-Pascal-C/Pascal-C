@@ -221,8 +221,17 @@ void printReadDeclaration(char * type) {
 void printComment(char * type, char * comment) {
 	if (strcmp(type, "slash") == 0) {
 		printTabs();
-		fprintf(fileOut, "%s\n", comment);
+		fprintf(fileOut, "%s", comment);
+	} else if (strcmp(type, "brace_asterisk") == 0) {
+		printTabs();
+		if (comment[0] == '*') {
+			fprintf(fileOut, "/%s/", comment);
+		} else {
+			fprintf(fileOut, "/* %s */", comment);
+		}
 	}
+
+	printNewLine();
 }
 
 void printEndStatements() {
