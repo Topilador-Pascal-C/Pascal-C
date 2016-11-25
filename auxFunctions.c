@@ -218,6 +218,12 @@ void printReadDeclaration(char * type) {
 	printNewLine();
 }
 
+void printComment(char * type, char * comment) {
+	if (strcmp(type, "slash") == 0) {
+		printTabs();
+		fprintf(fileOut, "%s\n", comment);
+	}
+}
 
 void printEndStatements() {
 	printTabs();

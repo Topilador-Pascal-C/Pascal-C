@@ -70,13 +70,10 @@ begin
 		end;
 	end;
 
-
 	while variavelShortint <> 10 do
 	begin
 		variavelDouble := 'teste';
 	end;
-
-
 
 	repeat
 		while variavelShortint <= variavelDouble do
@@ -97,5 +94,9 @@ begin
 	writeln('kkkk hahahaha');
 	writeln(895);
 	write(7.84);
+
+	//comentario de teste
+	// comentario de teste
+	// comentarioumapalavra
 
 end.

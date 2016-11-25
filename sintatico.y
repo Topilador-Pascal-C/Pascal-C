@@ -86,9 +86,14 @@ int debugValue = 1;
 %token T_MINOR
 %token T_MINOR_OR_EQUAL
 
+%token T_OPEN_COMMENT_KEY_ASTERISK
+%token T_CLOSE_COMMENT_KEY_ASTERISK
+%token T_OPEN_COMMENT_KEY
+%token T_CLOSE_COMMENT_KEY
+%token <all> T_SLASH_COMMENT
+
 %token T_WRITE
 %token T_WRITELN
-
 %token T_READ
 %token T_READLN
 
@@ -133,6 +138,7 @@ Command:
     | Write_Statements
     | Read_Statement
     | Repeat_Until_Statement
+    | Comment_Statement
 ;
 
 ProgramBegin:
@@ -279,6 +285,12 @@ Read_Statement:
 Read_Statement_Complement:
     T_LEFT_PARENTHESIS Variable T_RIGHT_PARENTHESIS T_SEMICOLON {
         printReadDeclaration($<all>3->value);
+    }
+;
+
+Comment_Statement:
+    T_SLASH_COMMENT {
+        printComment("slash", $<all>1->value);
     }
 ;
 
