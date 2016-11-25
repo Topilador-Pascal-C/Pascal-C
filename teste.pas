@@ -18,6 +18,7 @@ var
 	variavelInteger  : integer;
 
 	variavelSingle   : single;
+	variavelSingle   : single;
 	variavelDouble   : double;
 	variavelExtended : extended;
 
@@ -88,7 +89,7 @@ begin
 	until variavelInteger > 0;
 
 	writeln('Somemessage');
-	write('Somemessage');
-	writeln('Somemessage hahahaha');
+	write('Oxi');
+	writeln('kkkk hahahaha');
 
 end.

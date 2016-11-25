@@ -24,10 +24,11 @@ int debugValue = 1;
     char * strval;
     int intval;
     double doubval;
+    type_values * all;
 }
 
-%token <intval> T_INT_NUMBER;
-%token <doubval> T_DOUBLE_NUMBER;
+%token <all> T_INT_NUMBER;
+%token <all> T_DOUBLE_NUMBER;
 
 %token T_ATTRIBUTION;
 %token T_SEMICOLON;
@@ -69,8 +70,8 @@ int debugValue = 1;
 %token <strval> T_TYPE_COMP
 %token <strval> T_TYPE_CURRENCY
 
-%token T_SOME_TEXT
-%token T_SOME_WORD
+%token <all> T_SOME_TEXT
+%token <all> T_SOME_WORD
 %token T_SOME_DIGIT
 
 %token T_END_PROGRAM
@@ -89,7 +90,6 @@ int debugValue = 1;
 
 %token T_WRITE
 %token T_WRITELN
-%token <strval> T_STRING
 
 %token T_READ
 
@@ -97,6 +97,7 @@ int debugValue = 1;
 %token T_RIGHT_PARENTHESIS
 
 %type <strval> Type_Of_Variable
+%type <all> Some_String
 
 %start ProgramBegin
 
@@ -144,17 +145,17 @@ Declaration_Of_Variables:
 
 Declaration_Of_Variable:
     T_VAR_STATEMENT Variable T_COLON Type_Of_Variable T_SEMICOLON {
-        if (addNewVariable($<strval>2, $<strval>4, yylineno, curfilename) == 1) {
-            printDeclaration($<strval>4, $<strval>2);
+        if (addNewVariable($<all>2, $4, yylineno, curfilename) == 1) {
+            printDeclaration($4, $<all>2);
         } else {
-            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>3, curfilename, yylineno);
+            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", (char*)$<all>2->value, curfilename, yylineno);
         }
     }
     | Variable T_COLON Type_Of_Variable T_SEMICOLON {
-        if (addNewVariable($<strval>1, $<strval>3, yylineno, curfilename) == 1) {
-            printDeclaration($<strval>3, $<strval>1);
+        if (addNewVariable($<all>1, $3, yylineno, curfilename) == 1) {
+            printDeclaration($3, $<all>1);
         } else {
-            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", $<strval>1, curfilename, yylineno);
+            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", (char*)$<all>1->value, curfilename, yylineno);
         }
     }
 ;
@@ -165,7 +166,9 @@ Variable:
 
 Some_String:
     T_SOME_TEXT
-    | T_APOSTROPHE T_SOME_WORD T_APOSTROPHE
+    | T_APOSTROPHE T_SOME_WORD T_APOSTROPHE {
+        $$ = $<all>2;
+    }
 ;
 
 Some_Int:
@@ -178,14 +181,45 @@ Some_Double:
 
 Expression:
     Variable
+	| T_INT_NUMBER
+    | T_DOUBLE_NUMBER
 ;
 
-Expression_Int:
-	Some_Int
+For_Statement:
+    T_FOR_STATEMENT {
+        printForDeclaration("begin", "", 0, "");
+    } For_Info
 ;
 
-Expression_Double:
-    Some_Double
+For_Info:
+    Attribuition T_TO_STATEMENT Some_Int {
+        char * variable = getVariableFor();
+        printForDeclaration("condition_to_int", variable, $<intval>3, "");
+    } For_Do_To
+    | Attribuition T_TO_STATEMENT Variable {
+        char * variable = getVariableFor();
+        printForDeclaration("condition_to_str", variable, 0,$<all>3->value);
+    } For_Do_To
+    | Attribuition T_DOWNTO_STATEMENT Some_Int {
+        char * variable = getVariableFor();
+        printForDeclaration("condition_downto_int", variable, $<intval>3, "");
+    } For_Do_Downto
+;
+
+For_Do_To:
+    T_DO_STATEMENT {
+        char * variable = getVariableFor();
+        printForDeclaration("end_to", variable, 0, "");
+        incrementScope();
+    } Statement_Complementation
+;
+
+For_Do_Downto:
+    T_DO_STATEMENT {
+        char * variable = getVariableFor();
+        printForDeclaration("end_downto", variable, 0, "");
+        incrementScope();
+    } Statement_Complementation
 ;
 
 If_Statement:
@@ -206,41 +240,15 @@ While_Statement:
     } Statement_Complementation
 ;
 
-For_Statement:
-    T_FOR_STATEMENT {
-        printForDeclaration("begin", "", 0, "");
-    } For_Info
-;
-
-For_Info:
-    For_Attribution T_TO_STATEMENT Some_Int {
-        char * variable = get_variable_for();
-        printForDeclaration("condition_to_int", variable, $<intval>3, "");
-    } For_Do_To
-    | For_Attribution T_TO_STATEMENT Variable {
-        char * variable = get_variable_for();
-        printForDeclaration("condition_to_str", variable, 0,$<strval>3);
-    } For_Do_To
-    | For_Attribution T_DOWNTO_STATEMENT Some_Int {
-        char * variable = get_variable_for();
-        printForDeclaration("condition_downto_int", variable, $<intval>3, "");
-    } For_Do_Downto
-;
-
-For_Do_To:
-    T_DO_STATEMENT {
-        char * variable = get_variable_for();
-        printForDeclaration("end_to", variable, 0, "");
-        incrementScope();
-    } Statement_Complementation
-;
-
-For_Do_Downto:
-    T_DO_STATEMENT {
-        char * variable = get_variable_for();
-        printForDeclaration("end_downto", variable, 0, "");
-        incrementScope();
-    } Statement_Complementation
+Statement_Complementation:
+    T_BEGIN_STATEMENT Commands T_END_STATEMENT T_SEMICOLON {
+        decrementScope();
+        printEndStatements();
+    }
+    | Command {
+        decrementScope();
+        printEndStatements();
+    }
 ;
 
 Repeat_Until_Statement:
@@ -252,17 +260,6 @@ Repeat_Until_Statement:
         printRepeatDeclaration("before_end");
     } Multiple_Conditions T_SEMICOLON {
         printRepeatDeclaration("after_end");
-    }
-;
-
-Statement_Complementation:
-    T_BEGIN_STATEMENT Commands T_END_STATEMENT T_SEMICOLON {
-        decrementScope();
-        printEndStatements();
-    }
-    | Command {
-        decrementScope();
-        printEndStatements();
     }
 ;
 
@@ -281,10 +278,10 @@ Write_Statements:
 
 Write_Statement_Complementation:
     T_LEFT_PARENTHESIS Some_String T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printWriteDeclarationString($<strval>3);
+        printWriteDeclarationString($<all>2->value);
     }
     | T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printWriteDeclarationVariable($<strval>2);
+        printWriteDeclarationVariable($<all>2->value);
     }
 ;
 
@@ -299,180 +296,65 @@ Multiple_Conditions:
 ;
 
 Conditions:
-    Conditions_String
-    | Conditions_Double
-    | Conditions_Int
-;
-
-Conditions_String:
-	Expression {
-        printCondition1($<strval>1);
+    Expression {
+        printConditionOne($<all>1);
     }
     | Expression T_EQUAL Expression {
-        printCondition($<strval>1, $<strval>3, "==");
+        printCondition($<all>1, $<all>3, "==");
     }
     | Expression T_DIFFERENT Expression {
-        printCondition($<strval>1, $<strval>3, "!=");
+        printCondition($<all>1, $<all>3, "!=");
     }
     | Expression T_BIGGER Expression {
-        printCondition($<strval>1, $<strval>3, ">");
+        printCondition($<all>1, $<all>3, ">");
     }
     | Expression T_BIGGER_OR_EQUAL Expression {
-        printCondition($<strval>1, $<strval>3, ">=");
+        printCondition($<all>1, $<all>3, ">=");
     }
     | Expression T_MINOR Expression {
-        printCondition($<strval>1, $<strval>3, "<");
+        printCondition($<all>1, $<all>3, "<");
     }
     | Expression T_MINOR_OR_EQUAL Expression {
-        printCondition($<strval>1, $<strval>3, "<=");
-    }
-;
-
-Conditions_Int:
-    Expression_Int {
-    	printConditionInt($<intval>1);
-    }
-    | Expression_Int T_EQUAL Expression {
-        printConditionIntFirst($<intval>1, $<strval>3, "==");
-    }
-    | Expression T_EQUAL Expression_Int {
-        printConditionIntLast($<strval>1, $<intval>3, "==");
-    }
-    | Expression_Int T_EQUAL Expression_Int {
-        printConditionIntAll($<intval>1, $<intval>3, "==");
-    }
-    | Expression_Int T_DIFFERENT Expression {
-        printConditionIntFirst($<intval>1, $<strval>3, "!=");
-    }
-    | Expression T_DIFFERENT Expression_Int {
-        printConditionIntLast($<strval>1, $<intval>3, "!=");
-    }
-    | Expression_Int T_DIFFERENT Expression_Int {
-        printConditionIntAll($<intval>1, $<intval>3, "!=");
-    }
-    | Expression_Int T_BIGGER Expression {
-        printConditionIntFirst($<intval>1, $<strval>3, ">");
-    }
-    | Expression T_BIGGER Expression_Int {
-        printConditionIntLast($<strval>1, $<intval>3, ">");
-    }
-    | Expression_Int T_BIGGER Expression_Int {
-        printConditionIntAll($<intval>1, $<intval>3, ">");
-    }
-    | Expression_Int T_BIGGER_OR_EQUAL Expression {
-        printConditionIntFirst($<intval>1, $<strval>3, ">=");
-    }
-    | Expression T_BIGGER_OR_EQUAL Expression_Int {
-        printConditionIntLast($<strval>1, $<intval>3, ">=");
-    }
-    | Expression_Int T_BIGGER_OR_EQUAL Expression_Int {
-        printConditionIntAll($<intval>1, $<intval>3, ">=");
-    }
-    | Expression_Int T_MINOR Expression {
-        printConditionIntFirst($<intval>1, $<strval>3, "<");
-    }
-    | Expression T_MINOR Expression_Int {
-        printConditionIntLast($<strval>1, $<intval>3, "<");
-    }
-    | Expression_Int T_MINOR Expression_Int {
-        printConditionIntAll($<intval>1, $<intval>3, "<");
-    }
-    | Expression_Int T_MINOR_OR_EQUAL Expression {
-        printConditionIntFirst($<intval>1, $<strval>3, "<=");
-    }
-    | Expression T_MINOR_OR_EQUAL Expression_Int {
-        printConditionIntLast($<strval>1, $<intval>3, "<=");
-    }
-    | Expression_Int T_MINOR_OR_EQUAL Expression_Int {
-        printConditionIntAll($<intval>1, $<intval>3, "<=");
-    }
-;
-
-Conditions_Double:
-    Expression_Double {
-        printConditionDouble($<doubval>1);
-    }
-    | Expression_Double T_EQUAL Expression {
-        printConditionDoubleFirst($<doubval>1, $<strval>3, "==");
-    }
-    | Expression T_EQUAL Expression_Double {
-        printConditionDoubleLast($<strval>1, $<doubval>3, "==");
-    }
-    | Expression_Double T_EQUAL Expression_Double {
-        printConditionDoubleAll($<doubval>1, $<doubval>3, "==");
-    }
-    | Expression_Double T_DIFFERENT Expression {
-        printConditionDoubleFirst($<doubval>1, $<strval>3, "!=");
-    }
-    | Expression T_DIFFERENT Expression_Double {
-        printConditionDoubleLast($<strval>1, $<doubval>3, "!=");
-    }
-    | Expression_Double T_DIFFERENT Expression_Double {
-        printConditionDoubleAll($<doubval>1, $<doubval>3, "!=");
-    }
-    | Expression_Double T_BIGGER Expression {
-        printConditionDoubleFirst($<doubval>1, $<strval>3, ">");
-    }
-    | Expression T_BIGGER Expression_Double {
-        printConditionDoubleLast($<strval>1, $<doubval>3, ">");
-    }
-    | Expression_Double T_BIGGER Expression_Double {
-        printConditionDoubleAll($<doubval>1, $<doubval>3, ">");
-    }
-    | Expression_Double T_BIGGER_OR_EQUAL Expression {
-        printConditionDoubleFirst($<doubval>1, $<strval>3, ">=");
-    }
-    | Expression T_BIGGER_OR_EQUAL Expression_Double {
-        printConditionDoubleLast($<strval>1, $<doubval>3, ">=");
-    }
-    | Expression_Double T_BIGGER_OR_EQUAL Expression_Double {
-        printConditionDoubleAll($<doubval>1, $<doubval>3, ">=");
-    }
-    | Expression_Double T_MINOR Expression {
-        printConditionDoubleFirst($<doubval>1, $<strval>3, "<");
-    }
-    | Expression T_MINOR Expression_Double {
-        printConditionDoubleLast($<strval>1, $<doubval>3, "<");
-    }
-    | Expression_Double T_MINOR Expression_Double {
-        printConditionDoubleAll($<doubval>1, $<doubval>3, "<");
-    }
-    | Expression_Double T_MINOR_OR_EQUAL Expression {
-        printConditionDoubleFirst($<doubval>1, $<strval>3, "<=");
-    }
-    | Expression T_MINOR_OR_EQUAL Expression_Double {
-        printConditionDoubleLast($<strval>1, $<doubval>3, "<=");
-    }
-    | Expression_Double T_MINOR_OR_EQUAL Expression_Double {
-        printConditionDoubleAll($<doubval>1, $<doubval>3, "<=");
+        printCondition($<all>1, $<all>3, "<=");
     }
 ;
 
 Attribuition:
+    Attribuition_Without_Semicolon
+    | Attribuition_With_Semicolon
+;
+Attribuition_With_Semicolon:
     Variable T_ATTRIBUTION Some_String T_SEMICOLON {
-        addAttribuition($<strval>1, $<strval>4, yylineno, curfilename);
-        printAtribuition($<strval>1, "string", $<strval>4);
+        addAttribuition($<all>1->value, $<all>3->value, yylineno, curfilename);
+        printAtribuition($<all>1->value, "string", $<all>3->value);
     }
     | Variable T_ATTRIBUTION Variable T_SEMICOLON {
-        addAttribuition($<strval>1, $<strval>3, yylineno, curfilename);
-        printAtribuition($<strval>1, "number/expression", $<strval>3);
-    }
-    | Variable T_ATTRIBUTION Some_String {
-        addAttribuition($<strval>1, $<strval>3, yylineno, curfilename);
-        printAtribuitionNoSemicolon($<strval>1, "number/expression", $<strval>3);
+        addAttribuition($<all>1->value, $<all>3->value, yylineno, curfilename);
+        printAtribuition($<all>1->value, "variable", $<all>3->value);
     }
     | Variable T_ATTRIBUTION Some_Int T_SEMICOLON {
-        printAtribuitionNoSemicolonInt($<strval>1, "number/expression", $<intval>3);
+        printAtribuitionNoSemicolonInt($<all>1->value, "int", $<intval>3);
     }
     | Variable T_ATTRIBUTION Some_Double T_SEMICOLON {
-        printAtribuitionNoSemicolonDouble($<strval>1, "number/expression", $<doubval>3);
+        printAtribuitionNoSemicolonDouble($<all>1->value, "double", $<doubval>3);
     }
 ;
 
-For_Attribution:
-    Variable T_ATTRIBUTION Some_Int {
-        set_variable_for($<strval>1);
-        printAtribuitionNoSemicolonIntFor($<strval>1, "number/expression", $<intval>3);
+Attribuition_Without_Semicolon:
+    Variable T_ATTRIBUTION Some_String {
+        addAttribuition($<all>1->value, $<all>3->value, yylineno, curfilename);
+        printAtribuitionNoSemicolon($<all>1->value, "number/expression", $<all>3->value);
+    }
+    | Variable T_ATTRIBUTION Variable {
+        addAttribuition($<all>1->value, $<all>3->value, yylineno, curfilename);
+        printAtribuition($<all>1->value, "variable", $<all>3->value);
+    }
+    | Variable T_ATTRIBUTION Some_Int {
+        setVariableFor($<all>1->value);
+        printAtribuitionNoSemicolonIntFor($<all>1->value, "int", $<intval>3);
+    }
+    | Variable T_ATTRIBUTION Some_Double {
+        printAtribuitionNoSemicolonDouble($<all>1->value, "double", $<doubval>3);
     }
 ;
 

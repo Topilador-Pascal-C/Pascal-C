@@ -23,12 +23,27 @@ some_char .
 {withespace} /* Ignore */ ;
 
 {digits} {
-	yylval.intval = atoi(yytext);
+	yylval.all = (type_values*) malloc(sizeof(type_values));
+	yylval.all->type = TYPE_INT;
+
+	int * value = malloc(sizeof(int));
+	*value = atoi(yytext);
+	yylval.all->value = (int*) value;
+	
+	printf("Value: %d\n", ((int*)yylval.all->value)[0]);
+	
+
+
 	return T_INT_NUMBER;
 }
 
 {real} {
-	yylval.doubval = atof(yytext);
+	yylval.all = (type_values*) malloc(sizeof(type_values));
+	yylval.all->type = TYPE_DOUBLE;
+	double *value = (double*) malloc(sizeof(double));
+	*value = atof(yytext);
+	yylval.all->value = value;
+
 	return T_DOUBLE_NUMBER;
 }
 
@@ -95,18 +110,25 @@ some_char .
 {quotation_marks} {return T_QUOTATION_MARKS;}
 
 {apostrophe}{text}{apostrophe} {
-	yylval.strval = malloc(sizeof(strlen(yytext) - 2));
 	yytext = yytext + 1;
-	strncpy(yylval.strval, yytext, strlen(yytext) - 1);
+	
+	yylval.all = malloc(sizeof(type_values));
+	yylval.all->type = TYPE_STRING;
+	yylval.all->value = malloc(sizeof(strlen(yytext) - 2));
+	strncpy(yylval.all->value, yytext, strlen(yytext) - 1);
+
 	return T_SOME_TEXT;
 }
 
 {word} {
-	yylval.strval = malloc(sizeof(strlen(yytext)));
-	strcpy(yylval.strval, yytext);
+
+	yylval.all = malloc(sizeof(type_values));
+	yylval.all->type = TYPE_STRING;
+	yylval.all->value = malloc(sizeof(strlen(yytext)));
+	strcpy(yylval.all->value, yytext);
+	
 	return T_SOME_WORD;
 }
-
 
 {some_char} {
 	printf("%s:%d: Mystery character '%s'\n", curfilename, yylineno, yytext);

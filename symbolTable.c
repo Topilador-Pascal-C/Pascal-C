@@ -28,9 +28,9 @@ symbol * searchSymbol(char * word) {
 	
 }
 
-int addNewVariable(char * name, char * type, int line, char * filename) {
+int addNewVariable(type_values * all, char * type, int line, char * filename) {
 	reference * r;
-	symbol * sp = searchSymbol(name);
+	symbol * sp = searchSymbol(all->value);
 
 	int return_validate = 0;
 

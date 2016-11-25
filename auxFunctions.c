@@ -8,12 +8,12 @@ void decrementScope() {
 	scope = scope - 1;
 }
 
-void set_variable_for(char * new_variable) {
+void setVariableFor(char * new_variable) {
 	variable_for = mallocNewString(new_variable);
 	strcpy(new_variable, variable_for);
 }
 
-char * get_variable_for() {
+char * getVariableFor() {
 	return variable_for;
 }
 
@@ -56,11 +56,11 @@ void printEndOfProgram() {
 	printNewLine();
 }
 
-void printDeclaration(char * type, char * value) {
+void printDeclaration(char * type, type_values * name) {
 	printTabs();
 	fprintf(fileOut, "%s", type);
 	printBlankSpace();
-    fprintf(fileOut, "%s", value);
+    fprintf(fileOut, "%s", (char*)name->value);
     fprintf(fileOut, ";");
     printNewLine();
 }
@@ -202,65 +202,55 @@ void printRepeatDeclaration(char * type) {
 	} else if (strcmp(type, "before_end") == 0) {
 		printTabs();
         fprintf(fileOut, "} while (");
-    } else if (strcmp(type, "after_end") == 0) {
+    } else {
         fprintf(fileOut, ");");
         printNewLine();
     }
 }
 
-void printCondition1(char * expression) {
+void printConditionString(char * expression) {
 	fprintf(fileOut, "%s", expression);
 }
 
-void printConditionInt(int expression) {
-	fprintf(fileOut, "%d", expression);
+void printConditionDouble(type_values * expression) {
+	fprintf(fileOut, "%lf", ((double*)expression->value)[0]);
 }
 
-void printConditionDouble(double expression) {
-	fprintf(fileOut, "%lf", expression);
+void printConditionInt(type_values * expression) {
+
+	fprintf(fileOut, "%d", ((int*)expression->value)[0]);
 }
 
-void printCondition(char * expression1, char * expression2, char * condition) {
-	printCondition1(expression1);
+void printConditionOne(type_values * expression) {
+	if (expression->type == TYPE_STRING) {
+		printConditionString((char*)expression->value);
+	} else if (expression->type == TYPE_INT) {
+		printConditionInt(expression);
+	} else {
+		printConditionDouble(expression);
+	}
+}
+
+void printCondition(type_values * expression1, type_values * expression2, char * condition) {
+	if (expression1->type == TYPE_STRING) {
+		printConditionString((char*)expression1->value);
+	} else if (expression1->type == TYPE_INT) {
+		printConditionInt(expression1);
+	} else {
+		printConditionDouble(expression1);
+	}
+
 	fprintf(fileOut, " %s ", condition);
-	printCondition1(expression2);
+
+	if (expression2->type == TYPE_STRING) {
+		printConditionString((char*)expression2->value);
+	} else if (expression2->type == TYPE_INT) {
+		printConditionInt(expression2);
+	} else {
+		printConditionDouble(expression2);
+	}
 }
 
-void printConditionIntFirst(int expression1, char * expression2, char * condition) {
-	printConditionInt(expression1);
-	fprintf(fileOut, " %s ", condition);
-	printCondition1(expression2);
-}
-
-void printConditionIntLast(char * expression1, int expression2, char * condition) {
-	printCondition1(expression1);
-	fprintf(fileOut, " %s ", condition);
-	printConditionInt(expression2);
-}
-
-void printConditionIntAll(int expression1, int expression2, char * condition) {
-	printConditionInt(expression1);
-	fprintf(fileOut, " %s ", condition);
-	printConditionInt(expression2);
-}
-
-void printConditionDoubleFirst(double expression1, char * expression2, char * condition) {
-	printConditionDouble(expression1);
-	fprintf(fileOut, " %s ", condition);
-	printCondition1(expression2);
-}
-
-void printConditionDoubleLast(char * expression1, double expression2, char * condition) {
-	printCondition1(expression1);
-	fprintf(fileOut, " %s ", condition);
-	printConditionDouble(expression2);
-}
-
-void printConditionDoubleAll(double expression1, double expression2, char * condition) {
-	printConditionDouble(expression1);
-	fprintf(fileOut, " %s ", condition);
-	printConditionDouble(expression2);
-}
 
 void printAndOrCondition(char * type) {
 	if (strcmp(type, "and") == 0) {

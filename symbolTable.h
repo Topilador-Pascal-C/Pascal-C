@@ -1,5 +1,6 @@
 #ifndef SYMBOLTABLE_H
 #define SYMBOLTABLE_H
+#include "global.h"
 
 #define SIZE_TABLE 9997
 
@@ -30,7 +31,7 @@ symbol * searchSymbol(char * word);
 
 /* Function to add new ref in a symbol table */
 int addAttribuition(char * variable, char * value, int line, char * filename);
-int addNewVariable(char * name, char * type, int line, char * filename);
+int addNewVariable(type_values * all, char * type, int line, char * filename);
 void addSymbol(int line, char * filename, char * word);
 
 static int symCompare(const void * xa, const void * xb);
