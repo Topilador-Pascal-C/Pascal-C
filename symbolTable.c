@@ -56,7 +56,7 @@ int addNewVariable(type_values * all, char * type, int line, char * filename) {
 	return return_validate;
 }
 
-int addAttribuition(char * variable, char * value, int line, char * filename) {
+int addAttribuition(char * variable, type_values * value, int line, char * filename) {
 	reference * r;
 	symbol * sp = searchSymbol(variable);
 
@@ -71,7 +71,7 @@ int addAttribuition(char * variable, char * value, int line, char * filename) {
 			fputs("out of space\n", stderr);
 			abort();
 		} else {
-			r->value = strdup(value);
+			r->value = strdup((char*)value->value);
 			r->next = sp->reflist;
 			r->filename = filename;
 			r->line = line;

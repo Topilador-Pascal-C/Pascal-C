@@ -22,8 +22,6 @@ int debugValue = 1;
 
 %union { /* SEMANTIC RECORD */
     char * strval;
-    int intval;
-    double doubval;
     type_values * all;
 }
 
@@ -103,6 +101,38 @@ int debugValue = 1;
 
 %%
 
+Variable:
+    T_SOME_WORD
+;
+
+Some_String:
+    T_SOME_TEXT
+    | T_APOSTROPHE T_SOME_WORD T_APOSTROPHE {
+        $$ = $<all>2;
+    }
+;
+
+Expression:
+    Variable
+    | Some_String
+    | T_INT_NUMBER
+    | T_DOUBLE_NUMBER
+;
+
+Commands:
+    Command
+    | Commands Command
+;
+
+Command:
+    Attribuition
+    | If_Statement
+    | While_Statement
+    | For_Statement
+    | Write_Statements
+    | Repeat_Until_Statement
+;
+
 ProgramBegin:
     T_PROGRAM Variable T_SEMICOLON {
         printIncludesOfProgram();
@@ -122,20 +152,6 @@ ProgramBegin:
         printEndOfProgram();
         decrementScope();
     }
-;
-
-Commands:
-    Command
-    | Commands Command
-;
-
-Command:
-    Attribuition
-    | If_Statement
-    | While_Statement
-    | For_Statement
-    | Write_Statements
-    | Repeat_Until_Statement
 ;
 
 Declaration_Of_Variables:
@@ -160,66 +176,37 @@ Declaration_Of_Variable:
     }
 ;
 
-Variable:
-    T_SOME_WORD
-;
-
-Some_String:
-    T_SOME_TEXT
-    | T_APOSTROPHE T_SOME_WORD T_APOSTROPHE {
-        $$ = $<all>2;
+Attribuition:
+    Variable T_ATTRIBUTION Expression T_SEMICOLON {
+        addAttribuition($<all>1->value, $<all>3, yylineno, curfilename);
+        printAtribuition($<all>1->value, $<all>3);
     }
-;
-
-Some_Int:
-    T_INT_NUMBER
-;
-
-Some_Double:
-    T_DOUBLE_NUMBER
-;
-
-Expression:
-    Variable
-	| T_INT_NUMBER
-    | T_DOUBLE_NUMBER
 ;
 
 For_Statement:
     T_FOR_STATEMENT {
-        printForDeclaration("begin", "", 0, "");
-    } For_Info
-;
-
-For_Info:
-    Attribuition T_TO_STATEMENT Some_Int {
-        char * variable = getVariableFor();
-        printForDeclaration("condition_to_int", variable, $<intval>3, "");
-    } For_Do_To
-    | Attribuition T_TO_STATEMENT Variable {
-        char * variable = getVariableFor();
-        printForDeclaration("condition_to_str", variable, 0,$<all>3->value);
-    } For_Do_To
-    | Attribuition T_DOWNTO_STATEMENT Some_Int {
-        char * variable = getVariableFor();
-        printForDeclaration("condition_downto_int", variable, $<intval>3, "");
-    } For_Do_Downto
-;
-
-For_Do_To:
-    T_DO_STATEMENT {
-        char * variable = getVariableFor();
-        printForDeclaration("end_to", variable, 0, "");
-        incrementScope();
+        printForDeclaration("begin");
+    } For_Complementation {
+        printForDeclaration("end");
     } Statement_Complementation
 ;
 
-For_Do_Downto:
-    T_DO_STATEMENT {
-        char * variable = getVariableFor();
-        printForDeclaration("end_downto", variable, 0, "");
+For_Complementation:
+    For_Attribuition T_TO_STATEMENT Expression {
+        printForScope("<", $<all>3);
         incrementScope();
-    } Statement_Complementation
+    } T_DO_STATEMENT
+    | For_Attribuition T_DOWNTO_STATEMENT Expression {
+        printForScope(">", $<all>3);
+        incrementScope();
+    } T_DO_STATEMENT
+;
+
+For_Attribuition:
+    Variable T_ATTRIBUTION Expression {
+        setVariableFor($<all>1->value);
+        printForAtribuition($<all>3);
+    }
 ;
 
 If_Statement:
@@ -240,17 +227,6 @@ While_Statement:
     } Statement_Complementation
 ;
 
-Statement_Complementation:
-    T_BEGIN_STATEMENT Commands T_END_STATEMENT T_SEMICOLON {
-        decrementScope();
-        printEndStatements();
-    }
-    | Command {
-        decrementScope();
-        printEndStatements();
-    }
-;
-
 Repeat_Until_Statement:
     T_REPEAT_STATEMENT {
         printRepeatDeclaration("begin");
@@ -260,6 +236,17 @@ Repeat_Until_Statement:
         printRepeatDeclaration("before_end");
     } Multiple_Conditions T_SEMICOLON {
         printRepeatDeclaration("after_end");
+    }
+;
+
+Statement_Complementation:
+    T_BEGIN_STATEMENT Commands T_END_STATEMENT T_SEMICOLON {
+        decrementScope();
+        printEndStatements();
+    }
+    | Command {
+        decrementScope();
+        printEndStatements();
     }
 ;
 
@@ -277,11 +264,8 @@ Write_Statements:
 ;
 
 Write_Statement_Complementation:
-    T_LEFT_PARENTHESIS Some_String T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printWriteDeclarationString($<all>2->value);
-    }
-    | T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
-        printWriteDeclarationVariable($<all>2->value);
+    T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printWriteDeclarationValues($<all>2);
     }
 ;
 
@@ -297,7 +281,7 @@ Multiple_Conditions:
 
 Conditions:
     Expression {
-        printConditionOne($<all>1);
+        printConditionValue($<all>1);
     }
     | Expression T_EQUAL Expression {
         printCondition($<all>1, $<all>3, "==");
@@ -316,45 +300,6 @@ Conditions:
     }
     | Expression T_MINOR_OR_EQUAL Expression {
         printCondition($<all>1, $<all>3, "<=");
-    }
-;
-
-Attribuition:
-    Attribuition_Without_Semicolon
-    | Attribuition_With_Semicolon
-;
-Attribuition_With_Semicolon:
-    Variable T_ATTRIBUTION Some_String T_SEMICOLON {
-        addAttribuition($<all>1->value, $<all>3->value, yylineno, curfilename);
-        printAtribuition($<all>1->value, "string", $<all>3->value);
-    }
-    | Variable T_ATTRIBUTION Variable T_SEMICOLON {
-        addAttribuition($<all>1->value, $<all>3->value, yylineno, curfilename);
-        printAtribuition($<all>1->value, "variable", $<all>3->value);
-    }
-    | Variable T_ATTRIBUTION Some_Int T_SEMICOLON {
-        printAtribuitionNoSemicolonInt($<all>1->value, "int", $<intval>3);
-    }
-    | Variable T_ATTRIBUTION Some_Double T_SEMICOLON {
-        printAtribuitionNoSemicolonDouble($<all>1->value, "double", $<doubval>3);
-    }
-;
-
-Attribuition_Without_Semicolon:
-    Variable T_ATTRIBUTION Some_String {
-        addAttribuition($<all>1->value, $<all>3->value, yylineno, curfilename);
-        printAtribuitionNoSemicolon($<all>1->value, "number/expression", $<all>3->value);
-    }
-    | Variable T_ATTRIBUTION Variable {
-        addAttribuition($<all>1->value, $<all>3->value, yylineno, curfilename);
-        printAtribuition($<all>1->value, "variable", $<all>3->value);
-    }
-    | Variable T_ATTRIBUTION Some_Int {
-        setVariableFor($<all>1->value);
-        printAtribuitionNoSemicolonIntFor($<all>1->value, "int", $<intval>3);
-    }
-    | Variable T_ATTRIBUTION Some_Double {
-        printAtribuitionNoSemicolonDouble($<all>1->value, "double", $<doubval>3);
     }
 ;
 

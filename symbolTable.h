@@ -30,7 +30,7 @@ int size_of_table;
 symbol * searchSymbol(char * word);
 
 /* Function to add new ref in a symbol table */
-int addAttribuition(char * variable, char * value, int line, char * filename);
+int addAttribuition(char * variable, type_values * value, int line, char * filename);
 int addNewVariable(type_values * all, char * type, int line, char * filename);
 void addSymbol(int line, char * filename, char * word);
 

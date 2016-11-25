@@ -23,7 +23,7 @@ var
 	variavelExtended : extended;
 
 begin
-	if variavelShortint = variavelDouble then
+	if variavelShortint = 10 then
 		if variavelShortint = variavelDouble then
 		begin
 			variavelExtended := 'teste';
@@ -91,5 +91,7 @@ begin
 	writeln('Somemessage');
 	write('Oxi');
 	writeln('kkkk hahahaha');
+	writeln(895);
+	write(7.84);
 
 end.

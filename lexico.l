@@ -22,31 +22,6 @@ some_char .
 
 {withespace} /* Ignore */ ;
 
-{digits} {
-	yylval.all = (type_values*) malloc(sizeof(type_values));
-	yylval.all->type = TYPE_INT;
-
-	int * value = malloc(sizeof(int));
-	*value = atoi(yytext);
-	yylval.all->value = (int*) value;
-	
-	printf("Value: %d\n", ((int*)yylval.all->value)[0]);
-	
-
-
-	return T_INT_NUMBER;
-}
-
-{real} {
-	yylval.all = (type_values*) malloc(sizeof(type_values));
-	yylval.all->type = TYPE_DOUBLE;
-	double *value = (double*) malloc(sizeof(double));
-	*value = atof(yytext);
-	yylval.all->value = value;
-
-	return T_DOUBLE_NUMBER;
-}
-
 "program" {return T_PROGRAM;}
 "begin" {return T_BEGIN_STATEMENT;}
 "end." {return T_END_PROGRAM;}
@@ -109,11 +84,33 @@ some_char .
 
 {quotation_marks} {return T_QUOTATION_MARKS;}
 
+{digits} {
+	yylval.all = (type_values*) malloc(sizeof(type_values));
+	yylval.all->type = TYPE_INT;
+
+	int * value = malloc(sizeof(int));
+	* value = atoi(yytext);
+	yylval.all->value = (int*) value;
+
+	return T_INT_NUMBER;
+}
+
+{real} {
+	yylval.all = (type_values*) malloc(sizeof(type_values));
+	yylval.all->type = TYPE_DOUBLE;
+
+	double * value = malloc(sizeof(double));
+	* value = atof(yytext);
+	yylval.all->value = (double*) value;
+
+	return T_DOUBLE_NUMBER;
+}
+
 {apostrophe}{text}{apostrophe} {
-	yytext = yytext + 1;
-	
-	yylval.all = malloc(sizeof(type_values));
+	yylval.all = (type_values*) malloc(sizeof(type_values));
 	yylval.all->type = TYPE_STRING;
+	
+	yytext = yytext + 1;
 	yylval.all->value = malloc(sizeof(strlen(yytext) - 2));
 	strncpy(yylval.all->value, yytext, strlen(yytext) - 1);
 
@@ -121,9 +118,9 @@ some_char .
 }
 
 {word} {
-
-	yylval.all = malloc(sizeof(type_values));
+	yylval.all = (type_values*) malloc(sizeof(type_values));
 	yylval.all->type = TYPE_STRING;
+
 	yylval.all->value = malloc(sizeof(strlen(yytext)));
 	strcpy(yylval.all->value, yytext);
 	

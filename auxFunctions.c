@@ -65,94 +65,23 @@ void printDeclaration(char * type, type_values * name) {
     printNewLine();
 }
 
-void printAtribuition(char * variable, char * type, char * value) {
+void printAtribuition(char * variable, type_values * value) {
 	printTabs();
 	fprintf(fileOut, "%s", variable);
 	printBlankSpace();
 	fprintf(fileOut, "=");
 	printBlankSpace();
 
-	if (strcmp(type, "string") == 0) {
-    	fprintf(fileOut, "\"%s\"", value);
+	if (value->type == TYPE_STRING) {
+    	fprintf(fileOut, "\"");
+		printTypeValues(value);
+		fprintf(fileOut, "\"");
 	} else {
-		fprintf(fileOut, "%s", value);
+		printTypeValues(value);
 	}
 
     fprintf(fileOut, ";");
     printNewLine();
-}
-
-void printAtribuitionNoSemicolon(char * variable, char * type, char * value) {
-	fprintf(fileOut, "%s", variable);
-	printBlankSpace();
-	fprintf(fileOut, "=");
-	printBlankSpace();
-
-	if (strcmp(type, "string") == 0) {
-    	fprintf(fileOut, "\"%s\"", value);
-	} else {
-		fprintf(fileOut, "%s", value);
-	}
-
-	fprintf(fileOut, ";");
-	printNewLine();
-}
-
-void printAtribuitionNoSemicolonInt(char * variable, char * type, int value) {
-	printTabs();
-
-	fprintf(fileOut, "%s", variable);
-	printBlankSpace();
-	fprintf(fileOut, "=");
-	printBlankSpace();
-
-
-	if (strcmp(type, "string") == 0) {
-    	fprintf(fileOut, "\"%d\"", value);
-	} else {
-		fprintf(fileOut, "%d", value);
-	}
-
-
-	fprintf(fileOut, ";");
-	printNewLine();
-}
-
-void printAtribuitionNoSemicolonIntFor(char * variable, char * type, int value) {
-	fprintf(fileOut, "%s", variable);
-	printBlankSpace();
-	fprintf(fileOut, "=");
-	printBlankSpace();
-
-
-	if (strcmp(type, "string") == 0) {
-    	fprintf(fileOut, "\"%d\"", value);
-	} else {
-		fprintf(fileOut, "%d", value);
-	}
-
-
-	fprintf(fileOut, ";");
-}
-
-void printAtribuitionNoSemicolonDouble(char * variable, char * type, double value) {
-	printTabs();
-
-	fprintf(fileOut, "%s", variable);
-	printBlankSpace();
-	fprintf(fileOut, "=");
-	printBlankSpace();
-
-
-	if (strcmp(type, "string") == 0) {
-    	fprintf(fileOut, "\"%lf\"", value);
-	} else {
-		fprintf(fileOut, "%lf", value);
-	}
-
-
-	fprintf(fileOut, ";");
-	printNewLine();
 }
 
 void printIfDeclaration(char * type) {
@@ -175,23 +104,54 @@ void printWhileDeclaration(char * type) {
     }
 }
 
-void printForDeclaration(char * type, char * variable, int int_stop_point, char * str_stop_point) {
+void printForDeclaration(char * type) {
 	if (strcmp(type, "begin") == 0) {
 		printTabs();
 		fprintf(fileOut, "for (");
-	} else if (strcmp(type, "condition_to_int") == 0) {
-		fprintf(fileOut, " %s < %d;", variable, int_stop_point);
-	} else if (strcmp(type, "condition_to_str") == 0) {
-		fprintf(fileOut, " %s < %s;", variable, str_stop_point);
-	} else if (strcmp(type, "condition_downto_int") == 0) {
-		fprintf(fileOut, " %s > %d;", variable, int_stop_point);
-	} else if (strcmp(type, "end_to") == 0) {
-        fprintf(fileOut, " %s++) {", variable);
-        printNewLine();
-    } else if (strcmp(type, "end_downto") == 0) {
-        fprintf(fileOut, " %s--) {", variable);
-        printNewLine();
-    }
+	} else {
+		fprintf(fileOut, ") {");
+        printNewLine();	
+	}
+}
+
+void printForAtribuition(type_values * value) {
+	
+	fprintf(fileOut, "%s", getVariableFor());
+	printBlankSpace();
+	fprintf(fileOut, "=");
+	printBlankSpace();
+	
+	printTypeValues(value);
+
+	fprintf(fileOut, ";");
+}
+
+void printForScope(char * type, type_values * expression) {
+	if (strcmp(type, ">") == 0) {
+		printForScopeAux1();
+		fprintf(fileOut, ">");
+		printForScopeAux2(expression);
+		
+		fprintf(fileOut, "%s--", getVariableFor());
+	} else {
+		printForScopeAux1();
+		fprintf(fileOut, "<");
+		printForScopeAux2(expression);
+		fprintf(fileOut, "%s++", getVariableFor());
+	}
+}
+
+void printForScopeAux1() {
+	printBlankSpace();
+	fprintf(fileOut, "%s", getVariableFor());
+	printBlankSpace();
+}
+
+void printForScopeAux2(type_values * expression) {
+	printBlankSpace();
+	printTypeValues(expression);
+	fprintf(fileOut, ";");
+	printBlankSpace();
 }
 
 void printRepeatDeclaration(char * type) {
@@ -208,47 +168,16 @@ void printRepeatDeclaration(char * type) {
     }
 }
 
-void printConditionString(char * expression) {
-	fprintf(fileOut, "%s", expression);
-}
-
-void printConditionDouble(type_values * expression) {
-	fprintf(fileOut, "%lf", ((double*)expression->value)[0]);
-}
-
-void printConditionInt(type_values * expression) {
-
-	fprintf(fileOut, "%d", ((int*)expression->value)[0]);
-}
-
-void printConditionOne(type_values * expression) {
-	if (expression->type == TYPE_STRING) {
-		printConditionString((char*)expression->value);
-	} else if (expression->type == TYPE_INT) {
-		printConditionInt(expression);
-	} else {
-		printConditionDouble(expression);
-	}
+void printConditionValue(type_values * expression) {
+	printTypeValues(expression);
 }
 
 void printCondition(type_values * expression1, type_values * expression2, char * condition) {
-	if (expression1->type == TYPE_STRING) {
-		printConditionString((char*)expression1->value);
-	} else if (expression1->type == TYPE_INT) {
-		printConditionInt(expression1);
-	} else {
-		printConditionDouble(expression1);
-	}
+	printConditionValue(expression1);
 
 	fprintf(fileOut, " %s ", condition);
 
-	if (expression2->type == TYPE_STRING) {
-		printConditionString((char*)expression2->value);
-	} else if (expression2->type == TYPE_INT) {
-		printConditionInt(expression2);
-	} else {
-		printConditionDouble(expression2);
-	}
+	printConditionValue(expression2);
 }
 
 
@@ -260,24 +189,14 @@ void printAndOrCondition(char * type) {
 	}
 }
 
-void printEndStatements() {
-	printTabs();
-	fprintf(fileOut, "}");
-	printNewLine();
-}
-
-char * mallocNewString(char * new_text) {
-	char * destination = malloc(sizeof(strlen(new_text)));
-    strcpy(destination, new_text);
-    return destination;
-}
-
-void printWriteDeclarationString(char * expression) {
-	fprintf(fileOut, "\"%s\"", expression);
-}
-
-void printWriteDeclarationVariable(char * expression) {
-	fprintf(fileOut, "%s", expression);
+void printWriteDeclarationValues(type_values * expression) {
+	if (expression->type == TYPE_STRING) {
+		fprintf(fileOut, "\"");
+		printTypeValues(expression);
+		fprintf(fileOut, "\"");
+	} else {
+		printTypeValues(expression);
+	}
 }
 
 void printWriteDeclaration(char * type) {
@@ -297,4 +216,41 @@ void printReadDeclaration(char * expression) {
 	printTabs();
 	fprintf(fileOut, "cin >> %s;", expression);
 	printNewLine();
+}
+
+
+void printEndStatements() {
+	printTabs();
+	fprintf(fileOut, "}");
+	printNewLine();
+}
+
+void printTypeValues(type_values * type_value) {
+	if (type_value->type == TYPE_STRING) {
+		fprintf(fileOut, "%s", returnTypeValuesString(type_value));
+
+	} else if (type_value->type == TYPE_INT) {
+		fprintf(fileOut, "%d", returnTypeValuesInt(type_value));
+
+	} else {
+		fprintf(fileOut, "%lf", returnTypeValuesDouble(type_value));
+	}
+}
+
+char * returnTypeValuesString(type_values * type_value) {
+	return (char*)type_value->value;
+}
+
+int returnTypeValuesInt(type_values * type_value) {
+	return ((int*)type_value->value)[0];
+}
+
+double returnTypeValuesDouble(type_values * type_value) {
+	return ((double*)type_value->value)[0];
+}
+
+char * mallocNewString(char * new_text) {
+	char * destination = malloc(sizeof(strlen(new_text)));
+    strcpy(destination, new_text);
+    return destination;
 }
