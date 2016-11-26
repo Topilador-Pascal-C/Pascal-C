@@ -1,8 +1,23 @@
 #include "symbolTable.h"
+#include "auxFunctions.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
+
+symbol * searchIdentifier(char * identifier) {
+
+	symbol * sp  = NULL;
+	int i;
+
+	for (i = 0; i < size_of_table; i++) {
+		if (strcmp(symbol_table[i].name, identifier) == 0) {
+			sp = &symbol_table[i];
+			break;
+		}
+	}
+	return sp;
+}
 
 /* Find a symbol or create a new symbol in table */
 symbol * searchSymbol(char * word) {
@@ -38,32 +53,33 @@ int addNewVariable(type_values * all, char * type, int line, char * filename) {
 	if (sp->reflist) {
 		return_validate = 0;
 	} else {
-		sp->type = strdup(type);
+		sp->type = convertTypeStringToTypeInt(type);
 		r = malloc(sizeof(reference));
 		if (!r) {
 			fputs("out of space\n", stderr);
 			abort();
 		} else {
-			r->value = "";
+			r->value = NULL;
 			r->next = sp->reflist;
 			r->filename = filename;
 			r->line = line;
 			sp->reflist = r;
 		}
 		return_validate = 1;
+
 	}
 
 	return return_validate;
 }
 
-int addAttribuition(char * variable, type_values * value, int line, char * filename) {
+int addAttribuition(char * variable, type_values * new_value, int line, char * filename) {
 	reference * r;
-	symbol * sp = searchSymbol(variable);
+	symbol * sp = searchIdentifier(variable);
 
 	int return_validate = 0;
 
 	/* Don't do dups of same line and file */
-	if (sp->reflist && sp->reflist->line == line && sp->reflist->filename == filename) {
+	if (sp->reflist == NULL) {
 		return_validate = 0;
 	} else {
 		r = malloc(sizeof(reference));
@@ -71,7 +87,8 @@ int addAttribuition(char * variable, type_values * value, int line, char * filen
 			fputs("out of space\n", stderr);
 			abort();
 		} else {
-			r->value = strdup((char*)value->value);
+
+			r->value = new_value;
 			r->next = sp->reflist;
 			r->filename = filename;
 			r->line = line;
@@ -84,26 +101,32 @@ int addAttribuition(char * variable, type_values * value, int line, char * filen
 	return return_validate;
 }
 
+void printSymbolTable() {
+	char * prevfn = NULL;
 
-// Adding new word in the symbol table
-void addSymbol(int line, char * filename, char * word) {
-	reference * r;
-	symbol * sp = searchSymbol(word);
+	qsort(symbol_table, SIZE_TABLE, sizeof(symbol), symCompare);
 
-	/* Don't do dups of same line and file */
-	if (sp->reflist && sp->reflist->line == line && sp->reflist->filename == filename) {
-		return;
-	} else {
-		r = malloc(sizeof(reference));
-		if (!r) {
-			fputs("out of space\n", stderr);
-			abort();
-		} else {
-			r->next = sp->reflist;
-			r->filename = filename;
-			r->line = line;
-			sp->reflist = r;
+	for (int i = 0; i < size_of_table; i++) {
+		prevfn = NULL;
+
+		reference * ref = symbol_table[i].reflist;
+
+		/* Now print the word and its references */
+		printf("%20s:%-20s", symbol_table[i].name, convertTypeIntToTypeString(symbol_table[i].type));
+		while(ref != NULL) {
+			if (ref->filename == prevfn) {
+				printf(", %d", ref->line);
+			} else {
+				printf(" %s:%d", ref->filename, ref->line);
+				prevfn = ref->filename;
+			}
+			if (ref->value != NULL) {
+				printf(":");
+				printTypeValues1(ref->value);
+			}
+			ref = ref->next;
 		}
+		printf("\n");
 	}
 }
 
@@ -126,38 +149,6 @@ static int symCompare(const void * xa, const void * xb) {
 		} else {
 			return strcmp(a->name, b->name);
 		}
-	}
-}
-
-/* Print the identifiers of the list tree */
-void printSymbolTable() {
-	symbol * sp;
-	int i;
-
-	/* Sort the symbol table in alfabethic order */
-	qsort(symbol_table, SIZE_TABLE, sizeof(symbol), symCompare);
-
-	for (i = 0; i < size_of_table; i++) {
-		char * prevfn = NULL;
-
-		/* Revert the list of references */
-		reference * rp = symbol_table[i].reflist;
-
-		/* Now print the word and its references */
-		printf("%20s:%-20s", symbol_table[i].name, symbol_table[i].type);
-		while(rp != NULL) {
-			if (rp->filename == prevfn) {
-				printf(", %d", rp->line);
-			} else {
-				printf(" %s:%d", rp->filename, rp->line);
-				prevfn = rp->filename;
-			}
-			if (strcmp(rp->value, "") != 0) {
-				printf(":%s", rp->value);
-			}
-			rp = rp->next;
-		}
-		printf("\n");
 	}
 }
 

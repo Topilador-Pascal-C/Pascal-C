@@ -237,6 +237,30 @@ void printTypeValues(type_values * type_value) {
 	}
 }
 
+void printTypeValues1(type_values * type_value) {
+	if (type_value->type == TYPE_STRING) {
+		printf("%s", returnTypeValuesString(type_value));
+
+	} else if (type_value->type == TYPE_INT) {
+		printf("%d", returnTypeValuesInt(type_value));
+
+	} else {
+		printf("%lf", returnTypeValuesDouble(type_value));
+	}
+}
+
+void printTypeValues2(int type, void * type_value) {
+	if (type == TYPE_STRING) {
+		printf("%s", returnTypeValuesString(type_value));
+
+	} else if (type == TYPE_INT) {
+		printf("%d", returnTypeValuesInt(type_value));
+
+	} else {
+		printf("%lf", returnTypeValuesDouble(type_value));
+	}
+}
+
 char * returnTypeValuesString(type_values * type_value) {
 	return (char*)type_value->value;
 }
@@ -253,4 +277,56 @@ char * mallocNewString(char * new_text) {
 	char * destination = malloc(sizeof(strlen(new_text)));
     strcpy(destination, new_text);
     return destination;
+}
+
+int convertTypeStringToTypeInt(char * type) {
+	int returnConvert = -1;
+
+	if (!strcmp(type, "string") || !strcmp(type, "char")) {
+		returnConvert = TYPE_STRING;
+
+	} else if (!strcmp(type, "int") 		 || !strcmp(type, "signed char") 		|| !strcmp(type, "short int") 		   ||
+			   !strcmp(type, "long long") 	 || !strcmp(type, "unsigned char") 	  	|| !strcmp(type, "unsigned short int") ||
+			   !strcmp(type, "unsigned int") || !strcmp(type, "unsigned long long") || !strcmp(type, "int")) {
+		returnConvert = TYPE_INT;
+
+	} else if (!strcmp(type, "double") || !strcmp(type, "long double") || !strcmp(type, "float")) {
+		returnConvert = TYPE_DOUBLE;
+
+	} else if (!strcmp(type, "bool")) {
+		returnConvert = TYPE_BOOL;
+
+	} else {
+		returnConvert = -1;
+	}
+
+	return returnConvert;
+}
+
+char * convertTypeIntToTypeString(int type) {
+	char * returnConvert = "";
+
+	switch(type) {
+		case TYPE_STRING:
+			strcpy(returnConvert, "string");
+		break;
+
+		case TYPE_INT:
+			strcpy(returnConvert, "int");
+		break;
+
+		case TYPE_DOUBLE:
+			strcpy(returnConvert, "double");
+		break;
+
+		case TYPE_BOOL:
+			strcpy(returnConvert, "bool");
+		break;
+
+		default:
+			strcpy(returnConvert, "falha");
+		break;
+	}
+
+	return returnConvert;
 }

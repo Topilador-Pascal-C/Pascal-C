@@ -51,8 +51,14 @@ void printReadDeclaration(char * expression);
 void printEndStatements();
 
 void printTypeValues(type_values * type_value);
+void printTypeValues1(type_values * type_value);
+void printTypeValues2(int type, void * type_value);
 char * returnTypeValuesString(type_values * type_value);
 int returnTypeValuesInt(type_values * type_value);
 double returnTypeValuesDouble(type_values * type_value);
+
+
+int convertTypeStringToTypeInt(char * type);
+char * convertTypeIntToTypeString(int type);
 
 #endif

@@ -2,6 +2,7 @@
 #include "global.h"
 #include "symbolTable.h"
 #include "auxFunctions.h"
+#include "validations.h"
 #include <stdlib.h> /* For malloc in symbol table */
 #include <string.h> /* For strcmp in symbol table */
 #include <stdio.h> /* For error messages */
@@ -10,7 +11,6 @@
 /* interface to the lexer */
 extern int yylineno;
 extern int yyrestart();
-int errors;
 
 int debugValue = 1;
 
@@ -161,25 +161,22 @@ Declaration_Of_Variables:
 
 Declaration_Of_Variable:
     T_VAR_STATEMENT Variable T_COLON Type_Of_Variable T_SEMICOLON {
-        if (addNewVariable($<all>2, $4, yylineno, curfilename) == 1) {
+        if (validateDeclaration($4, $<all>2, yylineno, curfilename)) {
             printDeclaration($4, $<all>2);
-        } else {
-            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", (char*)$<all>2->value, curfilename, yylineno);
         }
     }
     | Variable T_COLON Type_Of_Variable T_SEMICOLON {
-        if (addNewVariable($<all>1, $3, yylineno, curfilename) == 1) {
+        if (validateDeclaration($3, $<all>1, yylineno, curfilename)) {
             printDeclaration($3, $<all>1);
-        } else {
-            printf("WARNING: Declaration of variable %s already exist in file %s in line %d.\n", (char*)$<all>1->value, curfilename, yylineno);
         }
     }
 ;
 
 Attribuition:
     Variable T_ATTRIBUTION Expression T_SEMICOLON {
-        addAttribuition($<all>1->value, $<all>3, yylineno, curfilename);
-        printAtribuition($<all>1->value, $<all>3);
+        if (validateAtribuition($<all>1->value, $<all>3, yylineno, curfilename)) {
+            printAtribuition($<all>1->value, $<all>3);
+        }
     }
 ;
 
@@ -379,6 +376,7 @@ int main(int argc, char ** argv){
         printf("Leitura concluída e resultado compilado em %s.c\n", fileName);
     } else {
         for (i = 1; i < argc; i++) {
+            errors = 0;
             FILE * f = fopen(argv[i], "r");
 
             // Verified if the file is openned
@@ -386,7 +384,7 @@ int main(int argc, char ** argv){
                 perror(argv[1]);
                 return (1);
             } else {
-                    curfilename = argv[i];
+                curfilename = argv[i];
                 scope = 0;
 
                 fileName = malloc(sizeof(strlen(curfilename)));
@@ -402,6 +400,7 @@ int main(int argc, char ** argv){
                 yylineno = 1;
 
                 printf("Iniciando leitura do arquivo %s...\n", curfilename);
+                printf("------------------------------------------\n");
 
                 char outfilename [10];
                 sprintf(outfilename, "%s.cpp", fileName);
@@ -409,17 +408,28 @@ int main(int argc, char ** argv){
                 fileOut = fopen(outfilename, "w");
                 yyparse();
                 fclose(fileOut);
-                printf("Arquivo compilado e resultado em %s\n", outfilename);
 
+                printf("------------------------------------------\n");
+                if (errors != 0) {
+                    remove(outfilename);
+                    printf("%sFALHA:%s ", COLOR_RED, COLOR_RESET);
+                    printf("Arquivo %s não compilado devido aos problemas.\n", curfilename);
+                } else {
+                    printf("%sCONCLUIDO:%s ", COLOR_GRN, COLOR_RESET);
+                    printf("Arquivo compilado e resultado em %s\n", outfilename);
+                }
+
+                printf("\n\n");
                 fclose(f);
             }
         }
     }
 
-    printf("\n\n----------------------\n");
-    printf("Print of symbol table! \n\n");
-    printSymbolTable();
-    printf("----------------------\n");
+    // printf("\n\n----------------------\n");
+    // printf("Print of symbol table! \n\n");
+    // printSymbolTable();
+    // printf("----------------------\n");
+
     return 1;
 }
 
