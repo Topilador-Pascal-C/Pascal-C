@@ -86,6 +86,8 @@ int debugValue = 1;
 %token T_MINOR
 %token T_MINOR_OR_EQUAL
 
+%token T_PLUS
+
 %token <all> T_SLASH_COMMENT
 %token <all> T_BRACE_COMMENT
 
@@ -291,6 +293,13 @@ Comment_Statement:
     }
 ;
 
+Calc_Statments:
+    Variable T_ATTRIBUTION Expression T_PLUS Expression T_SEMICOLON {
+        printCalcStatements($<all>1);
+        printCondition($<all>3, $<all>5, "+");
+    }
+;
+
 Multiple_Conditions:
     Conditions
     | Conditions T_AND_STATEMENT {
@@ -323,6 +332,7 @@ Conditions:
     | Expression T_MINOR_OR_EQUAL Expression {
         printCondition($<all>1, $<all>3, "<=");
     }
+    | Calc_Statments
 ;
 
 Type_Of_Variable:

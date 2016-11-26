@@ -16,7 +16,10 @@ var
 
 	variavelCardinal : cardinal;
 	variavelInteger  : integer;
-
+	A : integer;
+	B: integer;
+	C: integer;
+	
 	variavelSingle   : single;
 	variavelSingle   : single;
 	variavelDouble   : double;
@@ -27,8 +30,6 @@ begin
 		if variavelShortint = variavelDouble then
 		begin
 			variavel_String := 'isso';
-			// Para compilar com sucesso alterar a linha abaixo
-			variavelInteger := 'errado';
 		end;
 
 	if variavelShortint = variavelDouble then
@@ -38,9 +39,6 @@ begin
 		if _variavelBool then
 		begin
 			variavelDouble := 3.5;
-
-			// Para compilar com sucesso alterar a linha abaixo
-			variavel_String2 := 'muito bom';
 		end;
 
 	for variavelInteger := 115 downto 0 do
@@ -86,6 +84,7 @@ begin
 	writeln(895);
 	write(7.84);
 
+	A :=  B + C;
 	//comentario de teste
 	// comentarioumapalavra
 

@@ -110,17 +110,17 @@ void printForDeclaration(char * type) {
 		fprintf(fileOut, "for (");
 	} else {
 		fprintf(fileOut, ") {");
-        printNewLine();	
+        printNewLine();
 	}
 }
 
 void printForAtribuition(type_values * value) {
-	
+
 	fprintf(fileOut, "%s", getVariableFor());
 	printBlankSpace();
 	fprintf(fileOut, "=");
 	printBlankSpace();
-	
+
 	printTypeValues(value);
 
 	fprintf(fileOut, ";");
@@ -131,7 +131,7 @@ void printForScope(char * type, type_values * expression) {
 		printForScopeAux1();
 		fprintf(fileOut, ">");
 		printForScopeAux2(expression);
-		
+
 		fprintf(fileOut, "%s--", getVariableFor());
 	} else {
 		printForScopeAux1();
@@ -344,4 +344,12 @@ char * convertTypeIntToTypeString(int type) {
 	}
 
 	return returnConvert;
+}
+
+void printCalcStatements(type_values * expression1) {
+	printTabs();
+	printTypeValues(expression1);
+	printBlankSpace();
+	fprintf(fileOut, "=");
+	printBlankSpace();
 }

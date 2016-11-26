@@ -44,6 +44,8 @@ some_char .
 "<" {return T_MINOR;}
 "<=" {return T_MINOR_OR_EQUAL;}
 
+"+" {return T_PLUS;}
+
 "(" {return T_LEFT_PARENTHESIS;}
 ")" {return T_RIGHT_PARENTHESIS;}
 
@@ -125,7 +127,7 @@ some_char .
 {brace_asterisk_comment} {
 	yylval.all = (type_values*) malloc(sizeof(type_values));
 	yylval.all->type = TYPE_STRING;
-	
+
 	yytext = yytext + 1;
 	yylval.all->value = malloc(sizeof(strlen(yytext) - 1));
 	strncpy(yylval.all->value, yytext, strlen(yytext) - 1);
@@ -136,7 +138,7 @@ some_char .
 {apostrophe}{text}{apostrophe} {
 	yylval.all = (type_values*) malloc(sizeof(type_values));
 	yylval.all->type = TYPE_STRING;
-	
+
 	yytext = yytext + 1;
 	yylval.all->value = malloc(sizeof(strlen(yytext) - 1));
 	strncpy(yylval.all->value, yytext, strlen(yytext) - 1);
@@ -150,7 +152,7 @@ some_char .
 
 	yylval.all->value = malloc(sizeof(strlen(yytext)));
 	strcpy(yylval.all->value, yytext);
-	
+
 	return T_SOME_WORD;
 }
 

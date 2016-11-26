@@ -49,6 +49,8 @@ void printReadDeclaration(char * type);
 
 void printComment(char * type, char * comment);
 
+void printCalcStatements(type_values * expression1);
+
 void printEndStatements();
 
 void printTypeValues(type_values * type_value);
