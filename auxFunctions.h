@@ -45,8 +45,9 @@ void printAndOrCondition(char * type);
 
 void printWriteDeclaration(char * type);
 void printWriteDeclarationValues(type_values * expression);
+void printReadDeclaration(char * type);
 
-void printReadDeclaration(char * expression);
+void printComment(char * type, char * comment);
 
 void printEndStatements();
 

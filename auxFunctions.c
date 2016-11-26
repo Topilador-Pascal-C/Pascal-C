@@ -204,7 +204,7 @@ void printWriteDeclaration(char * type) {
 		printTabs();
 		fprintf(fileOut, "cout << ");
 	} else if (strcmp(type, "endln") == 0) {
-		fprintf(fileOut, " >> endl;");
+		fprintf(fileOut, " << endl;");
 		printNewLine();
 	} else {
 		fprintf(fileOut, ";");
@@ -212,12 +212,27 @@ void printWriteDeclaration(char * type) {
 	}
 }
 
-void printReadDeclaration(char * expression) {
+void printReadDeclaration(char * type) {
 	printTabs();
-	fprintf(fileOut, "cin >> %s;", expression);
+	fprintf(fileOut, "cin >> %s;", type);
 	printNewLine();
 }
 
+void printComment(char * type, char * comment) {
+	if (strcmp(type, "slash") == 0) {
+		printTabs();
+		fprintf(fileOut, "%s", comment);
+	} else if (strcmp(type, "brace_asterisk") == 0) {
+		printTabs();
+		if (comment[0] == '*') {
+			fprintf(fileOut, "/%s/", comment);
+		} else {
+			fprintf(fileOut, "/* %s */", comment);
+		}
+	}
+
+	printNewLine();
+}
 
 void printEndStatements() {
 	printTabs();

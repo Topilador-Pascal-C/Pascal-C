@@ -27,16 +27,19 @@ begin
 		if variavelShortint = variavelDouble then
 		begin
 			variavel_String := 'isso';
-			variavelInteger := 123;
+			// Para compilar com sucesso alterar a linha abaixo
+			variavelInteger := 'errado';
 		end;
 
 	if variavelShortint = variavelDouble then
-		variavelExtended := 785;
+		variavelExtended := 785.58;
 
 	for variavelInteger := 0 to 115 do
 		if _variavelBool then
 		begin
 			variavelDouble := 3.5;
+
+			// Para compilar com sucesso alterar a linha abaixo
 			variavel_String2 := 'muito bom';
 		end;
 
@@ -73,10 +76,20 @@ begin
 		end;
 	until variavelInteger > 0;
 
+
+	read(variavelInteger);
+	readln(variavelInteger);
+
 	writeln('Somemessage');
 	write('Oxi');
 	writeln('kkkk hahahaha');
 	writeln(895);
 	write(7.84);
+
+	//comentario de teste
+	// comentarioumapalavra
+
+	{comentario de uma linha sem asterisco}
+	{* comentario de uma linha com asterisco *}
 
 end.

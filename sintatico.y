@@ -86,10 +86,13 @@ int debugValue = 1;
 %token T_MINOR
 %token T_MINOR_OR_EQUAL
 
+%token <all> T_SLASH_COMMENT
+%token <all> T_BRACE_COMMENT
+
 %token T_WRITE
 %token T_WRITELN
-
 %token T_READ
+%token T_READLN
 
 %token T_LEFT_PARENTHESIS
 %token T_RIGHT_PARENTHESIS
@@ -130,7 +133,9 @@ Command:
     | While_Statement
     | For_Statement
     | Write_Statements
+    | Read_Statement
     | Repeat_Until_Statement
+    | Comment_Statement
 ;
 
 ProgramBegin:
@@ -263,6 +268,26 @@ Write_Statements:
 Write_Statement_Complementation:
     T_LEFT_PARENTHESIS Expression T_RIGHT_PARENTHESIS T_SEMICOLON {
         printWriteDeclarationValues($<all>2);
+    }
+;
+
+Read_Statement:
+    T_READ  Read_Statement_Complement
+    | T_READLN Read_Statement_Complement
+;
+
+Read_Statement_Complement:
+    T_LEFT_PARENTHESIS Variable T_RIGHT_PARENTHESIS T_SEMICOLON {
+        printReadDeclaration($<all>3->value);
+    }
+;
+
+Comment_Statement:
+    T_SLASH_COMMENT {
+        printComment("slash", $<all>1->value);
+    }
+    | T_BRACE_COMMENT {
+        printComment("brace_asterisk", $<all>1->value);
     }
 ;
 
@@ -435,4 +460,5 @@ int main(int argc, char ** argv){
 
 void yyerror(const char* errmsg) {
     printf("\n*** Erro: %s\n", errmsg);
+    errors = errors + 1;
 }
