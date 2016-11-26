@@ -2,10 +2,10 @@ CFLAGS=-g
 BISON=bison
 FLEX=flex
 RM=rm
-DEL_FILE= sintatico.tab.c sintatico.tab.h lex.yy.c topilador symbolTable.o auxFunctions.o sintatico.tab.o teste.cpp
+DEL_FILE= sintatico.tab.c sintatico.tab.h lex.yy.c topilador symbolTable.o auxFunctions.o validations.o sintatico.tab.o teste.cpp
 
-all: sintatico.tab.c lex.yy.c symbolTable.o auxFunctions.o
-	$(CC) -o topilador lex.yy.c sintatico.tab.c symbolTable.o auxFunctions.o -lfl
+all: sintatico.tab.c lex.yy.c symbolTable.o auxFunctions.o validations.o
+	$(CC) -o topilador lex.yy.c sintatico.tab.c symbolTable.o auxFunctions.o validations.o -lfl
 
 	@echo "\nPara executar: ./topilador <file.pas> ..."
 
@@ -20,6 +20,9 @@ symbolTable.o: symbolTable.c symbolTable.h
 
 auxFunctions.o: auxFunctions.c auxFunctions.h
 	gcc -c auxFunctions.c -o auxFunctions.o
+
+validations.o: validations.c validations.h
+	gcc -c validations.c -o validations.o
 
 clean:
 	$(RM) -f $(DEL_FILE)
