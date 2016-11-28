@@ -311,27 +311,27 @@ Comment_Statement:
 Calc_Statments:
     Number
     | Number T_OPERATOR_PLUS Calc_Statments {
-        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "+");
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "+", yylineno, curfilename);
         $$ = returnCalc;
     }
     | Number T_OPERATOR_MINUS Calc_Statments {
-        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "-");
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "-", yylineno, curfilename);
         $$ = returnCalc;
     } 
     | Number T_SLASH Calc_Statments {
-        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "/");
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "/", yylineno, curfilename);
         $$ = returnCalc;
     } 
     | Number T_ASTERISK Calc_Statments {
-        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "*");
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "*", yylineno, curfilename);
         $$ = returnCalc;
     } 
     | Number T_OPERATOR_MOD Calc_Statments {
-        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "mod");
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "mod", yylineno, curfilename);
         $$ = returnCalc;
     } 
     | Number T_OPERADOR_DIV Calc_Statments {
-        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "div");
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "div", yylineno, curfilename);
         $$ = returnCalc;
     }
 ;

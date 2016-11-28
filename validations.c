@@ -41,7 +41,7 @@ int validateAtribuition(char * variable, type_values * value, int line, char * f
 	return returnValidate;
 }
 
-type_values * validationCalculator(type_values * value1, type_values * value2, char * type) {
+type_values * validationCalculator(type_values * value1, type_values * value2, char * type, int line, char * filename) {
 	type_values * returnCalculator;
 
 	if (value1->type == value2->type) {
@@ -65,7 +65,9 @@ type_values * validationCalculator(type_values * value1, type_values * value2, c
 		int * value = malloc(sizeof(int));
 		* value = 0;
 		returnCalculator->value = (int*) value;
-		
+
+		printError("E03");
+		printf("Calculator invalid of different types. File %s in line %d.\n", filename, line);
 	}
 
 	return returnCalculator;
