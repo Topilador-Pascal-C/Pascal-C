@@ -15,7 +15,7 @@ one_line_comment {slash}{slash}[ ]*{word}+{text}*
 open_brace \{
 close_brace \}
 asterisk \*
-brace_asterisk_comment {open_brace}{asterisk}*[ ]*{word}+{text}*[ ]*{asterisk}*{close_brace}
+brace_asterisk_comment {open_brace}{asterisk}*[ ]*{word}+[ ]*\n*[ ]*\t*[ ]*{text}*[ ]*{asterisk}*[ ]*{close_brace}[ ]*
 withespace [ \r\t\n]+
 digits [0-9]+
 real {digits}("."{digits})
@@ -45,6 +45,7 @@ some_char .
 "<=" {return T_MINOR_OR_EQUAL;}
 
 "+" {return T_PLUS;}
+{asterisk} {return T_ASTERISK;}
 
 "(" {return T_LEFT_PARENTHESIS;}
 ")" {return T_RIGHT_PARENTHESIS;}
