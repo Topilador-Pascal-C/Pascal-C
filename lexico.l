@@ -44,7 +44,6 @@ some_char .
 "<" {return T_MINOR;}
 "<=" {return T_MINOR_OR_EQUAL;}
 
-"+" {return T_PLUS;}
 
 "(" {return T_LEFT_PARENTHESIS;}
 ")" {return T_RIGHT_PARENTHESIS;}
@@ -87,6 +86,14 @@ some_char .
 "comp" {return T_TYPE_COMP;}
 "currency" {return T_TYPE_CURRENCY;}
 "extended" {return T_TYPE_EXTENDED;}
+
+"+" {return T_OPERATOR_PLUS;}
+"-" {return T_OPERATOR_MINUS;}
+"mod" {return T_OPERATOR_MOD;}
+"div" {return T_OPERADOR_DIV;}
+{slash} {return T_SLASH;}
+{asterisk} {return T_ASTERISK;}
+
 
 {apostrophe} {return T_APOSTROPHE;}
 

@@ -41,6 +41,70 @@ int validateAtribuition(char * variable, type_values * value, int line, char * f
 	return returnValidate;
 }
 
+type_values * validationCalculator(type_values * value1, type_values * value2, char * type) {
+	type_values * returnCalculator;
+
+	if (value1->type == value2->type) {
+		returnCalculator = (type_values*) malloc(sizeof(type_values));
+		returnCalculator->type = value1->type;
+
+		if (value1->type == TYPE_INT) {
+			int * value = malloc(sizeof(int));
+			*value = calculateInteger((int*) value1->value, (int*) value2->value, type);
+			returnCalculator->value = (int*) value;
+		} else {
+			double * value = malloc(sizeof(double));
+			*value = calculateDouble((double*) value1->value, (double*) value2->value, type);
+			returnCalculator->value = (double*) value;
+		}
+
+	} else {
+		returnCalculator = (type_values*) malloc(sizeof(type_values));
+		returnCalculator->type = TYPE_INT;
+
+		int * value = malloc(sizeof(int));
+		* value = 0;
+		returnCalculator->value = (int*) value;
+		
+	}
+
+	return returnCalculator;
+}
+
+int calculateInteger(int * value1, int * value2, char * type) {
+	int returnCalc = 0;
+	if (!strcmp(type, "+")) {
+		returnCalc = *value1 + *value2;
+	} else if (!strcmp(type, "-")) {
+		returnCalc = *value1 - *value2;
+	} else if (!strcmp(type, "*")) {
+		returnCalc = *value1 * *value2;
+	} else if (!strcmp(type, "mod")) {
+		returnCalc = *value1 % *value2;
+	} else if (!strcmp(type, "div")) {
+		returnCalc = *value1 / *value2;
+	} else {
+		returnCalc = 0;
+	}
+	return returnCalc;
+}
+
+double calculateDouble(double * value1, double * value2, char * type) {
+	double returnCalc = 0.0;
+	if (!strcmp(type, "+")) {
+		returnCalc = *value1 + *value2;
+	} else if (!strcmp(type, "-")) {
+		returnCalc = *value1 - *value2;
+	} else if (!strcmp(type, "*")) {
+		returnCalc = *value1 * *value2;
+	} else if (!strcmp(type, "/")) {
+		returnCalc = *value1 / *value2;
+	} else {
+		returnCalc = 0.0;
+	}
+	return returnCalc;
+}
+
 void printWarning(char * code) {
 	printf("%sWARNING[%s]: %s", COLOR_CYN, code, COLOR_RESET);
 }

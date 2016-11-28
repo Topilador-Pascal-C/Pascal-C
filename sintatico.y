@@ -86,7 +86,12 @@ int debugValue = 1;
 %token T_MINOR
 %token T_MINOR_OR_EQUAL
 
-%token T_PLUS
+%token T_OPERATOR_PLUS
+%token T_OPERATOR_MINUS
+%token T_OPERATOR_MOD
+%token T_OPERADOR_DIV
+%token T_SLASH
+%token T_ASTERISK
 
 %token <all> T_SLASH_COMMENT
 %token <all> T_BRACE_COMMENT
@@ -101,8 +106,13 @@ int debugValue = 1;
 
 %type <strval> Type_Of_Variable
 %type <all> Some_String
+%type <all> Number
+%type <all> Calc_Statments
 
 %start ProgramBegin
+
+%left T_OPERATOR_PLUS T_OPERATOR_MINUS
+%left T_SLASH T_ASTERISK
 
 %%
 
@@ -117,11 +127,16 @@ Some_String:
     }
 ;
 
+Number:
+    T_INT_NUMBER
+    | T_DOUBLE_NUMBER
+;
+
 Expression:
     Variable
     | Some_String
-    | T_INT_NUMBER
-    | T_DOUBLE_NUMBER
+    | Number
+    | Calc_Statments
 ;
 
 Commands:
@@ -294,9 +309,30 @@ Comment_Statement:
 ;
 
 Calc_Statments:
-    Variable T_ATTRIBUTION Expression T_PLUS Expression T_SEMICOLON {
-        printCalcStatements($<all>1);
-        printCondition($<all>3, $<all>5, "+");
+    Number
+    | Number T_OPERATOR_PLUS Calc_Statments {
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "+");
+        $$ = returnCalc;
+    }
+    | Number T_OPERATOR_MINUS Calc_Statments {
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "-");
+        $$ = returnCalc;
+    } 
+    | Number T_SLASH Calc_Statments {
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "/");
+        $$ = returnCalc;
+    } 
+    | Number T_ASTERISK Calc_Statments {
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "*");
+        $$ = returnCalc;
+    } 
+    | Number T_OPERATOR_MOD Calc_Statments {
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "mod");
+        $$ = returnCalc;
+    } 
+    | Number T_OPERADOR_DIV Calc_Statments {
+        type_values * returnCalc = validationCalculator($<all>1, $<all>3, "div");
+        $$ = returnCalc;
     }
 ;
 
@@ -332,7 +368,6 @@ Conditions:
     | Expression T_MINOR_OR_EQUAL Expression {
         printCondition($<all>1, $<all>3, "<=");
     }
-    | Calc_Statments
 ;
 
 Type_Of_Variable:

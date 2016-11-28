@@ -16,9 +16,6 @@ var
 
 	variavelCardinal : cardinal;
 	variavelInteger  : integer;
-	A : integer;
-	B: integer;
-	C: integer;
 	
 	variavelSingle   : single;
 	variavelSingle   : single;
@@ -83,8 +80,15 @@ begin
 	writeln('kkkk hahahaha');
 	writeln(895);
 	write(7.84);
+	
+	variavelInteger := 2 + 3 - 8 * 10;
+	variavelInteger := 100 div 10;
+	variavelDouble := 100.50 / 10.0;
+	variavelInteger := 100 / 10.0;
 
-	A :=  B + C;
+	variavelInteger := 4 mod 2;
+	variavelInteger := 4 mod 3;
+
 	//comentario de teste
 	// comentarioumapalavra
 
