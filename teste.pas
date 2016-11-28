@@ -21,7 +21,6 @@ var
 	C: integer;
 	
 	variavelSingle   : single;
-	variavelSingle   : single;
 	variavelDouble   : double;
 	variavelExtended : extended;
 
@@ -84,11 +83,12 @@ begin
 	writeln(895);
 	write(7.84);
 
-	A :=  B + C;
 	//comentario de teste
 	// comentarioumapalavra
 
-	{comentario de uma linha sem asterisco}
-	{* comentario de uma linha com asterisco *}
+	{comentario
+	de uma linha sem asterisco}
+	{* comentario   
+	de uma linha com asterisco *}
 
 end.
