@@ -35,6 +35,7 @@ int debugValue = 1;
 %token T_APOSTROPHE;
 
 // structures
+%token T_USES_STATEMENT;
 %token T_IF_STATEMENT;
 %token T_IF_THEN_STATEMENT;
 %token T_WHILE_STATEMENT;
@@ -158,7 +159,7 @@ Command:
 ProgramBegin:
     T_PROGRAM Variable T_SEMICOLON {
         printIncludesOfProgram();
-    } T_BEGIN_STATEMENT {
+    } Uses_Statement T_BEGIN_STATEMENT {
         printBeginOfProgram();
         incrementScope();
     } Commands T_END_PROGRAM {
@@ -167,13 +168,17 @@ ProgramBegin:
     }
     | T_PROGRAM Variable T_SEMICOLON {
         printIncludesOfProgram();
-    } Declaration_Of_Variables T_BEGIN_STATEMENT {
+    } Uses_Statement Declaration_Of_Variables T_BEGIN_STATEMENT {
         printBeginOfProgram();
         incrementScope();
     } Commands T_END_PROGRAM {
         printEndOfProgram();
         decrementScope();
     }
+;
+
+Uses_Statement:
+    |T_USES_STATEMENT Variable T_SEMICOLON
 ;
 
 Declaration_Of_Variables:

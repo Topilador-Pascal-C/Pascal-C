@@ -47,6 +47,7 @@ some_char .
 "(" {return T_LEFT_PARENTHESIS;}
 ")" {return T_RIGHT_PARENTHESIS;}
 
+"uses" {return T_USES_STATEMENT;}
 "var" {return T_VAR_STATEMENT;}
 "if" {return T_IF_STATEMENT;}
 "then" {return T_IF_THEN_STATEMENT;}

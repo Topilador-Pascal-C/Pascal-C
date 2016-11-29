@@ -1,5 +1,7 @@
 program testeProgram;
 
+uses crt;
+
 var
 	variavel_String : string;
 	variavel_Char   : char;
