@@ -68,6 +68,7 @@ type_values * validationCalculator(type_values * value1, type_values * value2, c
 
 		printError("E03");
 		printf("Calculator invalid of different types. File %s in line %d.\n", filename, line);
+		errors = errors + 1;
 	}
 
 	return returnCalculator;

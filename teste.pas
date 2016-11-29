@@ -84,7 +84,6 @@ begin
 	variavelInteger := 2 + 3 - 8 * 10;
 	variavelInteger := 100 div 10;
 	variavelDouble := 100.50 / 10.0;
-	variavelInteger := 100 / 10.0;
 
 	variavelInteger := 4 mod 2;
 	variavelInteger := 4 mod 3;
