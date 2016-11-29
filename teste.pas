@@ -18,7 +18,6 @@ var
 	variavelInteger  : integer;
 	
 	variavelSingle   : single;
-	variavelSingle   : single;
 	variavelDouble   : double;
 	variavelExtended : extended;
 
@@ -91,7 +90,9 @@ begin
 	//comentario de teste
 	// comentarioumapalavra
 
-	{comentario de uma linha sem asterisco}
-	{* comentario de uma linha com asterisco *}
+	{comentario
+	de uma linha sem asterisco}
+	{* comentario   
+	de uma linha com asterisco *}
 
 end.
