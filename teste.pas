@@ -1,7 +1,5 @@
 program testeProgram;
 
-uses crt;
-
 var
 	variavel_String : string;
 	variavel_Char   : char;
@@ -96,5 +94,7 @@ begin
 	de uma linha sem asterisco}
 	{* comentario   
 	de uma linha com asterisco *}
+
+	clrscr;
 
 end.

@@ -53,6 +53,8 @@ void printCalcStatements(type_values * expression1);
 
 void printEndStatements();
 
+void printClrscrStatements();
+
 void printTypeValues(type_values * type_value);
 void printTypeValues1(type_values * type_value);
 void printTypeValues2(int type, void * type_value);

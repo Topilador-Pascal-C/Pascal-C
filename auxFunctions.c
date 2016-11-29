@@ -240,6 +240,11 @@ void printEndStatements() {
 	printNewLine();
 }
 
+void printClrscrStatements() {
+	printTabs();
+	fprintf(fileOut, "cout << string(50, \"\\n\");\n");
+}
+
 void printTypeValues(type_values * type_value) {
 	if (type_value->type == TYPE_STRING) {
 		fprintf(fileOut, "%s", returnTypeValuesString(type_value));

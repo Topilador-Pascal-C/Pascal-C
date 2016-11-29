@@ -105,6 +105,8 @@ int debugValue = 1;
 %token T_LEFT_PARENTHESIS
 %token T_RIGHT_PARENTHESIS
 
+%token T_CLRSCR
+
 %type <strval> Type_Of_Variable
 %type <all> Some_String
 %type <all> Number
@@ -154,6 +156,7 @@ Command:
     | Read_Statement
     | Repeat_Until_Statement
     | Comment_Statement
+    | Clrscr_Statement
 ;
 
 ProgramBegin:
@@ -338,6 +341,12 @@ Calc_Statments:
     | Number T_OPERADOR_DIV Calc_Statments {
         type_values * returnCalc = validationCalculator($<all>1, $<all>3, "div", yylineno, curfilename);
         $$ = returnCalc;
+    }
+;
+
+Clrscr_Statement:
+    T_CLRSCR T_SEMICOLON {
+        printClrscrStatements();
     }
 ;
 

@@ -94,6 +94,8 @@ some_char .
 {slash} {return T_SLASH;}
 {asterisk} {return T_ASTERISK;}
 
+"clrscr" {return T_CLRSCR;}
+
 
 {apostrophe} {return T_APOSTROPHE;}
 
