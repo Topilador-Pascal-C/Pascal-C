@@ -41,37 +41,83 @@ int validateAtribuition(char * variable, type_values * value, int line, char * f
 	return returnValidate;
 }
 
+type_values * createCleanTypeValue() {
+	type_values * returnCalculator;
+
+	returnCalculator = (type_values*) malloc(sizeof(type_values));
+	returnCalculator->type = TYPE_INT;
+
+	int * value = malloc(sizeof(int));
+	* value = 0;
+	returnCalculator->value = (int*) value;
+
+	return returnCalculator;
+}
+
 type_values * validationCalculator(type_values * value1, type_values * value2, char * type, int line, char * filename) {
 	type_values * returnCalculator;
 
 	if (value1->type == value2->type) {
-		returnCalculator = (type_values*) malloc(sizeof(type_values));
+		returnCalculator = createCleanTypeValue();
 		returnCalculator->type = value1->type;
 
 		if (value1->type == TYPE_INT) {
-			int * value = malloc(sizeof(int));
-			*value = calculateInteger((int*) value1->value, (int*) value2->value, type);
-			returnCalculator->value = (int*) value;
+			if (validOperatorInteger(type)) {
+				int * value = malloc(sizeof(int));
+				*value = calculateInteger((int*) value1->value, (int*) value2->value, type);
+				returnCalculator->value = (int*) value;
+			} else {
+				returnCalculator = createCleanTypeValue();
+
+				printError("E04");
+				printf("Invalid operator in calculate. File %s in line %d.\n", filename, line);
+				errors = errors + 1;
+			}
 		} else {
-			double * value = malloc(sizeof(double));
-			*value = calculateDouble((double*) value1->value, (double*) value2->value, type);
-			returnCalculator->value = (double*) value;
+			if (validOperatorDouble(type)) {
+				double * value = malloc(sizeof(double));
+				*value = calculateDouble((double*) value1->value, (double*) value2->value, type);
+				returnCalculator->value = (double*) value;
+			} else {
+				printError("E04");
+				printf("Invalid operator in calculate. File %s in line %d.\n", filename, line);
+				errors = errors + 1;
+			}
 		}
 
 	} else {
-		returnCalculator = (type_values*) malloc(sizeof(type_values));
-		returnCalculator->type = TYPE_INT;
-
-		int * value = malloc(sizeof(int));
-		* value = 0;
-		returnCalculator->value = (int*) value;
-
+		returnCalculator = createCleanTypeValue();
+		
 		printError("E03");
 		printf("Calculator invalid of different types. File %s in line %d.\n", filename, line);
 		errors = errors + 1;
 	}
 
 	return returnCalculator;
+}
+
+int validOperatorInteger(char * type) {
+	int returnValue = 1;
+
+	if (!strcmp(type, "/")) {
+		returnValue = 0;
+	} else {
+		returnValue = 1;
+	}
+
+	return returnValue;
+}
+
+int validOperatorDouble(char * type) {
+	int returnValue = 1;
+
+	if (!strcmp(type, "div") || !strcmp(type, "mod")) {
+		returnValue = 0;
+	} else {
+		returnValue = 1;
+	}
+
+	return returnValue;
 }
 
 int calculateInteger(int * value1, int * value2, char * type) {
