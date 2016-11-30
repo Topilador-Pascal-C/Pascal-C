@@ -88,6 +88,8 @@ void printIfDeclaration(char * type) {
 	if (strcmp(type, "begin") == 0) {
 		printTabs();
 		fprintf(fileOut, "if (");
+	} else if (strcmp(type, "begin_else") == 0) {
+		fprintf(fileOut, "if (");
 	} else {
         fprintf(fileOut, ") {");
         printNewLine();
@@ -98,6 +100,9 @@ void printElseDeclaration(char * type) {
 	if (strcmp(type, "begin") == 0) {
 		printTabs();
 		fprintf(fileOut, "else { \n");
+	} else if (strcmp(type, "begin_if") == 0) {
+		printTabs();
+		fprintf(fileOut, "else ");
 	}
 }
 
