@@ -240,8 +240,7 @@ If_Statement:
     } Multiple_Conditions T_IF_THEN_STATEMENT {
         printIfDeclaration("end");
         incrementScope();
-    } Statement_Complementation
-    | Else_Statement
+    } If_Statement_Complementation
 ;
 
 Else_Statement:
@@ -249,13 +248,14 @@ Else_Statement:
         printElseDeclaration("begin");
         incrementScope();
     } Statement_Complementation
-    | T_ELSE_STATEMENT T_IF_STATEMENT {
-        printElseDeclaration("begin_if");
-        printIfDeclaration("begin_else");
-    } Multiple_Conditions T_IF_THEN_STATEMENT {
-        printIfDeclaration("end");
-        incrementScope();
-    } Statement_Complementation
+;
+
+If_Statement_Complementation:
+    Statement_Complementation
+    | T_BEGIN_STATEMENT Commands T_END_STATEMENT {
+        decrementScope();
+        printEndStatements();
+    } Else_Statement
 ;
 
 While_Statement:

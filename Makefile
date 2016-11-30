@@ -2,7 +2,7 @@ CFLAGS=-g
 BISON=bison
 FLEX=flex
 RM=rm
-DEL_FILE= sintatico.tab.c sintatico.tab.h lex.yy.c topilador symbolTable.o auxFunctions.o validations.o sintatico.tab.o teste.cpp
+DEL_FILE= sintatico.tab.c sintatico.tab.h lex.yy.c topilador symbolTable.o auxFunctions.o validations.o sintatico.tab.o *.cpp
 
 all: sintatico.tab.c lex.yy.c symbolTable.o auxFunctions.o validations.o
 	$(CC) -o topilador lex.yy.c sintatico.tab.c symbolTable.o auxFunctions.o validations.o -lfl
