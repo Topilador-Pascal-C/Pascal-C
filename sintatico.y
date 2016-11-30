@@ -249,6 +249,13 @@ Else_Statement:
         printElseDeclaration("begin");
         incrementScope();
     } Statement_Complementation
+    | T_ELSE_STATEMENT T_IF_STATEMENT {
+        printElseDeclaration("begin_if");
+        printIfDeclaration("begin_else");
+    } Multiple_Conditions T_IF_THEN_STATEMENT {
+        printIfDeclaration("end");
+        incrementScope();
+    } Statement_Complementation
 ;
 
 While_Statement:
