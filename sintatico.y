@@ -112,7 +112,7 @@ int debugValue = 1;
 %type <all> Number
 %type <all> Calc_Statments
 
-%start ProgramBegin
+%start Program_Begin
 
 %left T_OPERATOR_PLUS T_OPERATOR_MINUS
 %left T_SLASH T_ASTERISK
@@ -138,7 +138,6 @@ Number:
 Expression:
     Variable
     | Some_String
-    | Number
     | Calc_Statments
 ;
 
@@ -159,7 +158,7 @@ Command:
     | Clrscr_Statement
 ;
 
-ProgramBegin:
+Program_Begin:
     T_PROGRAM Variable T_SEMICOLON {
         printIncludesOfProgram();
     } Uses_Statement T_BEGIN_STATEMENT {
