@@ -38,6 +38,7 @@ int debugValue = 1;
 %token T_USES_STATEMENT;
 %token T_IF_STATEMENT;
 %token T_IF_THEN_STATEMENT;
+%token T_ELSE_STATEMENT;
 %token T_WHILE_STATEMENT;
 %token T_DO_STATEMENT;
 %token T_VAR_STATEMENT
@@ -238,6 +239,14 @@ If_Statement:
         printIfDeclaration("begin");
     } Multiple_Conditions T_IF_THEN_STATEMENT {
         printIfDeclaration("end");
+        incrementScope();
+    } Statement_Complementation
+    | Else_Statement
+;
+
+Else_Statement:
+    T_ELSE_STATEMENT {
+        printElseDeclaration("begin");
         incrementScope();
     } Statement_Complementation
 ;
