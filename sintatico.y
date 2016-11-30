@@ -531,6 +531,6 @@ int main(int argc, char ** argv){
 }
 
 void yyerror(const char* errmsg) {
-    printf("\n*** Erro: %s\n", errmsg);
+    printf("\n*** Erro: %s na linha %d\n", errmsg, yylineno);
     errors = errors + 1;
 }
