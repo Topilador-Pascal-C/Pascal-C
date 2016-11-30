@@ -72,6 +72,14 @@ begin
 		end;
 	until variavelInteger > 0;
 
+	if variavelInteger = 0 then
+	begin
+		variavelInteger := 5;
+	end;
+	else
+	begin
+		variavelInteger:= 10;
+	end;
 
 	read(variavelInteger);
 	readln(variavelInteger);
