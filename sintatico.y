@@ -161,16 +161,7 @@ Command:
 Program_Begin:
     T_PROGRAM Variable T_SEMICOLON {
         printIncludesOfProgram();
-    } Uses_Statement T_BEGIN_STATEMENT {
-        printBeginOfProgram();
-        incrementScope();
-    } Commands T_END_PROGRAM {
-        printEndOfProgram();
-        decrementScope();
-    }
-    | T_PROGRAM Variable T_SEMICOLON {
-        printIncludesOfProgram();
-    } Uses_Statement Declaration_Of_Variables T_BEGIN_STATEMENT {
+    }  Program_Begin_Complementation T_BEGIN_STATEMENT {
         printBeginOfProgram();
         incrementScope();
     } Commands T_END_PROGRAM {
@@ -179,8 +170,15 @@ Program_Begin:
     }
 ;
 
+Program_Begin_Complementation:
+    /* Nothing */
+    | Uses_Statement
+    | Declaration_Of_Variables
+    | Uses_Statement Declaration_Of_Variables
+;
+
 Uses_Statement:
-    |T_USES_STATEMENT Variable T_SEMICOLON
+    T_USES_STATEMENT Variable T_SEMICOLON
 ;
 
 Declaration_Of_Variables:
