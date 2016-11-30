@@ -29,6 +29,7 @@ void printDeclaration(char * type, type_values * value);
 void printAtribuition(char * variable, type_values * value);
 
 void printIfDeclaration(char * type);
+void printElseDeclaration(char * type);
 void printWhileDeclaration(char * type);
 void printRepeatDeclaration(char * type);
 
