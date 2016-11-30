@@ -94,6 +94,13 @@ void printIfDeclaration(char * type) {
     }
 }
 
+void printElseDeclaration(char * type) {
+	if (strcmp(type, "begin") == 0) {
+		printTabs();
+		fprintf(fileOut, "else { \n");
+	}
+}
+
 void printWhileDeclaration(char * type) {
 	if (strcmp(type, "begin") == 0) {
 		printTabs();
