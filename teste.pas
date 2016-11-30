@@ -76,7 +76,7 @@ begin
 	begin
 		variavelInteger := 5;
 	end;
-	else
+	else if variavelInteger = 5 then
 	begin
 		variavelInteger:= 10;
 	end;
